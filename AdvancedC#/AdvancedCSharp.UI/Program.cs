@@ -21,10 +21,13 @@ namespace AdvancedCSharp.UI
                 args.State = FileSystemVisitorEventArgsStates.StopOnFirstFiltredFindedCoincidence;
             };
 
-            fsv.OnDirectoryFinded += (sender, args) => { Console.WriteLine($"Found dir. Name: {args.Message}"); };
+            fsv.OnDirectoryFinded += (sender, args) => {
+                Console.WriteLine($"Found dir. Name: {args.Message}");
+                //args.State = FileSystemVisitorEventArgsStates.StopOnFirstFindedCoincidence;
+            };
             fsv.OnFilteredDirectoryFinded += (sender, args) => { Console.WriteLine($"Found filtered dir. Name: {args.Message}"); };
 
-            var result = fsv.SearchByFilter(Directory.GetCurrentDirectory(), true)
+            var result = fsv.SearchByFilter($"{Directory.GetCurrentDirectory()}\\..\\..", true)
                             .RepresentAsString();
 
             Console.ReadKey();
