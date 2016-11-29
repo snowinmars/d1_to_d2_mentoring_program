@@ -17,10 +17,16 @@ namespace AdvancedCSharp.Core
             FoundFiltredDirectory = 16,
         }
 
+        private enum FileSystemVisitorAction
+        {
+            None = 0,
+            Ignore = 1,
+            Interrupt = 2,
+        }
+
         private const string DefaultSearchPattern = "*.*";
         public static readonly Func<FileSystemInfo, bool> DefaultFilter = info => true;
-        private bool haveToInterrupt;
-        private bool haveToIgnore;
+        private FileSystemVisitorAction action;
 
         public FileSystemVisitor() : this(FileSystemVisitor.DefaultFilter)
         {
@@ -29,8 +35,8 @@ namespace AdvancedCSharp.Core
         public FileSystemVisitor(Func<FileSystemInfo, bool> filter)
         {
             this.Filter = filter;
-            this.haveToInterrupt = false;
-            this.haveToIgnore = false;
+
+            this.action = FileSystemVisitorAction.None;
         }
 
         public Func<FileSystemInfo, bool> Filter { get; set; }
@@ -66,12 +72,12 @@ namespace AdvancedCSharp.Core
         {
             foreach (var entry in entries)
             {
-                if (haveToInterrupt)
+                if (this.action.HasFlag(FileSystemVisitorAction.Interrupt))
                 {
                     break;
                 }
 
-                if (haveToIgnore)
+                if (this.action.HasFlag(FileSystemVisitorAction.Ignore))
                 {
                     continue;
                 }
@@ -131,10 +137,16 @@ namespace AdvancedCSharp.Core
                     break;
                 case FileSystemVisitorEventArgsStates.StopOnFirstFindedCoincidence:
                 case FileSystemVisitorEventArgsStates.StopOnFirstFiltredFindedCoincidence:
-                    this.haveToInterrupt = true;
+                    if (!this.action.HasFlag(FileSystemVisitorAction.Interrupt))
+                    {
+                        this.action ^= FileSystemVisitorAction.Interrupt;
+                    }
                     break;
                 case FileSystemVisitorEventArgsStates.IgnoreThisEntry:
-                    this.haveToIgnore = true;
+                    if (!this.action.HasFlag(FileSystemVisitorAction.Ignore))
+                    {
+                        this.action ^= FileSystemVisitorAction.Ignore;
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(args.State), args.State, "FileSystemVisitorEventArgs state is out of range");
