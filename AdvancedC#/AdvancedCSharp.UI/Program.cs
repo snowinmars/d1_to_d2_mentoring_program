@@ -26,6 +26,8 @@ namespace AdvancedCSharp.UI
 
             var result = fsv.SearchByFilter(Directory.GetCurrentDirectory(), true)
                             .RepresentAsString();
+
+            Console.ReadKey();
         }
     }
 }
