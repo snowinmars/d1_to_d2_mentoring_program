@@ -26,22 +26,23 @@ namespace AdvancedCSharp.Core
                         this,
                         new FileSystemVisitorEventArgs());
 
-            if (!Directory.Exists(path))
+            IEnumerable<FileSystemInfo> result;
+
+            if (Directory.Exists(path))
             {
-                this.InvokeConsiderFilter(this.OnFinish,
-                        this,
-                        new FileSystemVisitorEventArgs()); // TODO
-                return new List<FileSystemInfo>();
+                SearchOption searchOption = (isRecursive ? SearchOption.AllDirectories :
+                                                            SearchOption.TopDirectoryOnly);
+
+                DirectoryInfo info = new DirectoryInfo(path);
+
+                IEnumerable<FileSystemInfo> entries = info.EnumerateFileSystemInfos(DefaultSearchPattern, searchOption);
+
+                result = this.HandleEntries(entries);
             }
-
-            SearchOption searchOption = (isRecursive ? SearchOption.AllDirectories :
-                                                        SearchOption.TopDirectoryOnly);
-
-            DirectoryInfo info = new DirectoryInfo(path);
-
-            IEnumerable<FileSystemInfo> entries = info.EnumerateFileSystemInfos(DefaultSearchPattern, searchOption);
-
-            IEnumerable<FileSystemInfo> result = this.HandleEntries(entries);
+            else
+            {
+                result = new List<FileSystemInfo>();
+            }
 
             this.InvokeConsiderFilter(this.OnFinish,
                         this,
