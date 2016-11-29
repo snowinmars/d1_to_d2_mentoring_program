@@ -30,18 +30,68 @@ namespace AdvancedCSharp.Core
 
             if (!Directory.Exists(path))
             {
-                this.OnFinish?.Invoke(FileSystemVisitor.EmptyObject, new FileSystemVisitorEventArgs());
+                this.InvokeConsiderFilter(this.OnFinish,
+                        FileSystemVisitor.EmptyObject,
+                        new FileSystemVisitorEventArgs()); // TODO
                 return new List<FileSystemInfo>();
             }
 
-            var directories = this.GetDirectories(path, isRecursive);
-            var files = this.GetFiles(path, isRecursive);
+            SearchOption searchOption = (isRecursive ? SearchOption.AllDirectories :
+                                                        SearchOption.TopDirectoryOnly);
+
+            DirectoryInfo info = new DirectoryInfo(path);
+
+            IEnumerable<FileSystemInfo> entries = info.EnumerateFileSystemInfos("*.*", searchOption);
+
+            IEnumerable<FileSystemInfo> result = this.HandleEntries(entries);
 
             this.InvokeConsiderFilter(this.OnFinish,
                         FileSystemVisitor.EmptyObject,
                         new FileSystemVisitorEventArgs());
 
-            return directories.Concat(files);
+            return result;
+        }
+
+        private IEnumerable<FileSystemInfo> HandleEntries(IEnumerable<FileSystemInfo> entries)
+        {
+            foreach (var entry in entries)
+            {
+                DirectoryInfo directoryInfo = entry as DirectoryInfo;
+                FileInfo fileInfo = entry as FileInfo;
+                bool isPassed = this.Filter(entry);
+
+                if (directoryInfo != null)
+                {
+                    this.InvokeConsiderFilter(this.OnDirectoryFinded,
+                            FileSystemVisitor.EmptyObject,
+                            new FileSystemVisitorEventArgs { Message = directoryInfo.FullName });
+
+                    if (isPassed)
+                    {
+                        this.InvokeConsiderFilter(this.OnFilteredDirectoryFinded,
+                            FileSystemVisitor.EmptyObject,
+                            new FileSystemVisitorEventArgs { Message = directoryInfo.FullName });
+
+                        yield return entry;
+                    }
+                }
+
+                if (fileInfo != null)
+                {
+                    this.InvokeConsiderFilter(this.OnFileFinded,
+                            FileSystemVisitor.EmptyObject,
+                            new FileSystemVisitorEventArgs { Message = fileInfo.FullName });
+
+                    if (isPassed)
+                    {
+                        this.InvokeConsiderFilter(this.OnFilteredFileFinded,
+                            FileSystemVisitor.EmptyObject,
+                            new FileSystemVisitorEventArgs { Message = fileInfo.FullName });
+
+                        yield return entry;
+                    }
+                }
+            }
         }
 
         private void InvokeConsiderFilter(MyEvent ev, object obj, FileSystemVisitorEventArgs args)
@@ -81,9 +131,7 @@ namespace AdvancedCSharp.Core
             {
                 string fullDirPath = dirEnumerator.Current;
 
-                this.InvokeConsiderFilter(this.OnDirectoryFinded,
-                            FileSystemVisitor.EmptyObject,
-                            new FileSystemVisitorEventArgs { Message = fullDirPath });
+                
 
                 FileInfo dirInfo = new FileInfo(dirEnumerator.Current);
 
