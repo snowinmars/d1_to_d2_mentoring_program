@@ -72,6 +72,11 @@ namespace AdvancedCSharp.Core
         {
             foreach (var entry in entries)
             {
+                if (this.runtimeState.HasFlag(FileSystemVisitorRuntimeState.Interrupt))
+                {
+                    break;
+                }
+
                 DirectoryInfo directoryInfo = entry as DirectoryInfo;
                 FileInfo fileInfo = entry as FileInfo;
                 bool isPassed = this.Filter(entry);
