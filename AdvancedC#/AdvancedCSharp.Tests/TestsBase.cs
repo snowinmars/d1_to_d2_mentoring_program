@@ -8,6 +8,14 @@ namespace AdvancedCSharp.Tests
     {
         protected static readonly string RootPath = Directory.GetCurrentDirectory();
 
+        protected TestsBase()
+        {
+            foreach (var folder in TestsBase.Folders)
+            {
+                Directory.CreateDirectory(Path.Combine(TestsBase.RootPath, folder));
+            }
+        }
+
         protected static IEnumerable<string> Folders { get; } = new[]
         {
             "testFolder",
@@ -30,14 +38,6 @@ namespace AdvancedCSharp.Tests
             @"testFolder\forth\third",
             @"testFolder\forth\forth",
         };
-
-        protected TestsBase()
-        {
-            foreach (var folder in TestsBase.Folders)
-            {
-                Directory.CreateDirectory(Path.Combine(TestsBase.RootPath, folder));
-            }
-        }
 
         public void Dispose()
         {

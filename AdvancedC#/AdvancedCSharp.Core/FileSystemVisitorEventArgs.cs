@@ -10,8 +10,7 @@ namespace AdvancedCSharp.Core
 
     public class FileSystemVisitorEventArgs : EventArgs
     {
-        public FileSystemVisitorEventArgsStates State { get; set; }
-
         public string Message { get; set; }
+        public FileSystemVisitorEventArgsStates State { get; set; }
     }
 }

@@ -1,7 +1,7 @@
-﻿using System;
-using System.IO;
-using AdvancedCSharp.Core;
+﻿using AdvancedCSharp.Core;
 using AdvancedCSharp.Extensions;
+using System;
+using System.IO;
 
 namespace AdvancedCSharp.UI
 {
@@ -9,7 +9,7 @@ namespace AdvancedCSharp.UI
     {
         private static void Main()
         {
-            FileSystemVisitor fsv = new FileSystemVisitor(info => 
+            FileSystemVisitor fsv = new FileSystemVisitor(info =>
                                                             info.Name.Contains("C"));
 
             fsv.OnStart += (sender, args) => { Console.WriteLine("Started"); };
@@ -23,7 +23,6 @@ namespace AdvancedCSharp.UI
 
             var result = fsv.SearchByFilter(Directory.GetCurrentDirectory(), true)
                             .RepresentAsString();
-
         }
     }
 }
