@@ -19,7 +19,7 @@ namespace AdvancedCSharp.UI
                 Console.WriteLine($"Found file. Name: {args.Message}");
                 if (args.Message.Contains("12"))
                 {
-                    args.State = FileSystemVisitorEventArgsStates.StopOnFirstFiltredFindedCoincidence;
+                    args.State = FileSystemVisitorEventArgsStates.IgnoreThisEntry;
                 }
             };
             fsv.OnFilteredFileFinded += (sender, args) => {
@@ -35,8 +35,6 @@ namespace AdvancedCSharp.UI
 
             var result = fsv.SearchByFilter($"{Directory.GetCurrentDirectory()}\\..\\..", true)
                             .RepresentAsString();
-
-            Console.ReadKey();
         }
     }
 }

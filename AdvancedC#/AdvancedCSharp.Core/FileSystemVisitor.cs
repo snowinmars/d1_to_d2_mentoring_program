@@ -25,7 +25,6 @@ namespace AdvancedCSharp.Core
         public FileSystemVisitor(Func<FileSystemInfo, bool> filter)
         {
             this.Filter = filter;
-
             this.action = FileSystemVisitorAction.None;
         }
 
@@ -44,7 +43,7 @@ namespace AdvancedCSharp.Core
 
                 DirectoryInfo info = new DirectoryInfo(path);
 
-                IEnumerable<FileSystemInfo> entries = info.EnumerateFileSystemInfos(DefaultSearchPattern, searchOption);
+                IEnumerable<FileSystemInfo> entries = info.EnumerateFileSystemInfos(FileSystemVisitor.DefaultSearchPattern, searchOption);
 
                 result = this.HandleEntries(entries).ToList();
             }
@@ -67,7 +66,7 @@ namespace AdvancedCSharp.Core
                     break;
                 }
 
-                if (this.action.HasFlag(FileSystemVisitorAction.Ignore))
+                if (this.action.HasFlag(FileSystemVisitorAction.Ignore)) // bug
                 {
                     continue;
                 }
@@ -127,16 +126,10 @@ namespace AdvancedCSharp.Core
                     break;
                 case FileSystemVisitorEventArgsStates.StopOnFirstFindedCoincidence:
                 case FileSystemVisitorEventArgsStates.StopOnFirstFiltredFindedCoincidence:
-                    if (!this.action.HasFlag(FileSystemVisitorAction.Interrupt))
-                    {
-                        this.action ^= FileSystemVisitorAction.Interrupt;
-                    }
+                    this.action = FileSystemVisitorAction.Interrupt;
                     break;
                 case FileSystemVisitorEventArgsStates.IgnoreThisEntry:
-                    if (!this.action.HasFlag(FileSystemVisitorAction.Ignore))
-                    {
-                        this.action ^= FileSystemVisitorAction.Ignore;
-                    }
+                    this.action = FileSystemVisitorAction.Ignore;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(args.State), args.State, "FileSystemVisitorEventArgs state is out of range");
