@@ -8,6 +8,7 @@ namespace AdvancedCSharp.Core
         None = 0,
         StopOnFirstFindedCoincidence = 1,
         StopOnFirstFiltredFindedCoincidence = 2,
+        IgnoreThisEntry = 4,
     }
 
     public class FileSystemVisitorEventArgs : EventArgs

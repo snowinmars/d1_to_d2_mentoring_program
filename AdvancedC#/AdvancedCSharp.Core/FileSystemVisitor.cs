@@ -152,6 +152,16 @@ namespace AdvancedCSharp.Core
                         this.runtimeState = FileSystemVisitorRuntimeState.Interrupt;
                     }
                     break;
+                case FileSystemVisitorEventArgsStates.IgnoreThisEntry:
+                    // if he found anything
+                    if (this.runtimeState.HasFlag(FileSystemVisitorRuntimeState.FoundFile) ||
+                        this.runtimeState.HasFlag(FileSystemVisitorRuntimeState.FoundDirectory) ||
+                        this.runtimeState.HasFlag(FileSystemVisitorRuntimeState.FoundFiltredFile) ||
+                        this.runtimeState.HasFlag(FileSystemVisitorRuntimeState.FoundFiltredDirectory))
+                    {
+                        this.runtimeState = FileSystemVisitorRuntimeState.Interrupt;
+                    }
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(args.State), args.State, "FileSystemVisitorEventArgs state is out of range");
             }
