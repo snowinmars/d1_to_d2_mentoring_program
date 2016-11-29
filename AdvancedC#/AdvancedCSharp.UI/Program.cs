@@ -15,10 +15,16 @@ namespace AdvancedCSharp.UI
             fsv.OnStart += (sender, args) => { Console.WriteLine("Started"); };
             fsv.OnFinish += (sender, args) => { Console.WriteLine("Finished"); };
 
-            fsv.OnFileFinded += (sender, args) => { Console.WriteLine($"Found file. Name: {args.Message}"); };
+            fsv.OnFileFinded += (sender, args) => {
+                Console.WriteLine($"Found file. Name: {args.Message}");
+                if (args.Message.Contains("12"))
+                {
+                    args.State = FileSystemVisitorEventArgsStates.StopOnFirstFiltredFindedCoincidence;
+                }
+            };
             fsv.OnFilteredFileFinded += (sender, args) => {
                 Console.WriteLine($"Found filtered file. Name: {args.Message}");
-                args.State = FileSystemVisitorEventArgsStates.StopOnFirstFiltredFindedCoincidence;
+                //args.State = FileSystemVisitorEventArgsStates.StopOnFirstFiltredFindedCoincidence;
             };
 
             fsv.OnDirectoryFinded += (sender, args) => {
