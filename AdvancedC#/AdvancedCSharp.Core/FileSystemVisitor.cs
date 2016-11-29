@@ -50,10 +50,9 @@ namespace AdvancedCSharp.Core
 
                 DirectoryInfo info = new DirectoryInfo(path);
 
-                IEnumerable<FileSystemInfo> directories = info.EnumerateDirectories(DefaultSearchPattern, searchOption);
-                IEnumerable<FileSystemInfo> files = info.EnumerateFiles(DefaultSearchPattern, searchOption);
+                IEnumerable<FileSystemInfo> entries = info.EnumerateFileSystemInfos(DefaultSearchPattern, searchOption);
 
-                result = this.HandleDirectories(directories).Concat(this.HandleFiles(files));
+                result = this.HandleEntries(entries);
             }
             else
             {
@@ -69,62 +68,44 @@ namespace AdvancedCSharp.Core
             return result;
         }
 
-        private IEnumerable<FileSystemInfo> HandleFiles(IEnumerable<FileSystemInfo> files)
+        private IEnumerable<FileSystemInfo> HandleEntries(IEnumerable<FileSystemInfo> entries)
         {
-            foreach (var file in files.Select(fileSystemInfo => fileSystemInfo as FileInfo))
+            foreach (var entry in entries)
             {
-                if (this.runtimeState.HasFlag(FileSystemVisitorRuntimeState.Interrupt))
+                DirectoryInfo directoryInfo = entry as DirectoryInfo;
+                FileInfo fileInfo = entry as FileInfo;
+                bool isPassed = this.Filter(entry);
+
+                if (directoryInfo != null)
                 {
-                    break;
+                    this.InvokeConsiderFilter(this.OnDirectoryFinded,
+                            this,
+                            new FileSystemVisitorEventArgs { Message = directoryInfo.FullName });
+
+                    if (isPassed)
+                    {
+                        this.InvokeConsiderFilter(this.OnFilteredDirectoryFinded,
+                            this,
+                            new FileSystemVisitorEventArgs { Message = directoryInfo.FullName });
+
+                        yield return entry;
+                    }
                 }
 
-                this.runtimeState = FileSystemVisitorRuntimeState.FoundFile;
-
-                this.InvokeConsiderFilter(this.OnFileFinded,
-                        this,
-                        new FileSystemVisitorEventArgs { Message = file.FullName });
-
-                bool isPassed = this.Filter(file);
-
-                if (isPassed)
+                if (fileInfo != null)
                 {
-                    this.runtimeState = FileSystemVisitorRuntimeState.FoundFiltredFile;
+                    this.InvokeConsiderFilter(this.OnFileFinded,
+                            this,
+                            new FileSystemVisitorEventArgs { Message = fileInfo.FullName });
 
-                    this.InvokeConsiderFilter(this.OnFilteredFileFinded,
-                        this,
-                        new FileSystemVisitorEventArgs { Message = file.FullName });
+                    if (isPassed)
+                    {
+                        this.InvokeConsiderFilter(this.OnFilteredFileFinded,
+                            this,
+                            new FileSystemVisitorEventArgs { Message = fileInfo.FullName });
 
-                    yield return file;
-                }
-            }
-        }
-
-        private IEnumerable<FileSystemInfo> HandleDirectories(IEnumerable<FileSystemInfo> directories)
-        {
-            foreach (var directory in directories.Select(fileSystemInfo => fileSystemInfo as DirectoryInfo))
-            {
-                if (this.runtimeState.HasFlag(FileSystemVisitorRuntimeState.Interrupt))
-                {
-                    break;
-                }
-
-                this.runtimeState = FileSystemVisitorRuntimeState.FoundDirectory;
-
-                this.InvokeConsiderFilter(this.OnDirectoryFinded,
-                        this,
-                        new FileSystemVisitorEventArgs { Message = directory.FullName });
-
-                bool isPassed = this.Filter(directory);
-
-                if (isPassed)
-                {
-                    this.runtimeState = FileSystemVisitorRuntimeState.FoundFiltredDirectory;
-
-                    this.InvokeConsiderFilter(this.OnFilteredDirectoryFinded,
-                        this,
-                        new FileSystemVisitorEventArgs { Message = directory.FullName });
-
-                    yield return directory;
+                        yield return entry;
+                    }
                 }
             }
         }
