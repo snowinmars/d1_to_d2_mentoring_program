@@ -78,12 +78,16 @@ namespace AdvancedCSharp.Core
 
                 if (directoryInfo != null)
                 {
+                    this.runtimeState = FileSystemVisitorRuntimeState.FoundDirectory;
+
                     this.InvokeConsiderFilter(this.OnDirectoryFinded,
                             this,
                             new FileSystemVisitorEventArgs { Message = directoryInfo.FullName });
 
                     if (isPassed)
                     {
+                        this.runtimeState = FileSystemVisitorRuntimeState.FoundFiltredDirectory;
+
                         this.InvokeConsiderFilter(this.OnFilteredDirectoryFinded,
                             this,
                             new FileSystemVisitorEventArgs { Message = directoryInfo.FullName });
@@ -94,12 +98,16 @@ namespace AdvancedCSharp.Core
 
                 if (fileInfo != null)
                 {
+                    this.runtimeState = FileSystemVisitorRuntimeState.FoundFile;
+
                     this.InvokeConsiderFilter(this.OnFileFinded,
                             this,
                             new FileSystemVisitorEventArgs { Message = fileInfo.FullName });
 
                     if (isPassed)
                     {
+                        this.runtimeState = FileSystemVisitorRuntimeState.FoundFiltredFile;
+                        
                         this.InvokeConsiderFilter(this.OnFilteredFileFinded,
                             this,
                             new FileSystemVisitorEventArgs { Message = fileInfo.FullName });
