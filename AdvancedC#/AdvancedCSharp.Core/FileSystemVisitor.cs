@@ -19,7 +19,8 @@ namespace AdvancedCSharp.Core
 
         private const string DefaultSearchPattern = "*.*";
         public static readonly Func<FileSystemInfo, bool> DefaultFilter = info => true;
-        private FileSystemVisitorRuntimeState runtimeState;
+        private bool haveToInterrupt;
+        private bool haveToIgnore;
 
         public FileSystemVisitor() : this(FileSystemVisitor.DefaultFilter)
         {
@@ -28,18 +29,15 @@ namespace AdvancedCSharp.Core
         public FileSystemVisitor(Func<FileSystemInfo, bool> filter)
         {
             this.Filter = filter;
-            this.runtimeState = FileSystemVisitorRuntimeState.None;
+            this.haveToInterrupt = false;
+            this.haveToIgnore = false;
         }
 
         public Func<FileSystemInfo, bool> Filter { get; set; }
 
         public IEnumerable<FileSystemInfo> SearchByFilter(string path, bool isRecursive = false)
         {
-            this.runtimeState = FileSystemVisitorRuntimeState.None;
-
-            this.InvokeConsiderFilter(this.OnStart,
-                        this,
-                        new FileSystemVisitorEventArgs());
+            this.OnStart?.Invoke(this, new EventArgs());
 
             IEnumerable<FileSystemInfo> result;
 
@@ -59,11 +57,7 @@ namespace AdvancedCSharp.Core
                 result = new List<FileSystemInfo>();
             }
 
-            this.runtimeState = FileSystemVisitorRuntimeState.None;
-
-            this.InvokeConsiderFilter(this.OnFinish,
-                        this,
-                        new FileSystemVisitorEventArgs());
+            this.OnFinish?.Invoke(this, new EventArgs());
 
             return result;
         }
@@ -72,9 +66,14 @@ namespace AdvancedCSharp.Core
         {
             foreach (var entry in entries)
             {
-                if (this.runtimeState.HasFlag(FileSystemVisitorRuntimeState.Interrupt))
+                if (haveToInterrupt)
                 {
                     break;
+                }
+
+                if (haveToIgnore)
+                {
+                    continue;
                 }
 
                 DirectoryInfo directoryInfo = entry as DirectoryInfo;
@@ -83,16 +82,12 @@ namespace AdvancedCSharp.Core
 
                 if (directoryInfo != null)
                 {
-                    this.runtimeState = FileSystemVisitorRuntimeState.FoundDirectory;
-
                     this.InvokeConsiderFilter(this.OnDirectoryFinded,
                             this,
                             new FileSystemVisitorEventArgs { Message = directoryInfo.FullName });
 
                     if (isPassed)
                     {
-                        this.runtimeState = FileSystemVisitorRuntimeState.FoundFiltredDirectory;
-
                         this.InvokeConsiderFilter(this.OnFilteredDirectoryFinded,
                             this,
                             new FileSystemVisitorEventArgs { Message = directoryInfo.FullName });
@@ -103,16 +98,12 @@ namespace AdvancedCSharp.Core
 
                 if (fileInfo != null)
                 {
-                    this.runtimeState = FileSystemVisitorRuntimeState.FoundFile;
-
                     this.InvokeConsiderFilter(this.OnFileFinded,
                             this,
                             new FileSystemVisitorEventArgs { Message = fileInfo.FullName });
 
                     if (isPassed)
                     {
-                        this.runtimeState = FileSystemVisitorRuntimeState.FoundFiltredFile;
-                        
                         this.InvokeConsiderFilter(this.OnFilteredFileFinded,
                             this,
                             new FileSystemVisitorEventArgs { Message = fileInfo.FullName });
@@ -123,7 +114,7 @@ namespace AdvancedCSharp.Core
             }
         }
 
-        private void InvokeConsiderFilter(MyEvent ev, object obj, FileSystemVisitorEventArgs args)
+        private void InvokeConsiderFilter(FileSystemVisitorEvent ev, object obj, FileSystemVisitorEventArgs args)
         {
             if (this.Filter != FileSystemVisitor.DefaultFilter)
             {
@@ -139,28 +130,11 @@ namespace AdvancedCSharp.Core
                 case FileSystemVisitorEventArgsStates.None:
                     break;
                 case FileSystemVisitorEventArgsStates.StopOnFirstFindedCoincidence:
-                    if (this.runtimeState.HasFlag(FileSystemVisitorRuntimeState.FoundFile) ||
-                        this.runtimeState.HasFlag(FileSystemVisitorRuntimeState.FoundDirectory))
-                    {
-                        this.runtimeState = FileSystemVisitorRuntimeState.Interrupt;
-                    }
-                    break;
                 case FileSystemVisitorEventArgsStates.StopOnFirstFiltredFindedCoincidence:
-                    if (this.runtimeState.HasFlag(FileSystemVisitorRuntimeState.FoundFiltredFile) ||
-                        this.runtimeState.HasFlag(FileSystemVisitorRuntimeState.FoundFiltredDirectory))
-                    {
-                        this.runtimeState = FileSystemVisitorRuntimeState.Interrupt;
-                    }
+                    this.haveToInterrupt = true;
                     break;
                 case FileSystemVisitorEventArgsStates.IgnoreThisEntry:
-                    // if he found anything
-                    if (this.runtimeState.HasFlag(FileSystemVisitorRuntimeState.FoundFile) ||
-                        this.runtimeState.HasFlag(FileSystemVisitorRuntimeState.FoundDirectory) ||
-                        this.runtimeState.HasFlag(FileSystemVisitorRuntimeState.FoundFiltredFile) ||
-                        this.runtimeState.HasFlag(FileSystemVisitorRuntimeState.FoundFiltredDirectory))
-                    {
-                        this.runtimeState = FileSystemVisitorRuntimeState.Interrupt;
-                    }
+                    this.haveToIgnore = true;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(args.State), args.State, "FileSystemVisitorEventArgs state is out of range");
@@ -169,19 +143,21 @@ namespace AdvancedCSharp.Core
 
         #region events
 
-        public delegate void MyEvent(object sender, FileSystemVisitorEventArgs e);
+        public delegate void Event(object sender, EventArgs e);
 
-        public event MyEvent OnDirectoryFinded;
+        public delegate void FileSystemVisitorEvent(object sender, FileSystemVisitorEventArgs e);
 
-        public event MyEvent OnFileFinded;
+        public event FileSystemVisitorEvent OnDirectoryFinded;
 
-        public event MyEvent OnFilteredDirectoryFinded;
+        public event FileSystemVisitorEvent OnFileFinded;
 
-        public event MyEvent OnFilteredFileFinded;
+        public event FileSystemVisitorEvent OnFilteredDirectoryFinded;
 
-        public event MyEvent OnFinish;
+        public event FileSystemVisitorEvent OnFilteredFileFinded;
 
-        public event MyEvent OnStart;
+        public event Event OnFinish;
+
+        public event Event OnStart;
 
         #endregion events
     }
