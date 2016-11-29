@@ -9,8 +9,6 @@ namespace AdvancedCSharp.Core
     {
         public static readonly Func<FileSystemInfo, bool> DefaultFilter = info => true;
 
-        private static readonly object EmptyObject = new object();
-
         public FileSystemVisitor() : this(FileSystemVisitor.DefaultFilter)
         {
         }
@@ -25,13 +23,13 @@ namespace AdvancedCSharp.Core
         public IEnumerable<FileSystemInfo> SearchByFilter(string path, bool isRecursive = false)
         {
             this.InvokeConsiderFilter(this.OnStart,
-                        FileSystemVisitor.EmptyObject,
+                        this,
                         new FileSystemVisitorEventArgs());
 
             if (!Directory.Exists(path))
             {
                 this.InvokeConsiderFilter(this.OnFinish,
-                        FileSystemVisitor.EmptyObject,
+                        this,
                         new FileSystemVisitorEventArgs()); // TODO
                 return new List<FileSystemInfo>();
             }
@@ -46,7 +44,7 @@ namespace AdvancedCSharp.Core
             IEnumerable<FileSystemInfo> result = this.HandleEntries(entries);
 
             this.InvokeConsiderFilter(this.OnFinish,
-                        FileSystemVisitor.EmptyObject,
+                        this,
                         new FileSystemVisitorEventArgs());
 
             return result;
@@ -63,13 +61,13 @@ namespace AdvancedCSharp.Core
                 if (directoryInfo != null)
                 {
                     this.InvokeConsiderFilter(this.OnDirectoryFinded,
-                            FileSystemVisitor.EmptyObject,
+                            this,
                             new FileSystemVisitorEventArgs { Message = directoryInfo.FullName });
 
                     if (isPassed)
                     {
                         this.InvokeConsiderFilter(this.OnFilteredDirectoryFinded,
-                            FileSystemVisitor.EmptyObject,
+                            this,
                             new FileSystemVisitorEventArgs { Message = directoryInfo.FullName });
 
                         yield return entry;
@@ -79,13 +77,13 @@ namespace AdvancedCSharp.Core
                 if (fileInfo != null)
                 {
                     this.InvokeConsiderFilter(this.OnFileFinded,
-                            FileSystemVisitor.EmptyObject,
+                            this,
                             new FileSystemVisitorEventArgs { Message = fileInfo.FullName });
 
                     if (isPassed)
                     {
                         this.InvokeConsiderFilter(this.OnFilteredFileFinded,
-                            FileSystemVisitor.EmptyObject,
+                            this,
                             new FileSystemVisitorEventArgs { Message = fileInfo.FullName });
 
                         yield return entry;
