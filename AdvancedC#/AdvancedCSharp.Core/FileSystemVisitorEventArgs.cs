@@ -2,10 +2,12 @@
 
 namespace AdvancedCSharp.Core
 {
+    [Flags]
     public enum FileSystemVisitorEventArgsStates
     {
         None = 0,
-        StopOnFirstCoincidence = 1,
+        StopOnFirstFindedCoincidence = 1,
+        StopOnFirstFiltredFindedCoincidence = 2,
     }
 
     public class FileSystemVisitorEventArgs : EventArgs
