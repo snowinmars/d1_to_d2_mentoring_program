@@ -6,6 +6,7 @@ namespace AdvancedCSharp.Core
 {
     public class FileSystemVisitor
     {
+        private const string DefaultSearchPattern = "*.*";
         public static readonly Func<FileSystemInfo, bool> DefaultFilter = info => true;
 
         public FileSystemVisitor() : this(FileSystemVisitor.DefaultFilter)
@@ -38,7 +39,7 @@ namespace AdvancedCSharp.Core
 
             DirectoryInfo info = new DirectoryInfo(path);
 
-            IEnumerable<FileSystemInfo> entries = info.EnumerateFileSystemInfos("*.*", searchOption);
+            IEnumerable<FileSystemInfo> entries = info.EnumerateFileSystemInfos(DefaultSearchPattern, searchOption);
 
             IEnumerable<FileSystemInfo> result = this.HandleEntries(entries);
 
