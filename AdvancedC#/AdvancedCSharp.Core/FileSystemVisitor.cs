@@ -119,59 +119,5 @@ namespace AdvancedCSharp.Core
         public event MyEvent OnStart;
 
         #endregion events
-
-        private IEnumerable<FileSystemInfo> GetDirectories(string path, bool isRecursive = false)
-        {
-            SearchOption searchOption = (isRecursive ? SearchOption.AllDirectories :
-                                                        SearchOption.TopDirectoryOnly);
-
-            var dirEnumerator = Directory.EnumerateDirectories(path, "*.*", searchOption).GetEnumerator();
-
-            while (dirEnumerator.MoveNext())
-            {
-                string fullDirPath = dirEnumerator.Current;
-
-                
-
-                FileInfo dirInfo = new FileInfo(dirEnumerator.Current);
-
-                if (this.Filter(dirInfo))
-                {
-                    this.InvokeConsiderFilter(this.OnFilteredDirectoryFinded,
-                            FileSystemVisitor.EmptyObject,
-                            new FileSystemVisitorEventArgs { Message = fullDirPath });
-
-                    yield return dirInfo;
-                }
-            }
-        }
-
-        private IEnumerable<FileSystemInfo> GetFiles(string path, bool isRecursive = false)
-        {
-            SearchOption searchOption = (isRecursive ? SearchOption.AllDirectories :
-                                                        SearchOption.TopDirectoryOnly);
-
-            IEnumerator<string> fileEnumerator = Directory.EnumerateFiles(path, "*.*", searchOption).GetEnumerator();
-
-            while (fileEnumerator.MoveNext())
-            {
-                string fullFilePath = fileEnumerator.Current;
-
-                this.InvokeConsiderFilter(this.OnFileFinded,
-                            FileSystemVisitor.EmptyObject,
-                            new FileSystemVisitorEventArgs { Message = fullFilePath });
-
-                FileInfo fileInfo = new FileInfo(fileEnumerator.Current);
-
-                if (this.Filter(fileInfo))
-                {
-                    this.InvokeConsiderFilter(this.OnFilteredFileFinded,
-                                FileSystemVisitor.EmptyObject,
-                                new FileSystemVisitorEventArgs { Message = fullFilePath });
-
-                    yield return fileInfo;
-                }
-            }
-        }
     }
 }
