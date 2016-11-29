@@ -7,16 +7,6 @@ namespace AdvancedCSharp.Core
 {
     public class FileSystemVisitor
     {
-        private enum FileSystemVisitorRuntimeState
-        {
-            None = 0,
-            Interrupt = 1,
-            FoundFile = 2,
-            FoundFiltredFile = 4,
-            FoundDirectory = 8,
-            FoundFiltredDirectory = 16,
-        }
-
         private enum FileSystemVisitorAction
         {
             None = 0,
