@@ -66,11 +66,6 @@ namespace AdvancedCSharp.Core
                     break;
                 }
 
-                if (this.action.HasFlag(FileSystemVisitorAction.Ignore)) // bug
-                {
-                    continue;
-                }
-
                 DirectoryInfo directoryInfo = entry as DirectoryInfo;
                 FileInfo fileInfo = entry as FileInfo;
                 bool isPassed = this.Filter(entry);

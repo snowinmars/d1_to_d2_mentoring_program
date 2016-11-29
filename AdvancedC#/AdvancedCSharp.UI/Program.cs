@@ -17,10 +17,10 @@ namespace AdvancedCSharp.UI
 
             fsv.OnFileFinded += (sender, args) => {
                 Console.WriteLine($"Found file. Name: {args.Message}");
-                if (args.Message.Contains("12"))
-                {
-                    args.State = FileSystemVisitorEventArgsStates.IgnoreThisEntry;
-                }
+                //if (args.Message.Contains("12"))
+                //{
+                //    args.State = FileSystemVisitorEventArgsStates.IgnoreThisEntry;
+                //}
             };
             fsv.OnFilteredFileFinded += (sender, args) => {
                 Console.WriteLine($"Found filtered file. Name: {args.Message}");
@@ -33,7 +33,7 @@ namespace AdvancedCSharp.UI
             };
             fsv.OnFilteredDirectoryFinded += (sender, args) => { Console.WriteLine($"Found filtered dir. Name: {args.Message}"); };
 
-            var result = fsv.SearchByFilter($"{Directory.GetCurrentDirectory()}\\..\\..", true)
+            var result = fsv.SearchByFilter(@"D:\testFolder", true)
                             .RepresentAsString();
         }
     }

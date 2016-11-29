@@ -58,7 +58,6 @@ namespace AdvancedCSharp.Tests
 
             Path.Combine(TestsBase.Folders[7], "newFile1.txt"),
             Path.Combine(TestsBase.Folders[7], "aNewFile.txt"),
-
         };
 
         public void Dispose()
