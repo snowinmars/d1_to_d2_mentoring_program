@@ -52,7 +52,7 @@ namespace AdvancedCSharp.Core
 
                 IEnumerable<FileSystemInfo> entries = info.EnumerateFileSystemInfos(DefaultSearchPattern, searchOption);
 
-                result = this.HandleEntries(entries);
+                result = this.HandleEntries(entries).ToList();
             }
             else
             {
