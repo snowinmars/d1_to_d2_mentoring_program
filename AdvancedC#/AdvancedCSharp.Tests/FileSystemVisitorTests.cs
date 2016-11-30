@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Xunit;
 
 namespace AdvancedCSharp.Tests
@@ -146,6 +147,89 @@ namespace AdvancedCSharp.Tests
             fsv.SearchByFilter(TestsBase.RootPath);
 
             Assert.True(i == 1);
+        }
+
+        [Fact]
+        public void FSV_EventOrderByDefaultFilter_MustBeCorrect()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor();
+
+            StringBuilder result = new StringBuilder(64);
+
+            fsv.Start += (sender, args) =>
+            {
+                result.Append("s");
+            };
+            fsv.DirectoryFinded += (sender, args) =>
+            {
+                result.Append("df");
+            };
+            fsv.FileFinded += (sender, args) =>
+            {
+                result.Append("ff");
+            };
+            fsv.FilteredDirectoryFinded += (sender, args) =>
+            {
+                result.Append("fdf");
+            };
+            fsv.FilteredFileFinded += (sender, args) =>
+            {
+                result.Append("fff");
+            };
+            fsv.Finish += (sender, args) =>
+            {
+                result.Append("f");
+            };
+
+            fsv.SearchByFilter(TestsBase.Folders
+                                        .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                        .ElementAt(1));
+
+            string exp = "s df df df df ff f".Replace(" ", string.Empty);
+
+            Assert.Equal(expected: exp, actual: result.ToString());
+        }
+
+
+            [Fact]
+        public void FSV_EventOrderByNonDefaultFilter_MustBeCorrect()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor(info => info.Name.Contains("o"));
+
+            StringBuilder result = new StringBuilder(64);
+
+            fsv.Start += (sender, args) =>
+            {
+                result.Append("s");
+            };
+            fsv.DirectoryFinded += (sender, args) =>
+            {
+                result.Append("df");
+            };
+            fsv.FileFinded += (sender, args) =>
+            {
+                result.Append("ff");
+            };
+            fsv.FilteredDirectoryFinded += (sender, args) =>
+            {
+                result.Append("fdf");
+            };
+            fsv.FilteredFileFinded += (sender, args) =>
+            {
+                result.Append("fff");
+            };
+            fsv.Finish += (sender, args) =>
+            {
+                result.Append("f");
+            };
+
+            fsv.SearchByFilter(TestsBase.Folders
+                                        .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                        .ElementAt(1));
+
+            string exp = "s df df fdf df fdf df ff f".Replace(" ", string.Empty);
+
+            Assert.Equal(expected: exp, actual: result.ToString());
         }
 
         [Fact]
