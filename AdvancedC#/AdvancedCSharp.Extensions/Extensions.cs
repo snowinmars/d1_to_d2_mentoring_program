@@ -13,7 +13,22 @@ namespace AdvancedCSharp.Extensions
 
             foreach (var item in collection)
             {
-                sb.Append(item.Name);
+                sb.Append(item.FullName);
+                sb.Append(Environment.NewLine);
+            }
+
+            return sb.ToString();
+        }
+
+        public static string RepresentAsString(this IEnumerable<string> collection)
+        {
+            const string separator = " ";
+
+            StringBuilder sb = new StringBuilder(128);
+
+            foreach (var item in collection)
+            {
+                sb.Append($"{item}");
                 sb.Append(Environment.NewLine);
             }
 

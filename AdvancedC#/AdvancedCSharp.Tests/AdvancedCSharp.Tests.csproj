@@ -66,6 +66,9 @@
     <Compile Include="TestsBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="DFSPSSearch.ps1">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

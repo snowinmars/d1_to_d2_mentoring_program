@@ -7,7 +7,8 @@ namespace AdvancedCSharp.Tests
 {
     public abstract class TestsBase : IDisposable
     {
-        protected static readonly string RootPath = Directory.GetCurrentDirectory();
+        private const string testFolderName = "testFolder";
+        public static readonly string RootPath = Directory.GetCurrentDirectory();
 
         protected TestsBase()
         {
@@ -26,25 +27,25 @@ namespace AdvancedCSharp.Tests
 
         protected static IList<string> Folders { get; } = new[]
         {
-            "testFolder",
-            @"testFolder\first",
-            @"testFolder\first\first",
-            @"testFolder\first\second",
-            @"testFolder\first\third",
-            @"testFolder\first\forth",
-            @"testFolder\second",
-            @"testFolder\second\first",
-            @"testFolder\second\second",
-            @"testFolder\third",
-            @"testFolder\forth",
-            @"testFolder\forth\first",
-            @"testFolder\forth\second",
-            @"testFolder\forth\second\first",
-            @"testFolder\forth\second\second",
-            @"testFolder\forth\second\third",
-            @"testFolder\forth\second\forth",
-            @"testFolder\forth\third",
-            @"testFolder\forth\forth",
+            TestsBase.testFolderName,
+            Path.Combine(TestsBase.testFolderName, @"first"),
+            Path.Combine(TestsBase.testFolderName, @"first\first"),
+            Path.Combine(TestsBase.testFolderName, @"first\second"),
+            Path.Combine(TestsBase.testFolderName, @"first\third"),
+            Path.Combine(TestsBase.testFolderName, @"first\forth"),
+            Path.Combine(TestsBase.testFolderName, @"second"),
+            Path.Combine(TestsBase.testFolderName, @"second\first"),
+            Path.Combine(TestsBase.testFolderName, @"second\second"),
+            Path.Combine(TestsBase.testFolderName, @"third"),
+            Path.Combine(TestsBase.testFolderName, @"forth"),
+            Path.Combine(TestsBase.testFolderName, @"forth\first"),
+            Path.Combine(TestsBase.testFolderName, @"forth\second"),
+            Path.Combine(TestsBase.testFolderName, @"forth\second\first"),
+            Path.Combine(TestsBase.testFolderName, @"forth\second\second"),
+            Path.Combine(TestsBase.testFolderName, @"forth\second\third"),
+            Path.Combine(TestsBase.testFolderName, @"forth\second\forth"),
+            Path.Combine(TestsBase.testFolderName, @"forth\third"),
+            Path.Combine(TestsBase.testFolderName, @"forth\forth"),
         };
 
         protected static IEnumerable<string> Files { get; } = new[]

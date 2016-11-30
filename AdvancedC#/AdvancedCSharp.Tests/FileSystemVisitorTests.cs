@@ -113,7 +113,7 @@ namespace AdvancedCSharp.Tests
                 string sfvResult = fsv.SearchByFilter(fullFolderPath, isRecursive: true)
                                         .RepresentAsString();
 
-                Assert.Equal(expected: pseResult, actual: sfvResult);
+               Assert.Equal(expected: pseResult, actual: sfvResult);
             }
         }
 

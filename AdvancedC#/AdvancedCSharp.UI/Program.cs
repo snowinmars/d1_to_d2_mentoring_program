@@ -15,19 +15,22 @@ namespace AdvancedCSharp.UI
             fsv.OnStart += (sender, args) => { Console.WriteLine("Started"); };
             fsv.OnFinish += (sender, args) => { Console.WriteLine("Finished"); };
 
-            fsv.OnFileFinded += (sender, args) => {
+            fsv.OnFileFinded += (sender, args) =>
+            {
                 Console.WriteLine($"Found file. Name: {args.Message}");
                 //if (args.Message.Contains("12"))
                 //{
                 //    args.State = FileSystemVisitorEventArgsStates.IgnoreThisEntry;
                 //}
             };
-            fsv.OnFilteredFileFinded += (sender, args) => {
+            fsv.OnFilteredFileFinded += (sender, args) =>
+            {
                 Console.WriteLine($"Found filtered file. Name: {args.Message}");
                 //args.State = FileSystemVisitorEventArgsStates.StopOnFirstFiltredFindedCoincidence;
             };
 
-            fsv.OnDirectoryFinded += (sender, args) => {
+            fsv.OnDirectoryFinded += (sender, args) =>
+            {
                 Console.WriteLine($"Found dir. Name: {args.Message}");
                 //args.State = FileSystemVisitorEventArgsStates.StopOnFirstFindedCoincidence;
             };
@@ -35,6 +38,8 @@ namespace AdvancedCSharp.UI
 
             var result = fsv.SearchByFilter(@"D:\testFolder", true)
                             .RepresentAsString();
+
+            //FileSystemVisitor.TraverseDirs(new DirectoryInfo(@"D:\testFolder"), "");
         }
     }
 }

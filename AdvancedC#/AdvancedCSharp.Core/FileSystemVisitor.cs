@@ -38,12 +38,9 @@ namespace AdvancedCSharp.Core
 
             if (Directory.Exists(path))
             {
-                SearchOption searchOption = (isRecursive ? SearchOption.AllDirectories :
-                                                            SearchOption.TopDirectoryOnly);
-
                 DirectoryInfo info = new DirectoryInfo(path);
 
-                IEnumerable<FileSystemInfo> entries = info.EnumerateFileSystemInfos(FileSystemVisitor.DefaultSearchPattern, searchOption);
+                IEnumerable<FileSystemInfo> entries = this.TraverseDirs(info, isRecursive);
 
                 result = this.HandleEntries(entries).ToList();
             }
@@ -55,6 +52,29 @@ namespace AdvancedCSharp.Core
             this.OnFinish?.Invoke(this, new EventArgs());
 
             return result;
+        }
+
+        public IEnumerable<FileSystemInfo> TraverseDirs(DirectoryInfo dir, bool isRecursive)
+        {
+            foreach (DirectoryInfo iInfo in dir.GetDirectories())
+            {
+                yield return iInfo;
+
+                if (isRecursive)
+                {
+                    var enumerator = this.TraverseDirs(iInfo, isRecursive).GetEnumerator();
+
+                    while (enumerator.MoveNext())
+                    {
+                        yield return enumerator.Current;
+                    }
+                }
+            }
+
+            foreach (FileInfo iInfo in dir.GetFiles())
+            {
+                yield return iInfo;
+            }
         }
 
         private IEnumerable<FileSystemInfo> HandleEntries(IEnumerable<FileSystemInfo> entries)
