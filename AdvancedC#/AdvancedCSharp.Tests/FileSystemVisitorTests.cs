@@ -43,17 +43,16 @@ namespace AdvancedCSharp.Tests
         public void FSV_SearchByDefaultFilterNonRecursively_MustWorkAsPowershell()
         {
             FileSystemVisitor fsv = new FileSystemVisitor();
-            PowershellSearchEngine pse = new PowershellSearchEngine();
 
             int i = 0;
 
             foreach (var fullFolderPath in TestsBase.Folders
                                                     .Select(f => Path.Combine(TestsBase.RootPath, f)))
             {
-                string sfvResult = fsv.SearchByFilter(fullFolderPath, isRecursive: false)
+                string fsvResult = fsv.SearchByFilter(fullFolderPath)
                                         .RepresentAsString();
 
-                Assert.True(sfvResult.Equals(TestsBase.ExpectedResultsForHardcodedFilter[TestsBase.Folders[i]]));
+                Assert.True(fsvResult.Equals(TestsBase.ExpectedResultsForHardcodedFilter[TestsBase.Folders[i]]));
 
                 ++i;
             }
@@ -70,10 +69,10 @@ namespace AdvancedCSharp.Tests
             {
                 string pseResult = pse.Ls(fullFolderPath, isRecursive: true)
                                         .RepresentAsString();
-                string sfvResult = fsv.SearchByFilter(fullFolderPath, isRecursive: true)
+                string fsvResult = fsv.SearchByFilter(fullFolderPath, isRecursive: true)
                                         .RepresentAsString();
 
-                Assert.Equal(expected: pseResult, actual: sfvResult);
+                Assert.Equal(expected: pseResult, actual: fsvResult);
             }
         }
 
@@ -84,16 +83,15 @@ namespace AdvancedCSharp.Tests
             Func<FileSystemInfo, bool> filter = fileInfo => fileInfo.Name.StartsWith(letter, StringComparison.InvariantCultureIgnoreCase);
 
             FileSystemVisitor fsv = new FileSystemVisitor(filter);
-            PowershellSearchEngine pse = new PowershellSearchEngine();
             int i = 0;
 
             foreach (var fullFolderPath in TestsBase.Folders
                                                     .Select(f => Path.Combine(TestsBase.RootPath, f)))
             {
-                string sfvResult = fsv.SearchByFilter(fullFolderPath, isRecursive: false)
+                string fsvResult = fsv.SearchByFilter(fullFolderPath)
                                         .RepresentAsString();
 
-                Assert.True(sfvResult.Equals(TestsBase.ExpectedResultsForNonDefaultFilter[TestsBase.Folders[i]]));
+                Assert.True(fsvResult.Equals(TestsBase.ExpectedResultsForNonDefaultFilter[TestsBase.Folders[i]]));
 
                 ++i;
             }
@@ -113,10 +111,10 @@ namespace AdvancedCSharp.Tests
             {
                 string pseResult = pse.Ls(fullFolderPath, isRecursive: true, filenameStartsWith: letter)
                                         .RepresentAsString();
-                string sfvResult = fsv.SearchByFilter(fullFolderPath, isRecursive: true)
+                string fsvResult = fsv.SearchByFilter(fullFolderPath, isRecursive: true)
                                         .RepresentAsString();
 
-                Assert.Equal(expected: pseResult, actual: sfvResult);
+                Assert.Equal(expected: pseResult, actual: fsvResult);
             }
         }
 
@@ -227,11 +225,12 @@ namespace AdvancedCSharp.Tests
                 }
             };
 
-            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
+            IList<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
                                                                     .Select(f => Path.Combine(TestsBase.RootPath, f))
-                                                                    .First());
+                                                                    .First())
+                                                    .ToList();
 
-            Assert.True(result.Count() == 3);
+            Assert.True(result.Count == 3);
             Assert.True(result.ElementAt(0).Name == "first");
             Assert.True(result.ElementAt(1).Name == "forth");
             Assert.True(result.ElementAt(2).Name == "second");
@@ -250,11 +249,12 @@ namespace AdvancedCSharp.Tests
                 }
             };
 
-            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
+            IList<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
                                                                     .Select(f => Path.Combine(TestsBase.RootPath, f))
-                                                                    .First());
+                                                                    .First())
+                                                .ToList();
 
-            Assert.True(result.Count() == 3);
+            Assert.True(result.Count == 3);
             Assert.True(result.ElementAt(0).Name == "first");
             Assert.True(result.ElementAt(1).Name == "forth");
             Assert.True(result.ElementAt(2).Name == "second");
@@ -273,11 +273,12 @@ namespace AdvancedCSharp.Tests
                 }
             };
 
-            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
+            IList<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
                                                                     .Select(f => Path.Combine(TestsBase.RootPath, f))
-                                                                    .ElementAt(2));
+                                                                    .ElementAt(2))
+                                                .ToList();
 
-            Assert.True(result.Count() == 1);
+            Assert.True(result.Count == 1);
             Assert.True(result.ElementAt(0).Name == "newFileA.txt");
         }
 
@@ -294,11 +295,12 @@ namespace AdvancedCSharp.Tests
                 }
             };
 
-            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
+            IList<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
                                                                     .Select(f => Path.Combine(TestsBase.RootPath, f))
-                                                                    .ElementAt(2));
+                                                                    .ElementAt(2))
+                                                .ToList();
 
-            Assert.True(result.Count() == 1);
+            Assert.True(result.Count == 1);
             Assert.True(result.ElementAt(0).Name == "newFileA.txt");
         }
 
@@ -319,11 +321,12 @@ namespace AdvancedCSharp.Tests
                 }
             };
 
-            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
+            IList<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
                                                                     .Select(f => Path.Combine(TestsBase.RootPath, f))
-                                                                    .First());
+                                                                    .First())
+                                                        .ToList();
 
-            Assert.True(result.Count() == 3);
+            Assert.True(result.Count == 3);
             Assert.True(result.ElementAt(0).Name == "first");
             Assert.True(result.ElementAt(1).Name == "forth");
             Assert.True(result.ElementAt(2).Name == "third");
@@ -342,11 +345,12 @@ namespace AdvancedCSharp.Tests
                 }
             };
 
-            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
+            IList<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
                                                                     .Select(f => Path.Combine(TestsBase.RootPath, f))
-                                                                    .First());
+                                                                    .First())
+                                                        .ToList();
 
-            Assert.True(result.Count() == 3);
+            Assert.True(result.Count == 3);
             Assert.True(result.ElementAt(0).Name == "first");
             Assert.True(result.ElementAt(1).Name == "forth");
             Assert.True(result.ElementAt(2).Name == "third");
@@ -365,11 +369,12 @@ namespace AdvancedCSharp.Tests
                 }
             };
 
-            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
+            IList<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
                                                                     .Select(f => Path.Combine(TestsBase.RootPath, f))
-                                                                    .ElementAt(1));
+                                                                    .ElementAt(1))
+                                                        .ToList();
 
-            Assert.True(result.Count() == 4);
+            Assert.True(result.Count == 4);
             Assert.True(result.ElementAt(0).Name == "first");
             Assert.True(result.ElementAt(1).Name == "forth");
             Assert.True(result.ElementAt(2).Name == "second");
@@ -389,11 +394,12 @@ namespace AdvancedCSharp.Tests
                 }
             };
 
-            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
+            IList<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
                                                                     .Select(f => Path.Combine(TestsBase.RootPath, f))
-                                                                    .ElementAt(1));
+                                                                    .ElementAt(1))
+                                                        .ToList();
 
-            Assert.True(result.Count() == 4);
+            Assert.True(result.Count == 4);
             Assert.True(result.ElementAt(0).Name == "first");
             Assert.True(result.ElementAt(1).Name == "forth");
             Assert.True(result.ElementAt(2).Name == "second");
@@ -475,7 +481,7 @@ namespace AdvancedCSharp.Tests
         {
             FileSystemVisitor fsv = new FileSystemVisitor();
 
-            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(Guid.NewGuid().ToString(), isRecursive: false);
+            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(Guid.NewGuid().ToString());
             string stringResult = result.RepresentAsString();
 
             Assert.NotNull(result);
@@ -500,7 +506,7 @@ namespace AdvancedCSharp.Tests
             Func<FileSystemInfo, bool> filter = fileInfo => fileInfo.Name.StartsWith("f", StringComparison.InvariantCultureIgnoreCase);
             FileSystemVisitor fsv = new FileSystemVisitor(filter);
 
-            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(Guid.NewGuid().ToString(), isRecursive: false);
+            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(Guid.NewGuid().ToString());
             string stringResult = result.RepresentAsString();
 
             Assert.NotNull(result);
@@ -513,7 +519,7 @@ namespace AdvancedCSharp.Tests
             Func<FileSystemInfo, bool> filter = fileInfo => fileInfo.Name.StartsWith("f", StringComparison.InvariantCultureIgnoreCase);
             FileSystemVisitor fsv = new FileSystemVisitor(filter);
 
-            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(Guid.NewGuid().ToString(), isRecursive: false);
+            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(Guid.NewGuid().ToString());
             string stringResult = result.RepresentAsString();
 
             Assert.NotNull(result);

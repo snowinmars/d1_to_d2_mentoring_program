@@ -54,7 +54,7 @@ namespace AdvancedCSharp.Core
             return result;
         }
 
-        public IEnumerable<FileSystemInfo> TraverseDirs(DirectoryInfo dir, bool isRecursive)
+        private IEnumerable<FileSystemInfo> TraverseDirs(DirectoryInfo dir, bool isRecursive)
         {
             foreach (DirectoryInfo iInfo in dir.GetDirectories())
             {
@@ -62,7 +62,7 @@ namespace AdvancedCSharp.Core
 
                 if (isRecursive)
                 {
-                    var enumerator = this.TraverseDirs(iInfo, isRecursive).GetEnumerator();
+                    var enumerator = this.TraverseDirs(iInfo, true).GetEnumerator();
 
                     while (enumerator.MoveNext())
                     {

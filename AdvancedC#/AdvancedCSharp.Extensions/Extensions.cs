@@ -22,8 +22,6 @@ namespace AdvancedCSharp.Extensions
 
         public static string RepresentAsString(this IEnumerable<string> collection)
         {
-            const string separator = " ";
-
             StringBuilder sb = new StringBuilder(128);
 
             foreach (var item in collection)
