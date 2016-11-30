@@ -6,8 +6,10 @@ namespace AdvancedCSharp.Tests
 {
     public abstract class TestsBase : IDisposable
     {
-        private const string testFolderName = "testFolder";
-        public static readonly string RootPath = Directory.GetCurrentDirectory();
+        private const string TestFolderName = "testFolder";
+        internal static readonly string RootPath = Directory.GetCurrentDirectory();
+
+        private static readonly string TestFolderPath = Path.Combine(TestsBase.RootPath, TestsBase.TestFolderName);
 
         protected TestsBase()
         {
@@ -24,92 +26,102 @@ namespace AdvancedCSharp.Tests
             }
         }
 
-        protected static IList<string> Folders { get; } = new[]
+        static TestsBase()
         {
-            TestsBase.testFolderName,
-            Path.Combine(TestsBase.testFolderName, @"first"),
-            Path.Combine(TestsBase.testFolderName, @"first\first"),
-            Path.Combine(TestsBase.testFolderName, @"first\second"),
-            Path.Combine(TestsBase.testFolderName, @"first\third"),
-            Path.Combine(TestsBase.testFolderName, @"first\forth"),
-            Path.Combine(TestsBase.testFolderName, @"second"),
-            Path.Combine(TestsBase.testFolderName, @"second\first"),
-            Path.Combine(TestsBase.testFolderName, @"second\second"),
-            Path.Combine(TestsBase.testFolderName, @"third"),
-            Path.Combine(TestsBase.testFolderName, @"forth"),
-            Path.Combine(TestsBase.testFolderName, @"forth\first"),
-            Path.Combine(TestsBase.testFolderName, @"forth\second"),
-            Path.Combine(TestsBase.testFolderName, @"forth\second\first"),
-            Path.Combine(TestsBase.testFolderName, @"forth\second\second"),
-            Path.Combine(TestsBase.testFolderName, @"forth\second\third"),
-            Path.Combine(TestsBase.testFolderName, @"forth\second\forth"),
-            Path.Combine(TestsBase.testFolderName, @"forth\third"),
-            Path.Combine(TestsBase.testFolderName, @"forth\forth"),
-        };
+            TestsBase.Folders = new[]
+            {
+                TestsBase.TestFolderName,
+                Path.Combine(TestsBase.TestFolderName, @"first"),
+                Path.Combine(TestsBase.TestFolderName, @"first\first"),
+                Path.Combine(TestsBase.TestFolderName, @"first\second"),
+                Path.Combine(TestsBase.TestFolderName, @"first\third"),
+                Path.Combine(TestsBase.TestFolderName, @"first\forth"),
+                Path.Combine(TestsBase.TestFolderName, @"second"),
+                Path.Combine(TestsBase.TestFolderName, @"second\first"),
+                Path.Combine(TestsBase.TestFolderName, @"second\second"),
+                Path.Combine(TestsBase.TestFolderName, @"third"),
+                Path.Combine(TestsBase.TestFolderName, @"forth"),
+                Path.Combine(TestsBase.TestFolderName, @"forth\first"),
+                Path.Combine(TestsBase.TestFolderName, @"forth\second"),
+                Path.Combine(TestsBase.TestFolderName, @"forth\second\first"),
+                Path.Combine(TestsBase.TestFolderName, @"forth\second\second"),
+                Path.Combine(TestsBase.TestFolderName, @"forth\second\third"),
+                Path.Combine(TestsBase.TestFolderName, @"forth\second\forth"),
+                Path.Combine(TestsBase.TestFolderName, @"forth\third"),
+                Path.Combine(TestsBase.TestFolderName, @"forth\forth"),
+            };
 
-        protected static IDictionary<string, string> ExpectedResultsForNonDefaultFilter { get; } = new Dictionary<string, string>
-        {
-            {TestsBase.Folders[0], "D:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\first\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\forth\r\n"},
-            {TestsBase.Folders[1], "D:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\first\\first\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\first\\forth\r\n"},
-            {TestsBase.Folders[2], ""},
-            {TestsBase.Folders[3], ""},
-            {TestsBase.Folders[4], ""},
-            {TestsBase.Folders[5], ""},
-            {TestsBase.Folders[6],"D:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\second\\first\r\n"},
-            {TestsBase.Folders[7], ""},
-            {TestsBase.Folders[8], ""},
-            {TestsBase.Folders[9], ""},
-            {TestsBase.Folders[10], "D:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\forth\\first\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\forth\\forth\r\n"},
-            {TestsBase.Folders[11], ""},
-            {TestsBase.Folders[12], "D:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\forth\\second\\first\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\forth\\second\\forth\r\n"},
-            {TestsBase.Folders[13], ""},
-            {TestsBase.Folders[14], ""},
-            {TestsBase.Folders[15], ""},
-            {TestsBase.Folders[16], ""},
-            {TestsBase.Folders[17], ""},
-            {TestsBase.Folders[18], ""},
-        };
+            TestsBase.ExpectedResultsForNonDefaultFilter = new Dictionary<string, string>
+            {
+                {TestsBase.Folders[0], $"{Path.Combine(TestsBase.TestFolderPath, "first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth")}{Environment.NewLine}"},
+                {TestsBase.Folders[1], $"{Path.Combine(TestsBase.TestFolderPath, "first\\first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\forth")}{Environment.NewLine}"},
+                {TestsBase.Folders[2], ""},
+                {TestsBase.Folders[3], ""},
+                {TestsBase.Folders[4], ""},
+                {TestsBase.Folders[5], ""},
+                {TestsBase.Folders[6], $"{Path.Combine(TestsBase.TestFolderPath, "second\\first")}{Environment.NewLine}"},
+                {TestsBase.Folders[7], ""},
+                {TestsBase.Folders[8], ""},
+                {TestsBase.Folders[9], ""},
+                {TestsBase.Folders[10], $"{Path.Combine(TestsBase.TestFolderPath, "forth\\first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\forth")}{Environment.NewLine}"},
+                {TestsBase.Folders[11], ""},
+                {TestsBase.Folders[12], $"{Path.Combine(TestsBase.TestFolderPath, "forth\\second\\first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\second\\forth")}{Environment.NewLine}"},
+                {TestsBase.Folders[13], ""},
+                {TestsBase.Folders[14], ""},
+                {TestsBase.Folders[15], ""},
+                {TestsBase.Folders[16], ""},
+                {TestsBase.Folders[17], ""},
+                {TestsBase.Folders[18], ""},
+            };
 
-        protected static IDictionary<string, string> ExpectedResultsForHardcodedFilter { get; } = new Dictionary
-            <string, string>
-        {
-            {TestsBase.Folders[0],"D:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\first\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\forth\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\second\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\third\r\n"},
-            {TestsBase.Folders[1],"D:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\first\\first\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\first\\forth\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\first\\second\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\first\\third\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\first\\newFile.txt\r\n"},
-            {TestsBase.Folders[2],"D:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\first\\first\\newFileA.txt\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\first\\first\\newFileB.txt\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\first\\first\\newFileC.txt\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\first\\first\\newFileD.txt\r\n"},
-            {TestsBase.Folders[3], ""},
-            {TestsBase.Folders[4], ""},
-            {TestsBase.Folders[5], ""},
-            {TestsBase.Folders[6],"D:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\second\\first\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\second\\second\r\n"},
-            {TestsBase.Folders[7],"D:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\second\\first\\aNewFile.txt\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\second\\first\\newFile1.txt\r\n"},
-            {TestsBase.Folders[8], ""},
-            {TestsBase.Folders[9], ""},
-            {TestsBase.Folders[10],"D:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\forth\\first\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\forth\\forth\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\forth\\second\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\forth\\third\r\n"},
-            {TestsBase.Folders[11], ""},
-            {TestsBase.Folders[12],"D:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\forth\\second\\first\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\forth\\second\\forth\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\forth\\second\\second\r\nD:\\prg\\github\\d1_to_d2_mentoring_program\\AdvancedC#\\AdvancedCSharp.Tests\\bin\\Debug\\testFolder\\forth\\second\\third\r\n"},
-            {TestsBase.Folders[13], ""},
-            {TestsBase.Folders[14], ""},
-            {TestsBase.Folders[15], ""},
-            {TestsBase.Folders[16], ""},
-            {TestsBase.Folders[17], ""},
-            {TestsBase.Folders[18], ""},
-        };
+            TestsBase.ExpectedResultsForHardcodedFilter = new Dictionary<string, string>
+            {
+                {TestsBase.Folders[0], $"{Path.Combine(TestsBase.TestFolderPath, "first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "second")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "third")}{Environment.NewLine}"},
+                {TestsBase.Folders[1], $"{Path.Combine(TestsBase.TestFolderPath, "first\\first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\forth")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\second")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\third")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\newFile.txt")}{Environment.NewLine}"},
+                {TestsBase.Folders[2], $"{Path.Combine(TestsBase.TestFolderPath, "first\\first\\newFileA.txt")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\first\\newFileB.txt")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\first\\newFileC.txt")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\first\\newFileD.txt")}{Environment.NewLine}"},
+                {TestsBase.Folders[3], ""},
+                {TestsBase.Folders[4], ""},
+                {TestsBase.Folders[5], ""},
+                {TestsBase.Folders[6], $"{Path.Combine(TestsBase.TestFolderPath, "second\\first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "second\\second")}{Environment.NewLine}"},
+                {TestsBase.Folders[7], $"{Path.Combine(TestsBase.TestFolderPath, "second\\first\\aNewFile.txt")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "second\\first\\newFile1.txt")}{Environment.NewLine}"},
+                {TestsBase.Folders[8], ""},
+                {TestsBase.Folders[9], ""},
+                {TestsBase.Folders[10], $"{Path.Combine(TestsBase.TestFolderPath, "forth\\first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\forth")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\second")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\third")}{Environment.NewLine}"},
+                {TestsBase.Folders[11], ""},
+                {TestsBase.Folders[12], $"{Path.Combine(TestsBase.TestFolderPath, "forth\\second\\first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\second\\forth")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\second\\second")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\second\\third")}{Environment.NewLine}"},
+                {TestsBase.Folders[13], ""},
+                {TestsBase.Folders[14], ""},
+                {TestsBase.Folders[15], ""},
+                {TestsBase.Folders[16], ""},
+                {TestsBase.Folders[17], ""},
+                {TestsBase.Folders[18], ""},
+            };
 
-        protected static IEnumerable<string> Files { get; } = new[]
-        {
-            Path.Combine(TestsBase.Folders[1], "newFile.txt"),
+            TestsBase.Files = new[]
+            {
+                Path.Combine(TestsBase.Folders[1], "newFile.txt"),
 
-            Path.Combine(TestsBase.Folders[2], "newFileA.txt"),
-            Path.Combine(TestsBase.Folders[2], "newFileB.txt"),
-            Path.Combine(TestsBase.Folders[2], "newFileC.txt"),
-            Path.Combine(TestsBase.Folders[2], "newFileD.txt"),
+                Path.Combine(TestsBase.Folders[2], "newFileA.txt"),
+                Path.Combine(TestsBase.Folders[2], "newFileB.txt"),
+                Path.Combine(TestsBase.Folders[2], "newFileC.txt"),
+                Path.Combine(TestsBase.Folders[2], "newFileD.txt"),
 
-            Path.Combine(TestsBase.Folders[7], "newFile1.txt"),
-            Path.Combine(TestsBase.Folders[7], "aNewFile.txt"),
-        };
+                Path.Combine(TestsBase.Folders[7], "newFile1.txt"),
+                Path.Combine(TestsBase.Folders[7], "aNewFile.txt"),
+            };
+        }
+
+        protected static IList<string> Folders { get; }
+
+        protected static IDictionary<string, string> ExpectedResultsForNonDefaultFilter { get; }
+
+        protected static IDictionary<string, string> ExpectedResultsForHardcodedFilter { get; }
+
+        protected static IEnumerable<string> Files { get; }
 
         public void Dispose()
         {
-            Directory.Delete(Path.Combine(TestsBase.RootPath, "testFolder"), recursive: true);
+            Directory.Delete(Path.Combine(TestsBase.RootPath, TestsBase.TestFolderName), recursive: true);
         }
     }
 }
