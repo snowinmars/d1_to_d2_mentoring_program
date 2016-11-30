@@ -49,10 +49,10 @@ namespace AdvancedCSharp.Tests
             foreach (var fullFolderPath in TestsBase.Folders
                                                     .Select(f => Path.Combine(TestsBase.RootPath, f)))
             {
-                string fsvResult = fsv.SearchByFilter(fullFolderPath)
+                string fsvResult = fsv.SearchByFilter(fullFolderPath, isRecursive: false)
                                         .RepresentAsString();
 
-                Assert.True(fsvResult.Equals(TestsBase.ExpectedResultsForHardcodedFilter[TestsBase.Folders[i]]));
+                Assert.True(fsvResult.Equals(TestsBase.ExpectedResultsForDefaultFilterNonRecursively[TestsBase.Folders[i]]));
 
                 ++i;
             }
@@ -62,17 +62,18 @@ namespace AdvancedCSharp.Tests
         public void FSV_SearchByDefaultFilterRecursively_MustWorkAsPowershell()
         {
             FileSystemVisitor fsv = new FileSystemVisitor();
-            PowershellSearchEngine pse = new PowershellSearchEngine();
+
+            int i = 0;
 
             foreach (var fullFolderPath in TestsBase.Folders
                                                     .Select(f => Path.Combine(TestsBase.RootPath, f)))
             {
-                string pseResult = pse.Ls(fullFolderPath, isRecursive: true)
-                                        .RepresentAsString();
                 string fsvResult = fsv.SearchByFilter(fullFolderPath, isRecursive: true)
                                         .RepresentAsString();
 
-                Assert.Equal(expected: pseResult, actual: fsvResult);
+                Assert.True(fsvResult.Equals(TestsBase.ExpectedResultsForDefaultFilterRecursively[TestsBase.Folders[i]]));
+
+                ++i;
             }
         }
 
@@ -88,10 +89,10 @@ namespace AdvancedCSharp.Tests
             foreach (var fullFolderPath in TestsBase.Folders
                                                     .Select(f => Path.Combine(TestsBase.RootPath, f)))
             {
-                string fsvResult = fsv.SearchByFilter(fullFolderPath)
+                string fsvResult = fsv.SearchByFilter(fullFolderPath, isRecursive: false)
                                         .RepresentAsString();
 
-                Assert.True(fsvResult.Equals(TestsBase.ExpectedResultsForNonDefaultFilter[TestsBase.Folders[i]]));
+                Assert.True(fsvResult.Equals(TestsBase.ExpectedResultsForNonDefaultFilterNonRecursively[TestsBase.Folders[i]]));
 
                 ++i;
             }
@@ -104,17 +105,18 @@ namespace AdvancedCSharp.Tests
             Func<FileSystemInfo, bool> filter = fileInfo => fileInfo.Name.StartsWith(letter, StringComparison.InvariantCultureIgnoreCase);
 
             FileSystemVisitor fsv = new FileSystemVisitor(filter);
-            PowershellSearchEngine pse = new PowershellSearchEngine();
+
+            int i = 0;
 
             foreach (var fullFolderPath in TestsBase.Folders
                                                     .Select(f => Path.Combine(TestsBase.RootPath, f)))
             {
-                string pseResult = pse.Ls(fullFolderPath, isRecursive: true, filenameStartsWith: letter)
-                                        .RepresentAsString();
                 string fsvResult = fsv.SearchByFilter(fullFolderPath, isRecursive: true)
                                         .RepresentAsString();
 
-                Assert.Equal(expected: pseResult, actual: fsvResult);
+                Assert.True(fsvResult.Equals(TestsBase.ExpectedResultsForNonDefaultFilterRecursively[TestsBase.Folders[i]]));
+
+                ++i;
             }
         }
 
@@ -506,7 +508,7 @@ namespace AdvancedCSharp.Tests
             Func<FileSystemInfo, bool> filter = fileInfo => fileInfo.Name.StartsWith("f", StringComparison.InvariantCultureIgnoreCase);
             FileSystemVisitor fsv = new FileSystemVisitor(filter);
 
-            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(Guid.NewGuid().ToString());
+            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(Guid.NewGuid().ToString(), isRecursive: false);
             string stringResult = result.RepresentAsString();
 
             Assert.NotNull(result);
@@ -519,7 +521,7 @@ namespace AdvancedCSharp.Tests
             Func<FileSystemInfo, bool> filter = fileInfo => fileInfo.Name.StartsWith("f", StringComparison.InvariantCultureIgnoreCase);
             FileSystemVisitor fsv = new FileSystemVisitor(filter);
 
-            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(Guid.NewGuid().ToString());
+            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(Guid.NewGuid().ToString(), isRecursive: false);
             string stringResult = result.RepresentAsString();
 
             Assert.NotNull(result);
