@@ -306,6 +306,35 @@ namespace AdvancedCSharp.Tests
             Assert.True(result.ElementAt(0).Name == "newFileA.txt");
         }
 
+        [Fact]
+        public void FSV_Event_MustWorkAfterInterrupt()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor(info => true);
+
+            int i = 0;
+            int j = 0;
+
+            fsv.OnFileFinded += (sender, args) =>
+            {
+                ++j;
+                args.State = FileSystemVisitorEventArgsStates.StopOnFirstFindedCoincidence;
+            };
+            fsv.OnDirectoryFinded += (sender, args) =>
+            {
+                ++j;
+                args.State = FileSystemVisitorEventArgsStates.StopOnFirstFindedCoincidence;
+            };
+            fsv.OnFinish += (sender, args) =>
+            {
+                ++i;
+            };
+
+            fsv.SearchByFilter(TestsBase.RootPath);
+
+            Assert.True(i == 1);
+            Assert.True(j == 1);
+        }
+
         #endregion interrupt
 
         #region ignore
