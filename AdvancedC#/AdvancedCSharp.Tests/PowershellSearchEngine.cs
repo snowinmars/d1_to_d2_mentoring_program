@@ -8,22 +8,6 @@ using System.Text;
 
 namespace AdvancedCSharp.Tests
 {
-    public static class Extensions
-    {
-        public static string RepresentAsString(this IEnumerable<PSObject> collection)
-        {
-            StringBuilder sb = new StringBuilder(128);
-
-            foreach (var item in collection)
-            {
-                sb.Append(item);
-                sb.Append(Environment.NewLine);
-            }
-
-            return sb.ToString();
-        }
-    }
-
     public class PowershellSearchEngine
     {
         public IEnumerable<string> Ls(string path, bool isRecursive = false, string filenameStartsWith = "")
