@@ -120,9 +120,351 @@ namespace AdvancedCSharp.Tests
             }
         }
 
+        [Fact]
+        public void FSV_StartEvent_MustWork()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor();
+
+            int i = 0;
+
+            fsv.OnStart += (sender, args) => ++i;
+
+            fsv.SearchByFilter(TestsBase.RootPath);
+
+            Assert.True(i == 1);
+        }
+
+        [Fact]
+        public void FSV_FinishEvent_MustWork()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor();
+
+            int i = 0;
+
+            fsv.OnFinish += (sender, args) => ++i;
+
+            fsv.SearchByFilter(TestsBase.RootPath);
+
+            Assert.True(i == 1);
+        }
+
+        [Fact]
+        public void FSV_DirectoryFindedEvent_MustWork()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor(info => true);
+
+            int i = 0;
+
+            fsv.OnDirectoryFinded+= (sender, args) => ++i;
+
+            fsv.SearchByFilter(TestsBase.Folders
+                                        .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                        .First());
+
+            Assert.True(i == 4);
+        }
+
+        [Fact]
+        public void FSV_DirectoryFiltredFindedEvent_MustWork()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor(info => info.Name.StartsWith("f", StringComparison.InvariantCultureIgnoreCase));
+
+            int i = 0;
+
+            fsv.OnFilteredDirectoryFinded += (sender, args) => ++i;
+
+            fsv.SearchByFilter(TestsBase.Folders
+                                        .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                        .First());
+
+            Assert.True(i == 2);
+        }
+
+        [Fact]
+        public void FSV_FileFindedEvent_MustWork()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor(info => true);
+
+            int i = 0;
+
+            fsv.OnFileFinded += (sender, args) => ++i;
+
+            fsv.SearchByFilter(TestsBase.Folders
+                                        .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                        .ElementAt(1));
+
+            Assert.True(i == 1);
+        }
+
+        [Fact]
+        public void FSV_FileFiltredFindedEvent_MustWork()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor(info => info.Name.StartsWith("n", StringComparison.InvariantCultureIgnoreCase));
+
+            int i = 0;
+
+            fsv.OnFileFinded += (sender, args) => ++i;
+
+            fsv.SearchByFilter(TestsBase.Folders
+                                        .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                        .ElementAt(1));
+
+            Assert.True(i == 1);
+        }
+
+        #region interrupt
+        [Fact]
+        public void FSV_InterruptOnFindedDirectoryEvent_MustWork()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor(info => true);
+
+            fsv.OnDirectoryFinded += (sender, args) =>
+            {
+                if (args.Value.Name.StartsWith("s", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    args.State = FileSystemVisitorEventArgsStates.StopOnFirstFindedCoincidence;
+                }
+            };
+
+            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
+                                                                    .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                                                    .First());
+
+            Assert.True(result.Count() == 3);
+            Assert.True(result.ElementAt(0).Name == "first");
+            Assert.True(result.ElementAt(1).Name == "forth");
+            Assert.True(result.ElementAt(2).Name == "second");
+        }
+
+        [Fact]
+        public void FSV_InterruptOnFilterFindedDirectoryEvent_MustWork()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor(info => true);
+
+            fsv.OnFilteredDirectoryFinded += (sender, args) =>
+            {
+                if (args.Value.Name.StartsWith("s", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    args.State = FileSystemVisitorEventArgsStates.StopOnFirstFindedCoincidence;
+                }
+            };
+
+            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
+                                                                    .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                                                    .First());
+
+            Assert.True(result.Count() == 3);
+            Assert.True(result.ElementAt(0).Name == "first");
+            Assert.True(result.ElementAt(1).Name == "forth");
+            Assert.True(result.ElementAt(2).Name == "second");
+        }
+
+        [Fact]
+        public void FSV_InterruptOnFindedFileEvent_MustWork()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor(info => true);
+
+            fsv.OnFileFinded += (sender, args) =>
+            {
+                if (args.Value.Name.StartsWith("n", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    args.State = FileSystemVisitorEventArgsStates.StopOnFirstFindedCoincidence;
+                }
+            };
+
+            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
+                                                                    .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                                                    .ElementAt(2));
+
+            Assert.True(result.Count() == 1);
+            Assert.True(result.ElementAt(0).Name == "newFileA.txt");
+        }
+
+        [Fact]
+        public void FSV_InterruptOnFilterFindedFileEvent_MustWork()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor(info => true);
+
+            fsv.OnFilteredFileFinded += (sender, args) =>
+            {
+                if (args.Value.Name.StartsWith("n", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    args.State = FileSystemVisitorEventArgsStates.StopOnFirstFindedCoincidence;
+                }
+            };
+
+            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
+                                                                    .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                                                    .ElementAt(2));
+
+            Assert.True(result.Count() == 1);
+            Assert.True(result.ElementAt(0).Name == "newFileA.txt");
+        }
+        #endregion interrupt
+
+        #region ignore
+        [Fact]
+        public void FSV_IgnoreOnFindedDirectoryEvent_MustWork()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor(info => true);
+
+            fsv.OnDirectoryFinded += (sender, args) =>
+            {
+                if (args.Value.Name.StartsWith("s", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    args.State = FileSystemVisitorEventArgsStates.IgnoreThisEntry;
+                }
+            };
+
+            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
+                                                                    .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                                                    .First());
+
+            Assert.True(result.Count() == 3);
+            Assert.True(result.ElementAt(0).Name == "first");
+            Assert.True(result.ElementAt(1).Name == "forth");
+            Assert.True(result.ElementAt(2).Name == "third");
+        }
+
+        [Fact]
+        public void FSV_IgnoreOnFilterFindedDirectoryEvent_MustWork()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor(info => true);
+
+            fsv.OnFilteredDirectoryFinded += (sender, args) =>
+            {
+                if (args.Value.Name.StartsWith("s", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    args.State = FileSystemVisitorEventArgsStates.IgnoreThisEntry;
+                }
+            };
+
+            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
+                                                                    .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                                                    .First());
+
+            Assert.True(result.Count() == 3);
+            Assert.True(result.ElementAt(0).Name == "first");
+            Assert.True(result.ElementAt(1).Name == "forth");
+            Assert.True(result.ElementAt(2).Name == "third");
+        }
+
+        [Fact]
+        public void FSV_IgnoreOnFindedFileEvent_MustWork()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor(info => true);
+
+            fsv.OnFileFinded += (sender, args) =>
+            {
+                if (args.Value.Name.StartsWith("n", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    args.State = FileSystemVisitorEventArgsStates.IgnoreThisEntry;
+                }
+            };
+
+            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
+                                                                    .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                                                    .ElementAt(1));
+
+            Assert.True(result.Count() == 4);
+            Assert.True(result.ElementAt(0).Name == "first");
+            Assert.True(result.ElementAt(1).Name == "forth");
+            Assert.True(result.ElementAt(2).Name == "second");
+            Assert.True(result.ElementAt(3).Name == "third");
+        }
+
+        [Fact]
+        public void FSV_IgnoreOnFilterFindedFileEvent_MustWork()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor(info => true);
+
+            fsv.OnFilteredFileFinded += (sender, args) =>
+            {
+                if (args.Value.Name.StartsWith("n", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    args.State = FileSystemVisitorEventArgsStates.IgnoreThisEntry;
+                }
+            };
+
+            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(TestsBase.Folders
+                                                                    .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                                                    .ElementAt(1));
+
+            Assert.True(result.Count() == 4);
+            Assert.True(result.ElementAt(0).Name == "first");
+            Assert.True(result.ElementAt(1).Name == "forth");
+            Assert.True(result.ElementAt(2).Name == "second");
+            Assert.True(result.ElementAt(3).Name == "third");
+        }
+        #endregion ignore
+
         #endregion positive
 
         #region negative
+
+        [Fact]
+        public void FSV_DirectoryFindedEvent_MustNotInvokeOnSearchingByDefaultFilter()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor();
+
+            int i = 0;
+
+            fsv.OnDirectoryFinded += (sender, args) => ++i;
+
+            fsv.SearchByFilter(TestsBase.Folders
+                                        .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                        .First());
+
+            Assert.True(i == 0);
+        }
+
+        [Fact]
+        public void FSV_DirectoryFiltredFindedEvent_MustNotInvokeOnSearchingByDefaultFilter()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor();
+
+            int i = 0;
+
+            fsv.OnFilteredDirectoryFinded += (sender, args) => ++i;
+
+            fsv.SearchByFilter(TestsBase.Folders
+                                        .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                        .First());
+
+            Assert.True(i == 0);
+        }
+
+        [Fact]
+        public void FSV_FileFindedEvent_MustNotInvokeOnSearchingByDefaultFilter()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor();
+
+            int i = 0;
+
+            fsv.OnFileFinded += (sender, args) => ++i;
+
+            fsv.SearchByFilter(TestsBase.Folders
+                                        .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                        .ElementAt(1));
+
+            Assert.True(i == 0);
+        }
+
+        [Fact]
+        public void FSV_FileFiltredFindedEvent_MustNotInvokeOnSearchingByDefaultFilter()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor();
+
+            int i = 0;
+
+            fsv.OnFileFinded += (sender, args) => ++i;
+
+            fsv.SearchByFilter(TestsBase.Folders
+                                        .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                        .ElementAt(1));
+
+            Assert.True(i == 0);
+        }
 
         [Fact]
         public void FSV_SearchByDefaultFilterNonRecursively_MustNotReturnsNullOnTrashInput()
