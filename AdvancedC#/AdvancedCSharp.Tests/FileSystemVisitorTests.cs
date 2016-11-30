@@ -49,7 +49,7 @@ namespace AdvancedCSharp.Tests
             foreach (var fullFolderPath in TestsBase.Folders
                                                     .Select(f => Path.Combine(TestsBase.RootPath, f)))
             {
-                string fsvResult = fsv.SearchByFilter(fullFolderPath, isRecursive: false)
+                string fsvResult = fsv.SearchByFilter(fullFolderPath)
                                         .RepresentAsString();
 
                 Assert.True(fsvResult.Equals(TestsBase.ExpectedResultsForDefaultFilterNonRecursively[TestsBase.Folders[i]]));
@@ -89,7 +89,7 @@ namespace AdvancedCSharp.Tests
             foreach (var fullFolderPath in TestsBase.Folders
                                                     .Select(f => Path.Combine(TestsBase.RootPath, f)))
             {
-                string fsvResult = fsv.SearchByFilter(fullFolderPath, isRecursive: false)
+                string fsvResult = fsv.SearchByFilter(fullFolderPath)
                                         .RepresentAsString();
 
                 Assert.True(fsvResult.Equals(TestsBase.ExpectedResultsForNonDefaultFilterNonRecursively[TestsBase.Folders[i]]));
@@ -508,7 +508,7 @@ namespace AdvancedCSharp.Tests
             Func<FileSystemInfo, bool> filter = fileInfo => fileInfo.Name.StartsWith("f", StringComparison.InvariantCultureIgnoreCase);
             FileSystemVisitor fsv = new FileSystemVisitor(filter);
 
-            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(Guid.NewGuid().ToString(), isRecursive: false);
+            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(Guid.NewGuid().ToString());
             string stringResult = result.RepresentAsString();
 
             Assert.NotNull(result);
@@ -521,7 +521,7 @@ namespace AdvancedCSharp.Tests
             Func<FileSystemInfo, bool> filter = fileInfo => fileInfo.Name.StartsWith("f", StringComparison.InvariantCultureIgnoreCase);
             FileSystemVisitor fsv = new FileSystemVisitor(filter);
 
-            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(Guid.NewGuid().ToString(), isRecursive: false);
+            IEnumerable<FileSystemInfo> result = fsv.SearchByFilter(Guid.NewGuid().ToString());
             string stringResult = result.RepresentAsString();
 
             Assert.NotNull(result);
