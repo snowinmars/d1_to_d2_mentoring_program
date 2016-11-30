@@ -1,7 +1,5 @@
 ﻿using AdvancedCSharp.Core;
-using AdvancedCSharp.Extensions;
 using System;
-using System.IO;
 
 namespace AdvancedCSharp.UI
 {
@@ -35,8 +33,6 @@ namespace AdvancedCSharp.UI
             fsv.OnFilteredDirectoryFinded += (sender, args) => { Console.WriteLine($"Found filtered dir. Name: {args.Message}"); };
 
             var result = fsv.SearchByFilter(@"D:\testFolder", true);
-                            
-
 
             Console.WriteLine("And this is the results:");
 

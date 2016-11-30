@@ -170,12 +170,15 @@ namespace AdvancedCSharp.Core
             {
                 case FileSystemVisitorEventArgsStates.None:
                     break;
+
                 case FileSystemVisitorEventArgsStates.StopOnFirstFindedCoincidence:
                     this.action = FileSystemVisitorAction.Interrupt;
                     break;
+
                 case FileSystemVisitorEventArgsStates.IgnoreThisEntry:
                     this.action = FileSystemVisitorAction.Ignore;
                     break;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(args.State), args.State, "FileSystemVisitorEventArgs state is out of range");
             }

@@ -1,7 +1,7 @@
 ﻿function TraverseDirs
 (
 [string] $dir,
-[string] $startWith, 
+[string] $startWith,
 [bool] $recursive
 )
 
@@ -9,7 +9,7 @@
     $dirs = Get-ChildItem "$dir" -Directory | % {
                 if ($_.Name.StartsWith($startWith)) {
                     $global:results += $_.FullName
-                } 
+                }
 
                 #$global:results += $recursive
 
@@ -21,7 +21,7 @@
     $files = Get-ChildItem "$dir" -File | % {
         if ($_.Name.StartsWith($startWith)) {
             $global:results += $_.FullName
-        } 
+        }
     }
 }
 

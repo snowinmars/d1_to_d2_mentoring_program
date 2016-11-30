@@ -44,7 +44,7 @@ namespace AdvancedCSharp.Tests
         {
             FileSystemVisitor fsv = new FileSystemVisitor();
             PowershellSearchEngine pse = new PowershellSearchEngine();
-            
+
             int i = 0;
 
             foreach (var fullFolderPath in TestsBase.Folders
@@ -52,7 +52,7 @@ namespace AdvancedCSharp.Tests
             {
                 string sfvResult = fsv.SearchByFilter(fullFolderPath, isRecursive: false)
                                         .RepresentAsString();
-                
+
                 Assert.True(sfvResult.Equals(TestsBase.ExpectedResultsForHardcodedFilter[TestsBase.Folders[i]]));
 
                 ++i;
@@ -116,7 +116,7 @@ namespace AdvancedCSharp.Tests
                 string sfvResult = fsv.SearchByFilter(fullFolderPath, isRecursive: true)
                                         .RepresentAsString();
 
-               Assert.Equal(expected: pseResult, actual: sfvResult);
+                Assert.Equal(expected: pseResult, actual: sfvResult);
             }
         }
 
@@ -155,7 +155,7 @@ namespace AdvancedCSharp.Tests
 
             int i = 0;
 
-            fsv.OnDirectoryFinded+= (sender, args) => ++i;
+            fsv.OnDirectoryFinded += (sender, args) => ++i;
 
             fsv.SearchByFilter(TestsBase.Folders
                                         .Select(f => Path.Combine(TestsBase.RootPath, f))
@@ -213,6 +213,7 @@ namespace AdvancedCSharp.Tests
         }
 
         #region interrupt
+
         [Fact]
         public void FSV_InterruptOnFindedDirectoryEvent_MustWork()
         {
@@ -300,9 +301,11 @@ namespace AdvancedCSharp.Tests
             Assert.True(result.Count() == 1);
             Assert.True(result.ElementAt(0).Name == "newFileA.txt");
         }
+
         #endregion interrupt
 
         #region ignore
+
         [Fact]
         public void FSV_IgnoreOnFindedDirectoryEvent_MustWork()
         {
@@ -396,6 +399,7 @@ namespace AdvancedCSharp.Tests
             Assert.True(result.ElementAt(2).Name == "second");
             Assert.True(result.ElementAt(3).Name == "third");
         }
+
         #endregion ignore
 
         #endregion positive
