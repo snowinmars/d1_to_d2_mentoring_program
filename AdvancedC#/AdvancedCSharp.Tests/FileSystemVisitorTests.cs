@@ -40,7 +40,7 @@ namespace AdvancedCSharp.Tests
         }
 
         [Fact]
-        public void FSV_SearchByDefaultFilterNonRecursively_MustWorkAsPowershell()
+        public void FSV_SearchByDefaultFilterNonRecursively_MustWorkAsDFS()
         {
             FileSystemVisitor fsv = new FileSystemVisitor();
 
@@ -59,7 +59,7 @@ namespace AdvancedCSharp.Tests
         }
 
         [Fact]
-        public void FSV_SearchByDefaultFilterRecursively_MustWorkAsPowershell()
+        public void FSV_SearchByDefaultFilterRecursively_MustWorkAsDFS()
         {
             FileSystemVisitor fsv = new FileSystemVisitor();
 
@@ -78,7 +78,7 @@ namespace AdvancedCSharp.Tests
         }
 
         [Fact]
-        public void FSV_SearchByNonDefaultFilterNonRecursively_MustWorkAsPowershell()
+        public void FSV_SearchByNonDefaultFilterNonRecursively_MustWorkAsDFS()
         {
             const string letter = "f";
             Func<FileSystemInfo, bool> filter = fileInfo => fileInfo.Name.StartsWith(letter, StringComparison.InvariantCultureIgnoreCase);
@@ -99,7 +99,7 @@ namespace AdvancedCSharp.Tests
         }
 
         [Fact]
-        public void FSV_SearchByNonDefaultFilterRecursively_MustWorkAsPowershell()
+        public void FSV_SearchByNonDefaultFilterRecursively_MustWorkAsDFS()
         {
             const string letter = "f";
             Func<FileSystemInfo, bool> filter = fileInfo => fileInfo.Name.StartsWith(letter, StringComparison.InvariantCultureIgnoreCase);

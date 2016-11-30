@@ -8,7 +8,6 @@ namespace AdvancedCSharp.Tests
     {
         private const string TestFolderName = "testFolder";
         internal static readonly string RootPath = Directory.GetCurrentDirectory();
-
         private static readonly string TestFolderPath = Path.Combine(TestsBase.RootPath, TestsBase.TestFolderName);
 
         protected TestsBase()
