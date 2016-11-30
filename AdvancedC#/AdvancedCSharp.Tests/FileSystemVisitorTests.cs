@@ -413,7 +413,7 @@ namespace AdvancedCSharp.Tests
                 ++i;
             };
 
-            fsv.SearchByFilter(TestsBase.RootPath);
+            fsv.SearchByFilter(TestsBase.TestFolderPath);
 
             Assert.True(i == 1);
             Assert.True(j == 1);
@@ -528,13 +528,29 @@ namespace AdvancedCSharp.Tests
         #region negative
 
         [Fact]
-        public void FSV_DirectoryFindedEvent_MustNotInvokeOnSearchingByDefaultFilter()
+        public void FSV_DirectoryFindedEvent_MustInvokeOnSearchingByDefaultFilter()
         {
             FileSystemVisitor fsv = new FileSystemVisitor();
 
             int i = 0;
 
             fsv.DirectoryFinded += (sender, args) => ++i;
+
+            fsv.SearchByFilter(TestsBase.Folders
+                                        .Select(f => Path.Combine(TestsBase.RootPath, f))
+                                        .First());
+
+            Assert.True(i == 4);
+        }
+
+        [Fact]
+        public void FSV_DirectoryFindedEvent_MustNotInvokeOnSearchingByDefaultFilter()
+        {
+            FileSystemVisitor fsv = new FileSystemVisitor();
+
+            int i = 0;
+
+            fsv.FilteredDirectoryFinded += (sender, args) => ++i;
 
             fsv.SearchByFilter(TestsBase.Folders
                                         .Select(f => Path.Combine(TestsBase.RootPath, f))
@@ -566,7 +582,7 @@ namespace AdvancedCSharp.Tests
 
             int i = 0;
 
-            fsv.FileFinded += (sender, args) => ++i;
+            fsv.FilteredFileFinded += (sender, args) => ++i;
 
             fsv.SearchByFilter(TestsBase.Folders
                                         .Select(f => Path.Combine(TestsBase.RootPath, f))
@@ -582,7 +598,7 @@ namespace AdvancedCSharp.Tests
 
             int i = 0;
 
-            fsv.FileFinded += (sender, args) => ++i;
+            fsv.FilteredFileFinded += (sender, args) => ++i;
 
             fsv.SearchByFilter(TestsBase.Folders
                                         .Select(f => Path.Combine(TestsBase.RootPath, f))

@@ -98,12 +98,12 @@ namespace AdvancedCSharp.Core
                 if (directoryInfo != null)
                 {
                     this.InvokeConsiderFilter(this.DirectoryFinded,
-                            this,
-                            new FileSystemVisitorEventArgs
-                            {
-                                Message = directoryInfo.FullName,
-                                Value = directoryInfo,
-                            });
+                        this,
+                        new FileSystemVisitorEventArgs
+                        {
+                            Message = directoryInfo.FullName,
+                            Value = directoryInfo,
+                        });
 
                     if (isPassed)
                     {
@@ -127,12 +127,12 @@ namespace AdvancedCSharp.Core
                 if (fileInfo != null)
                 {
                     this.InvokeConsiderFilter(this.FileFinded,
-                            this,
-                            new FileSystemVisitorEventArgs
-                            {
-                                Message = fileInfo.FullName,
-                                Value = fileInfo,
-                            });
+                        this,
+                        new FileSystemVisitorEventArgs
+                        {
+                            Message = fileInfo.FullName,
+                            Value = fileInfo,
+                        });
 
                     if (isPassed)
                     {
@@ -156,6 +156,12 @@ namespace AdvancedCSharp.Core
         }
 
         private void InvokeConsiderFilter(FileSystemVisitorEvent ev, object obj, FileSystemVisitorEventArgs args)
+        {
+                ev?.Invoke(obj, args);
+                this.ApplyEventArgsChanges(args);
+        }
+
+        private void InvokeConsiderFilter(FileSystemVisitorIgnoreOnDefaultFilterEvent ev, object obj, FileSystemVisitorEventArgs args)
         {
             if (this.Filter != FileSystemVisitor.DefaultFilter)
             {
@@ -190,13 +196,15 @@ namespace AdvancedCSharp.Core
 
         public delegate void FileSystemVisitorEvent(object sender, FileSystemVisitorEventArgs e);
 
+        public delegate void FileSystemVisitorIgnoreOnDefaultFilterEvent(object sender, FileSystemVisitorEventArgs e);
+
         public event FileSystemVisitorEvent DirectoryFinded;
 
         public event FileSystemVisitorEvent FileFinded;
 
-        public event FileSystemVisitorEvent FilteredDirectoryFinded;
+        public event FileSystemVisitorIgnoreOnDefaultFilterEvent FilteredDirectoryFinded;
 
-        public event FileSystemVisitorEvent FilteredFileFinded;
+        public event FileSystemVisitorIgnoreOnDefaultFilterEvent FilteredFileFinded;
 
         public event Event Finish;
 

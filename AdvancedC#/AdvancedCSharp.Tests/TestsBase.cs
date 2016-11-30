@@ -6,9 +6,9 @@ namespace AdvancedCSharp.Tests
 {
     public abstract class TestsBase : IDisposable
     {
-        private const string TestFolderName = "testFolder";
+        protected const string TestFolderName = "testFolder";
         internal static readonly string RootPath = Directory.GetCurrentDirectory();
-        private static readonly string TestFolderPath = Path.Combine(TestsBase.RootPath, TestsBase.TestFolderName);
+        protected static readonly string TestFolderPath = Path.Combine(TestsBase.RootPath, TestsBase.TestFolderName);
 
         protected TestsBase()
         {
