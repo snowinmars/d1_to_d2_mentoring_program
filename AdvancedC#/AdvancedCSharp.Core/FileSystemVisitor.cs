@@ -7,6 +7,7 @@ namespace AdvancedCSharp.Core
 {
     public class FileSystemVisitor
     {
+        [Flags]
         private enum FileSystemVisitorAction
         {
             None = 0,
@@ -81,6 +82,11 @@ namespace AdvancedCSharp.Core
         {
             foreach (var entry in entries)
             {
+                if (this.action.HasFlag(FileSystemVisitorAction.Ignore))
+                {
+                    this.action ^= FileSystemVisitorAction.Ignore;
+                }
+
                 if (this.action.HasFlag(FileSystemVisitorAction.Interrupt))
                 {
                     break;
@@ -94,13 +100,26 @@ namespace AdvancedCSharp.Core
                 {
                     this.InvokeConsiderFilter(this.OnDirectoryFinded,
                             this,
-                            new FileSystemVisitorEventArgs { Message = directoryInfo.FullName });
+                            new FileSystemVisitorEventArgs
+                            {
+                                Message = directoryInfo.FullName,
+                                Value = directoryInfo,
+                            });
 
                     if (isPassed)
                     {
                         this.InvokeConsiderFilter(this.OnFilteredDirectoryFinded,
                             this,
-                            new FileSystemVisitorEventArgs { Message = directoryInfo.FullName });
+                            new FileSystemVisitorEventArgs
+                            {
+                                Message = directoryInfo.FullName,
+                                Value = directoryInfo,
+                            });
+
+                        if (this.action == FileSystemVisitorAction.Ignore)
+                        {
+                            continue;
+                        }
 
                         yield return entry;
                     }
@@ -110,13 +129,26 @@ namespace AdvancedCSharp.Core
                 {
                     this.InvokeConsiderFilter(this.OnFileFinded,
                             this,
-                            new FileSystemVisitorEventArgs { Message = fileInfo.FullName });
+                            new FileSystemVisitorEventArgs
+                            {
+                                Message = fileInfo.FullName,
+                                Value = fileInfo,
+                            });
 
                     if (isPassed)
                     {
                         this.InvokeConsiderFilter(this.OnFilteredFileFinded,
                             this,
-                            new FileSystemVisitorEventArgs { Message = fileInfo.FullName });
+                            new FileSystemVisitorEventArgs
+                            {
+                                Message = fileInfo.FullName,
+                                Value = fileInfo,
+                            });
+
+                        if (this.action == FileSystemVisitorAction.Ignore)
+                        {
+                            continue;
+                        }
 
                         yield return entry;
                     }
@@ -140,7 +172,6 @@ namespace AdvancedCSharp.Core
                 case FileSystemVisitorEventArgsStates.None:
                     break;
                 case FileSystemVisitorEventArgsStates.StopOnFirstFindedCoincidence:
-                case FileSystemVisitorEventArgsStates.StopOnFirstFiltredFindedCoincidence:
                     this.action = FileSystemVisitorAction.Interrupt;
                     break;
                 case FileSystemVisitorEventArgsStates.IgnoreThisEntry:

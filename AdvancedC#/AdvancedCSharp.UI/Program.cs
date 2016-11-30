@@ -10,7 +10,9 @@ namespace AdvancedCSharp.UI
         private static void Main()
         {
             FileSystemVisitor fsv = new FileSystemVisitor(info =>
-                                                            info.Name.Contains("C"));
+                                                            info.Exists);
+
+            Console.WriteLine("This is from events:");
 
             fsv.OnStart += (sender, args) => { Console.WriteLine("Started"); };
             fsv.OnFinish += (sender, args) => { Console.WriteLine("Finished"); };
@@ -18,16 +20,12 @@ namespace AdvancedCSharp.UI
             fsv.OnFileFinded += (sender, args) =>
             {
                 Console.WriteLine($"Found file. Name: {args.Message}");
-                //if (args.Message.Contains("12"))
-                //{
-                //    args.State = FileSystemVisitorEventArgsStates.IgnoreThisEntry;
-                //}
+                if (args.Value.Name.Contains("C"))
+                {
+                    args.State = FileSystemVisitorEventArgsStates.IgnoreThisEntry;
+                }
             };
-            fsv.OnFilteredFileFinded += (sender, args) =>
-            {
-                Console.WriteLine($"Found filtered file. Name: {args.Message}");
-                //args.State = FileSystemVisitorEventArgsStates.StopOnFirstFiltredFindedCoincidence;
-            };
+            fsv.OnFilteredFileFinded += (sender, args) => { Console.WriteLine($"Found filtered file. Name: {args.Message}"); };
 
             fsv.OnDirectoryFinded += (sender, args) =>
             {
@@ -36,10 +34,16 @@ namespace AdvancedCSharp.UI
             };
             fsv.OnFilteredDirectoryFinded += (sender, args) => { Console.WriteLine($"Found filtered dir. Name: {args.Message}"); };
 
-            var result = fsv.SearchByFilter(@"D:\testFolder", true)
-                            .RepresentAsString();
+            var result = fsv.SearchByFilter(@"D:\testFolder", true);
+                            
 
-            //FileSystemVisitor.TraverseDirs(new DirectoryInfo(@"D:\testFolder"), "");
+
+            Console.WriteLine("And this is the results:");
+
+            foreach (var item in result)
+            {
+                Console.WriteLine(item.FullName);
+            }
         }
     }
 }

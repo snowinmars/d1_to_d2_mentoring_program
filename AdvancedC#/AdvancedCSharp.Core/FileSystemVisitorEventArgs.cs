@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace AdvancedCSharp.Core
 {
@@ -7,7 +8,6 @@ namespace AdvancedCSharp.Core
     {
         None = 0,
         StopOnFirstFindedCoincidence = 1,
-        StopOnFirstFiltredFindedCoincidence = 2,
         IgnoreThisEntry = 4,
     }
 
@@ -15,5 +15,6 @@ namespace AdvancedCSharp.Core
     {
         public string Message { get; set; }
         public FileSystemVisitorEventArgsStates State { get; set; }
+        public FileSystemInfo Value { get; set; }
     }
 }
