@@ -51,6 +51,19 @@ namespace AdvancedCSharp.Tests
                 Path.Combine(TestsBase.TestFolderName, @"forth\forth"),
             };
 
+            TestsBase.Files = new[]
+            {
+                Path.Combine(TestsBase.Folders[1], "newFile.txt"),
+
+                Path.Combine(TestsBase.Folders[2], "newFileA.txt"),
+                Path.Combine(TestsBase.Folders[2], "newFileB.txt"),
+                Path.Combine(TestsBase.Folders[2], "newFileC.txt"),
+                Path.Combine(TestsBase.Folders[2], "newFileD.txt"),
+
+                Path.Combine(TestsBase.Folders[7], "newFile1.txt"),
+                Path.Combine(TestsBase.Folders[7], "aNewFile.txt"),
+            };
+
             TestsBase.ExpectedResultsForNonDefaultFilterNonRecursively = new Dictionary<string, string>
             {
                 {TestsBase.Folders[0], $"{Path.Combine(TestsBase.TestFolderPath, "first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth")}{Environment.NewLine}"},
@@ -97,20 +110,7 @@ namespace AdvancedCSharp.Tests
                 {TestsBase.Folders[18], ""},
             };
 
-            TestsBase.Files = new[]
-            {
-                Path.Combine(TestsBase.Folders[1], "newFile.txt"),
-
-                Path.Combine(TestsBase.Folders[2], "newFileA.txt"),
-                Path.Combine(TestsBase.Folders[2], "newFileB.txt"),
-                Path.Combine(TestsBase.Folders[2], "newFileC.txt"),
-                Path.Combine(TestsBase.Folders[2], "newFileD.txt"),
-
-                Path.Combine(TestsBase.Folders[7], "newFile1.txt"),
-                Path.Combine(TestsBase.Folders[7], "aNewFile.txt"),
-            };
-
-            ExpectedResultsForDefaultFilterRecursively = new Dictionary<string, string>
+            TestsBase.ExpectedResultsForDefaultFilterRecursively = new Dictionary<string, string>
             {
                 {TestsBase.Folders[0], $"{Path.Combine(TestsBase.TestFolderPath, "first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\first\\newFileA.txt")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\first\\newFileB.txt")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\first\\newFileC.txt")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\first\\newFileD.txt")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\forth")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\second")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\third")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\newFile.txt")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\forth")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\second")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\second\\first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\second\\forth")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\second\\second")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\second\\third")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\third")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "second")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "second\\first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "second\\first\\aNewFile.txt")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "second\\first\\newFile1.txt")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "second\\second")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "third")}{Environment.NewLine}"},
                 {TestsBase.Folders[1], $"{Path.Combine(TestsBase.TestFolderPath, "first\\first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\first\\newFileA.txt")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\first\\newFileB.txt")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\first\\newFileC.txt")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\first\\newFileD.txt")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\forth")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\second")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\third")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\newFile.txt")}{Environment.NewLine}"},
@@ -133,7 +133,7 @@ namespace AdvancedCSharp.Tests
                 {TestsBase.Folders[18], ""},
             };
 
-            ExpectedResultsForNonDefaultFilterRecursively = new Dictionary<string, string>
+            TestsBase.ExpectedResultsForNonDefaultFilterRecursively = new Dictionary<string, string>
             {
                 {TestsBase.Folders[0], $"{Path.Combine(TestsBase.TestFolderPath, "first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\forth")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\forth")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\second\\first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "forth\\second\\forth")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "second\\first")}{Environment.NewLine}"},
                 {TestsBase.Folders[1], $"{Path.Combine(TestsBase.TestFolderPath, "first\\first")}{Environment.NewLine}{Path.Combine(TestsBase.TestFolderPath, "first\\forth")}{Environment.NewLine}"},
@@ -164,8 +164,10 @@ namespace AdvancedCSharp.Tests
         protected static IDictionary<string, string> ExpectedResultsForDefaultFilterNonRecursively { get; }
 
         protected static IEnumerable<string> Files { get; }
-        public static IDictionary<string, string> ExpectedResultsForDefaultFilterRecursively { get; }
-        public static IDictionary<string,string> ExpectedResultsForNonDefaultFilterRecursively { get; set; }
+
+        protected static IDictionary<string, string> ExpectedResultsForDefaultFilterRecursively { get; }
+
+        protected static IDictionary<string,string> ExpectedResultsForNonDefaultFilterRecursively { get; }
 
         public void Dispose()
         {
