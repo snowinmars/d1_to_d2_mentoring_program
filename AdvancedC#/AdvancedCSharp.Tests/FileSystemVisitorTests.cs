@@ -44,16 +44,18 @@ namespace AdvancedCSharp.Tests
         {
             FileSystemVisitor fsv = new FileSystemVisitor();
             PowershellSearchEngine pse = new PowershellSearchEngine();
+            
+            int i = 0;
 
             foreach (var fullFolderPath in TestsBase.Folders
                                                     .Select(f => Path.Combine(TestsBase.RootPath, f)))
             {
-                string pseResult = pse.Ls(fullFolderPath, isRecursive: false)
-                                        .RepresentAsString();
                 string sfvResult = fsv.SearchByFilter(fullFolderPath, isRecursive: false)
                                         .RepresentAsString();
+                
+                Assert.True(sfvResult.Equals(TestsBase.ExpectedResultsForHardcodedFilter[TestsBase.Folders[i]]));
 
-                Assert.Equal(expected: pseResult, actual: sfvResult);
+                ++i;
             }
         }
 
@@ -83,16 +85,17 @@ namespace AdvancedCSharp.Tests
 
             FileSystemVisitor fsv = new FileSystemVisitor(filter);
             PowershellSearchEngine pse = new PowershellSearchEngine();
+            int i = 0;
 
             foreach (var fullFolderPath in TestsBase.Folders
                                                     .Select(f => Path.Combine(TestsBase.RootPath, f)))
             {
-                string pseResult = pse.Ls(fullFolderPath, isRecursive: false, filenameStartsWith: letter)
-                                        .RepresentAsString();
                 string sfvResult = fsv.SearchByFilter(fullFolderPath, isRecursive: false)
                                         .RepresentAsString();
 
-                Assert.Equal(expected: pseResult, actual: sfvResult);
+                Assert.True(sfvResult.Equals(TestsBase.ExpectedResultsForNonDefaultFilter[TestsBase.Folders[i]]));
+
+                ++i;
             }
         }
 

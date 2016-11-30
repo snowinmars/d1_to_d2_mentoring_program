@@ -15,7 +15,6 @@ namespace AdvancedCSharp.Core
             Interrupt = 2,
         }
 
-        private const string DefaultSearchPattern = "*.*";
         public static readonly Func<FileSystemInfo, bool> DefaultFilter = info => true;
         private FileSystemVisitorAction action;
 

@@ -1,4 +1,10 @@
-﻿function TraverseDirs($dir, $startWith, $recursive)
+﻿function TraverseDirs
+(
+[string] $dir,
+[string] $startWith, 
+[bool] $recursive
+)
+
 {
     $dirs = Get-ChildItem "$dir" -Directory | % {
                 if ($_.Name.StartsWith($startWith)) {
@@ -7,7 +13,7 @@
 
                 #$global:results += $recursive
 
-                if (!!$recursive) {
+                if ($recursive -eq $True) {
                     TraverseDirs $_.FullName -startWith $startWith -recursive $True
                 }
             }
@@ -29,7 +35,7 @@ if($intCount -ne 3){
 
 $strPath = $args[0];
 $strSearch = $args[1].ToLower();
-$isRecursive = $args[2];
+$isRecursive = !!$args[2];
 
 #$global:results += $isRecursive
 
