@@ -160,19 +160,19 @@ namespace AdvancedCSharp.Tests
             {
                 result.Append("s");
             };
-            fsv.DirectoryFinded += (sender, args) =>
+            fsv.DirectoryFound += (sender, args) =>
             {
                 result.Append("df");
             };
-            fsv.FileFinded += (sender, args) =>
+            fsv.FileFound += (sender, args) =>
             {
                 result.Append("ff");
             };
-            fsv.FilteredDirectoryFinded += (sender, args) =>
+            fsv.FilteredDirectoryFound += (sender, args) =>
             {
                 result.Append("fdf");
             };
-            fsv.FilteredFileFinded += (sender, args) =>
+            fsv.FilteredFileFound += (sender, args) =>
             {
                 result.Append("fff");
             };
@@ -202,19 +202,19 @@ namespace AdvancedCSharp.Tests
             {
                 result.Append("s");
             };
-            fsv.DirectoryFinded += (sender, args) =>
+            fsv.DirectoryFound += (sender, args) =>
             {
                 result.Append("df");
             };
-            fsv.FileFinded += (sender, args) =>
+            fsv.FileFound += (sender, args) =>
             {
                 result.Append("ff");
             };
-            fsv.FilteredDirectoryFinded += (sender, args) =>
+            fsv.FilteredDirectoryFound += (sender, args) =>
             {
                 result.Append("fdf");
             };
-            fsv.FilteredFileFinded += (sender, args) =>
+            fsv.FilteredFileFound += (sender, args) =>
             {
                 result.Append("fff");
             };
@@ -239,7 +239,7 @@ namespace AdvancedCSharp.Tests
 
             int i = 0;
 
-            fsv.DirectoryFinded += (sender, args) => ++i;
+            fsv.DirectoryFound += (sender, args) => ++i;
 
             fsv.SearchByFilter(TestsBase.Folders
                                         .Select(f => Path.Combine(TestsBase.RootPath, f))
@@ -255,7 +255,7 @@ namespace AdvancedCSharp.Tests
 
             int i = 0;
 
-            fsv.FilteredDirectoryFinded += (sender, args) => ++i;
+            fsv.FilteredDirectoryFound += (sender, args) => ++i;
 
             fsv.SearchByFilter(TestsBase.Folders
                                         .Select(f => Path.Combine(TestsBase.RootPath, f))
@@ -271,7 +271,7 @@ namespace AdvancedCSharp.Tests
 
             int i = 0;
 
-            fsv.FileFinded += (sender, args) => ++i;
+            fsv.FileFound += (sender, args) => ++i;
 
             fsv.SearchByFilter(TestsBase.Folders
                                         .Select(f => Path.Combine(TestsBase.RootPath, f))
@@ -287,7 +287,7 @@ namespace AdvancedCSharp.Tests
 
             int i = 0;
 
-            fsv.FileFinded += (sender, args) => ++i;
+            fsv.FileFound += (sender, args) => ++i;
 
             fsv.SearchByFilter(TestsBase.Folders
                                         .Select(f => Path.Combine(TestsBase.RootPath, f))
@@ -303,7 +303,7 @@ namespace AdvancedCSharp.Tests
         {
             FileSystemVisitor fsv = new FileSystemVisitor(info => true);
 
-            fsv.DirectoryFinded += (sender, args) =>
+            fsv.DirectoryFound += (sender, args) =>
             {
                 if (args.Value.Name.StartsWith("s", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -327,7 +327,7 @@ namespace AdvancedCSharp.Tests
         {
             FileSystemVisitor fsv = new FileSystemVisitor(info => true);
 
-            fsv.FilteredDirectoryFinded += (sender, args) =>
+            fsv.FilteredDirectoryFound += (sender, args) =>
             {
                 if (args.Value.Name.StartsWith("s", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -351,7 +351,7 @@ namespace AdvancedCSharp.Tests
         {
             FileSystemVisitor fsv = new FileSystemVisitor(info => true);
 
-            fsv.FileFinded += (sender, args) =>
+            fsv.FileFound += (sender, args) =>
             {
                 if (args.Value.Name.StartsWith("n", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -373,7 +373,7 @@ namespace AdvancedCSharp.Tests
         {
             FileSystemVisitor fsv = new FileSystemVisitor(info => true);
 
-            fsv.FilteredFileFinded += (sender, args) =>
+            fsv.FilteredFileFound += (sender, args) =>
             {
                 if (args.Value.Name.StartsWith("n", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -398,12 +398,12 @@ namespace AdvancedCSharp.Tests
             int i = 0;
             int j = 0;
 
-            fsv.FileFinded += (sender, args) =>
+            fsv.FileFound += (sender, args) =>
             {
                 ++j;
                 args.State = FileSystemVisitorEventArgsStates.StopOnFirstFindedCoincidence;
             };
-            fsv.DirectoryFinded += (sender, args) =>
+            fsv.DirectoryFound += (sender, args) =>
             {
                 ++j;
                 args.State = FileSystemVisitorEventArgsStates.StopOnFirstFindedCoincidence;
@@ -428,7 +428,7 @@ namespace AdvancedCSharp.Tests
         {
             FileSystemVisitor fsv = new FileSystemVisitor(info => true);
 
-            fsv.DirectoryFinded += (sender, args) =>
+            fsv.DirectoryFound += (sender, args) =>
             {
                 if (args.Value.Name.StartsWith("s", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -452,7 +452,7 @@ namespace AdvancedCSharp.Tests
         {
             FileSystemVisitor fsv = new FileSystemVisitor(info => true);
 
-            fsv.FilteredDirectoryFinded += (sender, args) =>
+            fsv.FilteredDirectoryFound += (sender, args) =>
             {
                 if (args.Value.Name.StartsWith("s", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -476,7 +476,7 @@ namespace AdvancedCSharp.Tests
         {
             FileSystemVisitor fsv = new FileSystemVisitor(info => true);
 
-            fsv.FileFinded += (sender, args) =>
+            fsv.FileFound += (sender, args) =>
             {
                 if (args.Value.Name.StartsWith("n", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -501,7 +501,7 @@ namespace AdvancedCSharp.Tests
         {
             FileSystemVisitor fsv = new FileSystemVisitor(info => true);
 
-            fsv.FilteredFileFinded += (sender, args) =>
+            fsv.FilteredFileFound += (sender, args) =>
             {
                 if (args.Value.Name.StartsWith("n", StringComparison.InvariantCultureIgnoreCase))
                 {
@@ -534,7 +534,7 @@ namespace AdvancedCSharp.Tests
 
             int i = 0;
 
-            fsv.DirectoryFinded += (sender, args) => ++i;
+            fsv.DirectoryFound += (sender, args) => ++i;
 
             fsv.SearchByFilter(TestsBase.Folders
                                         .Select(f => Path.Combine(TestsBase.RootPath, f))
@@ -550,7 +550,7 @@ namespace AdvancedCSharp.Tests
 
             int i = 0;
 
-            fsv.FilteredDirectoryFinded += (sender, args) => ++i;
+            fsv.FilteredDirectoryFound += (sender, args) => ++i;
 
             fsv.SearchByFilter(TestsBase.Folders
                                         .Select(f => Path.Combine(TestsBase.RootPath, f))
@@ -566,7 +566,7 @@ namespace AdvancedCSharp.Tests
 
             int i = 0;
 
-            fsv.FilteredDirectoryFinded += (sender, args) => ++i;
+            fsv.FilteredDirectoryFound += (sender, args) => ++i;
 
             fsv.SearchByFilter(TestsBase.Folders
                                         .Select(f => Path.Combine(TestsBase.RootPath, f))
@@ -582,7 +582,7 @@ namespace AdvancedCSharp.Tests
 
             int i = 0;
 
-            fsv.FilteredFileFinded += (sender, args) => ++i;
+            fsv.FilteredFileFound += (sender, args) => ++i;
 
             fsv.SearchByFilter(TestsBase.Folders
                                         .Select(f => Path.Combine(TestsBase.RootPath, f))
@@ -598,7 +598,7 @@ namespace AdvancedCSharp.Tests
 
             int i = 0;
 
-            fsv.FilteredFileFinded += (sender, args) => ++i;
+            fsv.FilteredFileFound += (sender, args) => ++i;
 
             fsv.SearchByFilter(TestsBase.Folders
                                         .Select(f => Path.Combine(TestsBase.RootPath, f))

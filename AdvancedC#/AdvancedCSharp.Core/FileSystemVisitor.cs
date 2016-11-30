@@ -97,7 +97,7 @@ namespace AdvancedCSharp.Core
 
                 if (directoryInfo != null)
                 {
-                    this.InvokeConsiderFilter(this.DirectoryFinded,
+                    this.InvokeConsiderFilter(this.DirectoryFound,
                         this,
                         new FileSystemVisitorEventArgs
                         {
@@ -107,7 +107,7 @@ namespace AdvancedCSharp.Core
 
                     if (isPassed)
                     {
-                        this.InvokeConsiderFilter(this.FilteredDirectoryFinded,
+                        this.InvokeConsiderFilter(this.FilteredDirectoryFound,
                             this,
                             new FileSystemVisitorEventArgs
                             {
@@ -126,7 +126,7 @@ namespace AdvancedCSharp.Core
 
                 if (fileInfo != null)
                 {
-                    this.InvokeConsiderFilter(this.FileFinded,
+                    this.InvokeConsiderFilter(this.FileFound,
                         this,
                         new FileSystemVisitorEventArgs
                         {
@@ -136,7 +136,7 @@ namespace AdvancedCSharp.Core
 
                     if (isPassed)
                     {
-                        this.InvokeConsiderFilter(this.FilteredFileFinded,
+                        this.InvokeConsiderFilter(this.FilteredFileFound,
                             this,
                             new FileSystemVisitorEventArgs
                             {
@@ -198,13 +198,13 @@ namespace AdvancedCSharp.Core
 
         public delegate void FileSystemVisitorIgnoreOnDefaultFilterEvent(object sender, FileSystemVisitorEventArgs e);
 
-        public event FileSystemVisitorEvent DirectoryFinded;
+        public event FileSystemVisitorEvent DirectoryFound;
 
-        public event FileSystemVisitorEvent FileFinded;
+        public event FileSystemVisitorEvent FileFound;
 
-        public event FileSystemVisitorIgnoreOnDefaultFilterEvent FilteredDirectoryFinded;
+        public event FileSystemVisitorIgnoreOnDefaultFilterEvent FilteredDirectoryFound;
 
-        public event FileSystemVisitorIgnoreOnDefaultFilterEvent FilteredFileFinded;
+        public event FileSystemVisitorIgnoreOnDefaultFilterEvent FilteredFileFound;
 
         public event Event Finish;
 

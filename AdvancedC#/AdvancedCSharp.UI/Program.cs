@@ -15,7 +15,7 @@ namespace AdvancedCSharp.UI
             fsv.Start += (sender, args) => { Console.WriteLine("Started"); };
             fsv.Finish += (sender, args) => { Console.WriteLine("Finished"); };
 
-            fsv.FileFinded += (sender, args) =>
+            fsv.FileFound += (sender, args) =>
             {
                 Console.WriteLine($"Found file. Name: {args.Message}");
                 if (args.Value.Name.Contains("C"))
@@ -23,14 +23,14 @@ namespace AdvancedCSharp.UI
                     args.State = FileSystemVisitorEventArgsStates.IgnoreThisEntry;
                 }
             };
-            fsv.FilteredFileFinded += (sender, args) => { Console.WriteLine($"Found filtered file. Name: {args.Message}"); };
+            fsv.FilteredFileFound += (sender, args) => { Console.WriteLine($"Found filtered file. Name: {args.Message}"); };
 
-            fsv.DirectoryFinded += (sender, args) =>
+            fsv.DirectoryFound += (sender, args) =>
             {
                 Console.WriteLine($"Found dir. Name: {args.Message}");
                 //args.State = FileSystemVisitorEventArgsStates.StopOnFirstFindedCoincidence;
             };
-            fsv.FilteredDirectoryFinded += (sender, args) => { Console.WriteLine($"Found filtered dir. Name: {args.Message}"); };
+            fsv.FilteredDirectoryFound += (sender, args) => { Console.WriteLine($"Found filtered dir. Name: {args.Message}"); };
 
             var result = fsv.SearchByFilter(@"D:\testFolder", true);
 
