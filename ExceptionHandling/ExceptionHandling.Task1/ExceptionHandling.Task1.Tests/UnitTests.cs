@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Remoting.Channels;
 using System.Security.Authentication;
 using System.Text;
@@ -37,7 +38,7 @@ namespace ExceptionHandling.Task1.Tests
         [InlineData("1")] // four    U+0007
         public void NonPrintableChars_MustBeIgnored(string str)
         {
-            int actual = new[] { str }.Go().First();
+            int actual = int.Parse(new[] { str }.Go().First().ToString());
 
             StringBuilder sb = new StringBuilder(str.Length);
             sb.Append(str.Where(c => c.IsPrintable()).ToArray());
@@ -68,23 +69,11 @@ namespace ExceptionHandling.Task1.Tests
         [InlineData("  ")]
         public void EmptyStringAreEquals(string str)
         {
-            //Assert.Throws<IndexOutOfRangeException>(() =>
-            //{
-            //    string[] arr = { str };
-            //    arr.Go();
-            //});
-
-            try
+            Assert.Throws<IndexOutOfRangeException>(() =>
             {
                 string[] arr = { str };
                 arr.Go();
-            }
-            catch (IndexOutOfRangeException)
-            {
-                Assert.True(true);
-            }
-
-            Assert.True(false);
+            });
         }
 
         [Fact]

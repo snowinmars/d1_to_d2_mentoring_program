@@ -12,11 +12,6 @@ namespace ExceptionHandling.Task1.Core
     {
         public static IEnumerable<char> Go(this IEnumerable<string> input)
         {
-            if (input == null)
-            {
-                throw new ArgumentNullException();
-            }
-
             if (!input.Any())
             {
                 throw new IndexOutOfRangeException();
