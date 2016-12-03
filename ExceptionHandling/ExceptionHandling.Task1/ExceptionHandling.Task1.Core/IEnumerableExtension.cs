@@ -12,7 +12,30 @@ namespace ExceptionHandling.Task1.Core
     {
         public static IEnumerable<char> Go(this IEnumerable<string> input)
         {
-            return null;
+            if (input == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (!input.Any())
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            foreach (var str in input)
+            {
+                StringBuilder sb = new StringBuilder(str.Length);
+                sb.Append(str.Where(c => c.IsPrintable()).ToArray());
+
+                string trimmedString = sb.ToString();
+
+                if (trimmedString == string.Empty)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+                yield return trimmedString[0];
+            }
         }
     }
 }
