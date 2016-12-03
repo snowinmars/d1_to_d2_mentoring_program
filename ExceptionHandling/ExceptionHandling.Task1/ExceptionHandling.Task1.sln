@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExceptionHandling.Task1.Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExceptionHandling.Task1.UI", "ExceptionHandling.Task1.UI\ExceptionHandling.Task1.UI.csproj", "{175734DC-7FB8-4ACA-99DD-FB4681C7E577}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExceptionHandling.Task1.Extensions", "ExceptionHandling.Task1.Extensions\ExceptionHandling.Task1.Extensions.csproj", "{1B155055-F85D-4275-94AC-44ABDA46A536}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{175734DC-7FB8-4ACA-99DD-FB4681C7E577}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{175734DC-7FB8-4ACA-99DD-FB4681C7E577}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{175734DC-7FB8-4ACA-99DD-FB4681C7E577}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B155055-F85D-4275-94AC-44ABDA46A536}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B155055-F85D-4275-94AC-44ABDA46A536}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B155055-F85D-4275-94AC-44ABDA46A536}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B155055-F85D-4275-94AC-44ABDA46A536}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

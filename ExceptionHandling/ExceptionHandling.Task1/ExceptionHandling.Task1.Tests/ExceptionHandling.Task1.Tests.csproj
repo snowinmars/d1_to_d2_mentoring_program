@@ -71,6 +71,10 @@
       <Project>{DD64D05E-CD0F-48DD-88C3-CB238B82F11C}</Project>
       <Name>ExceptionHandling.Task1.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ExceptionHandling.Task1.Extensions\ExceptionHandling.Task1.Extensions.csproj">
+      <Project>{1B155055-F85D-4275-94AC-44ABDA46A536}</Project>
+      <Name>ExceptionHandling.Task1.Extensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
