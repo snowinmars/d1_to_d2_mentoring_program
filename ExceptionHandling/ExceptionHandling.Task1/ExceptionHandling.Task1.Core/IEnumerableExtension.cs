@@ -12,6 +12,11 @@ namespace ExceptionHandling.Task1.Core
     {
         public static IEnumerable<char> Go(this IEnumerable<string> input)
         {
+            if (input == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             if (!input.Any())
             {
                 throw new IndexOutOfRangeException();
@@ -19,6 +24,11 @@ namespace ExceptionHandling.Task1.Core
 
             foreach (var str in input)
             {
+                if (str == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
                 StringBuilder sb = new StringBuilder(str.Length);
                 sb.Append(str.Where(c => c.IsPrintable()).ToArray());
 

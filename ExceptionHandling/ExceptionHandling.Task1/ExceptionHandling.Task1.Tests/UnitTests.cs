@@ -68,8 +68,7 @@ namespace ExceptionHandling.Task1.Tests
         {
             Assert.Throws<IndexOutOfRangeException>(() =>
             {
-                string[] arr = { str };
-                arr.Go();
+                new[] { str }.Go().ToList();
             });
         }
 
@@ -78,7 +77,7 @@ namespace ExceptionHandling.Task1.Tests
         {
             Assert.Throws<ArgumentNullException>(() => 
             {
-                new string[] { null }.Go();
+                new string[] { null }.Go().ToList();
             });
         }
 
@@ -87,12 +86,12 @@ namespace ExceptionHandling.Task1.Tests
         {
             Assert.Throws<IndexOutOfRangeException>(() =>
             {
-                new[] { "" }.Go();
+                new[] { "" }.Go().ToList();
             });
 
             Assert.Throws<IndexOutOfRangeException>(() => // TODO
             {
-                new string[] { }.Go();
+                new string[] { }.Go().ToList();
             });
         }
 
