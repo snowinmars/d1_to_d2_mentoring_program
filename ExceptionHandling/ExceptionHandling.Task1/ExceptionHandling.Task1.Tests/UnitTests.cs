@@ -22,28 +22,25 @@ namespace ExceptionHandling.Task1.Tests
         // spaces in head
         [InlineData(" 1")] // one space
         [InlineData("    1")] // four spaces
-        [InlineData("1")] // one U+0007
-        [InlineData("1")] // four    U+0007
+        [InlineData("\u00071")] // one U+0007
+        [InlineData("\u0007\u0007\u0007\u00071")] // four    U+0007
 
         // spaces in tail
         [InlineData("1 ")] // one space
         [InlineData("1    ")] // four spaces
-        [InlineData("1")] // one U+0007
-        [InlineData("1")] // four    U+0007
+        [InlineData("1\u0007")] // one U+0007
+        [InlineData("1\u0007\u0007\u0007\u0007")] // four    U+0007
 
         //spaces in head and tail
         [InlineData(" 1 ")] // one space
         [InlineData("    1    ")] // four spaces
-        [InlineData("1")] // one U+0007
-        [InlineData("1")] // four    U+0007
+        [InlineData("\u00071\u0007")] // one U+0007
+        [InlineData("\u0007\u0007\u0007\u00071\u0007\u0007\u0007\u0007")] // four    U+0007
         public void NonPrintableChars_MustBeIgnored(string str)
         {
-            int actual = int.Parse(new[] { str }.Go().First().ToString());
+            char actual = new[] { str }.Go().First();
 
-            StringBuilder sb = new StringBuilder(str.Length);
-            sb.Append(str.Where(c => c.IsPrintable()).ToArray());
-
-            int expected = int.Parse(str);
+            char expected = '1';
 
             Assert.Equal(actual: actual, expected: expected);
         }
@@ -64,9 +61,9 @@ namespace ExceptionHandling.Task1.Tests
         [InlineData("")]
         [InlineData(" ")]
         [InlineData("    ")]
-        [InlineData("")]
-        [InlineData("")]
-        [InlineData("  ")]
+        [InlineData("\u0007")]
+        [InlineData("\u0007\u0007\u0007\u0007")]
+        [InlineData(" \u0007\u0007\u0007\u0007 ")]
         public void EmptyStringAreEquals(string str)
         {
             Assert.Throws<IndexOutOfRangeException>(() =>

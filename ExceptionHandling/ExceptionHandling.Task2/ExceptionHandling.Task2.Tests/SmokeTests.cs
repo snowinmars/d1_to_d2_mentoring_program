@@ -18,7 +18,7 @@ namespace ExceptionHandling.Task2.Tests
 
             for (int i = 0; i < ints.Length; i++)
             {
-                Assert.Equal(expected: ints[i], actual: Core.Core.Go(strings[i]));
+                Assert.Equal(expected: ints[i], actual: Core.Core.Parse(strings[i]));
             }
         }
     }

@@ -8,7 +8,7 @@ namespace ExceptionHandling.Task2.Core
 {
     public static class Core
     {
-        public static int Go(string inputString)
+        public static int Parse(string inputString)
         {
             return -1;
         }
