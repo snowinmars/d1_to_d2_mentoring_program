@@ -19,8 +19,55 @@ namespace ExceptionHandling.Task2.Core
                 throw new ArgumentNullException();
             }
 
-            long returnValue = 0;
+            string trimedString = Core.Trim(inputString);
 
+            long returnValue = Pars(trimedString);
+
+            return (int)returnValue;
+        }
+
+        private static long Pars(string trimedString)
+        {
+            long returnValue = 0;
+            int order = 0;
+            bool isNegative = false;
+            int a = 0;
+
+            if (trimedString.StartsWith("-"))
+            {
+                a = 1;
+                isNegative = true;
+            }
+
+            for (int i = trimedString.Length - 1; i >= a; i--)
+            {
+                if (trimedString[i] == '+')
+                {
+                    continue;
+                }
+
+                int v = Core.Map(trimedString[i]);
+
+                returnValue += (long)(Math.Pow(10, order) * v);
+
+                order++;
+            }
+
+                if (returnValue > int.MaxValue)
+                {
+                    throw new OverflowException();
+                }
+                
+            if (isNegative)
+            {
+                returnValue *= -1;
+            }
+
+            return returnValue;
+        }
+
+        private static string Trim(string inputString)
+        {
             string trimedString = inputString.TrimNonPrintableChars();
 
             if (trimedString == string.Empty)
@@ -33,23 +80,7 @@ namespace ExceptionHandling.Task2.Core
                 throw new OverflowException();
             }
 
-            int l = 0;
-
-            for (int i = trimedString.Length - 1; i >= 0; i--)
-            {
-                int v = Map(trimedString[i]);
-
-                returnValue += (long) (Math.Pow(10, l)*v);
-
-                l++;
-            }
-
-            if (returnValue > int.MaxValue)
-            {
-                throw new OverflowException();
-            }
-
-            return (int)returnValue;
+            return trimedString;
         }
 
         private static int Map(char c)
