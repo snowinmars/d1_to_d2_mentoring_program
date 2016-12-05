@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExceptionHandling.Task1.Core;
+using System;
 using System.Linq;
 
 namespace ExceptionHandling.Task1.UI
@@ -10,7 +11,7 @@ namespace ExceptionHandling.Task1.UI
             while (true)
             {
                 string input = Console.ReadLine();
-                Console.WriteLine(Core.Core.CutOff(new[] { input}).First());
+                Console.WriteLine(input.CutOff());
             }
         }
     }
