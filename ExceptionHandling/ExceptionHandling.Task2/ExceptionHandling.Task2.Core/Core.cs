@@ -2,15 +2,93 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ExceptionHandling.Task2.Extensions;
 
 namespace ExceptionHandling.Task2.Core
 {
+    internal enum DigitSign
+    {
+        None = 0,
+        Plus = 1,
+        Minus = 2,
+    }
+
+    internal class Digit
+    {
+        private Digit(DigitSign sign, int value)
+        {
+            this.Sign = sign;
+            this.Value = value;
+        }
+
+        internal DigitSign Sign { get; }
+
+        internal int Value
+        {
+            get
+            {
+                switch (this.Sign)
+                {
+                    case DigitSign.None:
+                    case DigitSign.Plus:
+                        return this.value;
+                    case DigitSign.Minus:
+                        return -this.value;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            private set { this.value = value; }
+        }
+
+        private static readonly IDictionary<string, DigitSign> SignBinding = new Dictionary<string, DigitSign>
+        {
+            {string.Empty, DigitSign.None}, {"+", DigitSign.Plus}, {"-", DigitSign.Minus},
+        };
+
+        private static readonly IDictionary<char, int> DigitBinding = new Dictionary<char, int>
+        {
+            {'0', 0}, {'1', 1}, {'2', 2}, {'3', 3}, {'4', 4}, {'5', 5}, {'6', 6}, {'7', 7}, {'8', 8}, {'9', 9},
+        };
+
+        private int value;
+
+
+        public static Digit Parse(string digit, string stringValue)
+        {
+            DigitSign sign = Digit.SignBinding[digit];
+
+            long value = 0;
+            int order = 0;
+            string str = stringValue;
+
+            for (int i = str.Length - 1; i >= 0; i--)
+            {
+                int v = Digit.DigitBinding[str[i]];
+
+                value += (long) (Math.Pow(10, order)*v);
+
+                order++;
+            }
+
+            if (value > int.MaxValue)
+            {
+                throw new OverflowException();
+            }
+
+            return new Digit(sign, (int) value);
+        }
+    }
+
     public static class Core
     {
         private const int IntMaxValueOrder = 10;
+        private const string NumberRegexPattern = "^([+-]?)([0-9]*)$";
 
         public static int Parse(string inputString)
         {
@@ -21,49 +99,23 @@ namespace ExceptionHandling.Task2.Core
 
             string trimedString = Core.Trim(inputString);
 
-            long returnValue = Pars(trimedString);
+            bool isMatch = Regex.IsMatch(input: trimedString, pattern: Core.NumberRegexPattern, options: RegexOptions.CultureInvariant);
 
-            return (int)returnValue;
-        }
-
-        private static long Pars(string trimedString)
-        {
-            long returnValue = 0;
-            int order = 0;
-            bool isNegative = false;
-            int a = 0;
-
-            if (trimedString.StartsWith("-"))
+            if (!isMatch)
             {
-                a = 1;
-                isNegative = true;
+                throw new FormatException();
             }
 
-            for (int i = trimedString.Length - 1; i >= a; i--)
-            {
-                if (trimedString[i] == '+')
-                {
-                    continue;
-                }
+            MatchCollection matches = Regex.Matches(input: trimedString, pattern: Core.NumberRegexPattern, options: RegexOptions.CultureInvariant);
 
-                int v = Core.Map(trimedString[i]);
+            Match match = matches[0];
 
-                returnValue += (long)(Math.Pow(10, order) * v);
+            Group digitGroup = match.Groups[2];
+            Group signGroup = match.Groups[1];
 
-                order++;
-            }
+            Digit digit = Digit.Parse(signGroup.Value, digitGroup.Value);
 
-                if (returnValue > int.MaxValue)
-                {
-                    throw new OverflowException();
-                }
-                
-            if (isNegative)
-            {
-                returnValue *= -1;
-            }
-
-            return returnValue;
+            return digit.Value;
         }
 
         private static string Trim(string inputString)
@@ -81,35 +133,6 @@ namespace ExceptionHandling.Task2.Core
             }
 
             return trimedString;
-        }
-
-        private static int Map(char c)
-        {
-            switch (c)
-            {
-                case '0':
-                    return 0;
-                case '1':
-                    return 1;
-                case '2':
-                    return 2;
-                case '3':
-                    return 3;
-                case '4':
-                    return 4;
-                case '5':
-                    return 5;
-                case '6':
-                    return 6;
-                case '7':
-                    return 7;
-                case '8':
-                    return 8;
-                case '9':
-                    return 9;
-                default:
-                    throw new FormatException();
-            }
         }
     }
 }
