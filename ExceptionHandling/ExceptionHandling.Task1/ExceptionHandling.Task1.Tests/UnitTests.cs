@@ -33,7 +33,7 @@ namespace ExceptionHandling.Task1.Tests
         {
             char actual = new[] { str }.Go().First();
 
-            char expected = '1';
+            const char expected = '1';
 
             Assert.Equal(actual: actual, expected: expected);
         }
