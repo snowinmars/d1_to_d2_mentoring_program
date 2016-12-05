@@ -50,6 +50,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExceptionHandling.Task2.Core\ExceptionHandling.Task2.Core.csproj">
+      <Project>{3A11C10C-0216-4628-8265-284A5A0B7D88}</Project>
+      <Name>ExceptionHandling.Task2.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
