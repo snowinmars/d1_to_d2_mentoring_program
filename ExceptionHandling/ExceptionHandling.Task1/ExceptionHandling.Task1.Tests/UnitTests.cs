@@ -72,11 +72,13 @@ namespace ExceptionHandling.Task1.Tests
             {
                 new[] { "" }.CutOff().ToList();
             });
+        }
 
-            Assert.Throws<IndexOutOfRangeException>(() =>
-            {
-                new string[] { }.CutOff().ToList();
-            });
+        [Fact]
+        public void NoInpit_MustIgnore()
+        {
+            var r = new string[] { }.CutOff().ToList();
+            Assert.NotNull(r);
         }
 
         [Fact]

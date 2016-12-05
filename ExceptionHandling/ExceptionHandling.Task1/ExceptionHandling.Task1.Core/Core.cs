@@ -21,7 +21,7 @@ namespace ExceptionHandling.Task1.Core
 
             if (!input.Any())
             {
-                throw new IndexOutOfRangeException();
+                return new char[0];
             }
 
             return input.Select(Core.HandleEntry).Select(trimmedString => trimmedString[0]);
