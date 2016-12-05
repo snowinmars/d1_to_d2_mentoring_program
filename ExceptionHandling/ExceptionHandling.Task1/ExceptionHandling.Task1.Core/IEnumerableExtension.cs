@@ -1,9 +1,8 @@
-﻿using System;
+﻿using ExceptionHandling.Task1.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using ExceptionHandling.Task1.Extensions;
 
 namespace ExceptionHandling.Task1.Core
 {
@@ -22,25 +21,38 @@ namespace ExceptionHandling.Task1.Core
                 throw new IndexOutOfRangeException();
             }
 
-            foreach (var str in input)
+            return input.Select(IEnumerableExtension.HandleEntry).Select(trimmedString => trimmedString[0]);
+        }
+
+        private static string HandleEntry(string entry)
+        {
+            if (entry == null)
             {
-                if (str == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
-                StringBuilder sb = new StringBuilder(str.Length);
-                sb.Append(str.Where(c => c.IsPrintable()).ToArray());
-
-                string trimmedString = sb.ToString();
-
-                if (trimmedString == string.Empty)
-                {
-                    throw new IndexOutOfRangeException();
-                }
-
-                yield return trimmedString[0];
+                throw new ArgumentNullException();
             }
+
+            if (entry == string.Empty)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            string trimmedString = IEnumerableExtension.Trim(entry);
+
+            if (trimmedString == string.Empty)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
+            return trimmedString;
+        }
+
+        private static string Trim(string entry)
+        {
+            StringBuilder sb = new StringBuilder(entry.Length);
+
+            sb.Append(entry.Where(c => c.IsPrintable()).ToArray());
+
+            return sb.ToString();
         }
     }
 }

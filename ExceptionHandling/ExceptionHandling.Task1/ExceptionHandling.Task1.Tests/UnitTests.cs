@@ -1,13 +1,6 @@
 ﻿using ExceptionHandling.Task1.Core;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.Remoting.Channels;
-using System.Security.Authentication;
-using System.Text;
-using System.Threading.Tasks;
-using ExceptionHandling.Task1.Extensions;
 using Xunit;
 
 namespace ExceptionHandling.Task1.Tests
@@ -50,10 +43,10 @@ namespace ExceptionHandling.Task1.Tests
         [InlineData("abcd")]
         public void Print_MustWork(string str)
         {
-            Assert.Equal(expected: str[0], actual: new[] {str}.Go().First());
+            Assert.Equal(expected: str[0], actual: new[] { str }.Go().First());
         }
 
-        #endregion
+        #endregion positive
 
         #region negative
 
@@ -73,15 +66,6 @@ namespace ExceptionHandling.Task1.Tests
         }
 
         [Fact]
-        public void OnNullInput_MustThrow_ArgNullExc()
-        {
-            Assert.Throws<ArgumentNullException>(() => 
-            {
-                new string[] { null }.Go().ToList();
-            });
-        }
-
-        [Fact]
         public void OnEmptyInput_MustThrow_IndexOutOfRangeExc()
         {
             Assert.Throws<IndexOutOfRangeException>(() =>
@@ -89,14 +73,21 @@ namespace ExceptionHandling.Task1.Tests
                 new[] { "" }.Go().ToList();
             });
 
-            Assert.Throws<IndexOutOfRangeException>(() => // TODO
+            Assert.Throws<IndexOutOfRangeException>(() =>
             {
                 new string[] { }.Go().ToList();
             });
         }
 
+        [Fact]
+        public void OnNullInput_MustThrow_ArgNullExc()
+        {
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                new string[] { null }.Go().ToList();
+            });
+        }
 
-
-        #endregion
+        #endregion negative
     }
 }
