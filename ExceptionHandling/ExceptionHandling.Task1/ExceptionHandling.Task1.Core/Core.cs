@@ -16,7 +16,7 @@ namespace ExceptionHandling.Task1.Core
         {
             if (input == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("Input is null");
             }
 
             if (!input.Any())
@@ -31,19 +31,19 @@ namespace ExceptionHandling.Task1.Core
         {
             if (entry == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("Entry is null");
             }
 
             if (entry == string.Empty)
             {
-                throw new IndexOutOfRangeException();
+                throw new IndexOutOfRangeException("Entry is empty");
             }
 
             string trimmedString = Core.Trim(entry);
 
             if (trimmedString == string.Empty)
             {
-                throw new IndexOutOfRangeException();
+                throw new IndexOutOfRangeException("Entry is empty");
             }
 
             return trimmedString;
