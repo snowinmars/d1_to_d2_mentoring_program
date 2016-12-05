@@ -9,25 +9,7 @@ namespace ExceptionHandling.Task1.Core
     // ReSharper disable once InconsistentNaming
     public static class Core
     {
-        public static char CutOff(this string input)
-            => new[] { input }.CutOff().First();
-
-        public static IEnumerable<char> CutOff(this IEnumerable<string> input)
-        {
-            if (input == null)
-            {
-                throw new ArgumentNullException("Input is null");
-            }
-
-            if (!input.Any())
-            {
-                return new char[0];
-            }
-
-            return input.Select(Core.HandleEntry).Select(trimmedString => trimmedString[0]);
-        }
-
-        private static string HandleEntry(string entry)
+        public static char CutOff(this string entry)
         {
             if (entry == null)
             {
@@ -46,7 +28,22 @@ namespace ExceptionHandling.Task1.Core
                 throw new IndexOutOfRangeException("Entry is empty");
             }
 
-            return trimmedString;
+            return trimmedString[0];
+        }
+
+        public static IEnumerable<char> CutOff(this IEnumerable<string> input)
+        {
+            if (input == null)
+            {
+                throw new ArgumentNullException("Input is null");
+            }
+
+            if (!input.Any())
+            {
+                return new char[0];
+            }
+
+            return input.Select(s => s.CutOff());
         }
 
         private static string Trim(string entry)
