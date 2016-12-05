@@ -37,7 +37,7 @@ namespace ExceptionHandling.Task2.Core
                         return -this.value;
 
                     default:
-                        throw new ArgumentOutOfRangeException();
+                        throw new ArgumentOutOfRangeException(nameof(this.Sign), this.Sign, "DigitSing enumerator is out of range");
                 }
             }
 
@@ -62,7 +62,7 @@ namespace ExceptionHandling.Task2.Core
 
             if (value > int.MaxValue) // TODO check all boundaries conditions here. Now it's a bit buggy
             {
-                throw new OverflowException();
+                throw new OverflowException("Input cant be fitted to Integer range");
             }
 
             DigitSign sign = Digit.SignBinding[digit];

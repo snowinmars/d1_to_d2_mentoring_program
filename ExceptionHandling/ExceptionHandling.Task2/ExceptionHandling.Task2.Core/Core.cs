@@ -13,7 +13,7 @@ namespace ExceptionHandling.Task2.Core
         {
             if (inputString == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("Input string is null");
             }
 
             string trimedString = Core.Trim(inputString);
@@ -21,7 +21,7 @@ namespace ExceptionHandling.Task2.Core
             // int cant contain 10^10. If it's more - anyway Overflow will be thrown
             if (trimedString.Length > Core.IntMaxValueOrder)
             {
-                throw new OverflowException();
+                throw new OverflowException("Input cant be fitted to Integer range");
             }
 
             Core.EnsureCorrectFormat(trimedString);
@@ -36,7 +36,7 @@ namespace ExceptionHandling.Task2.Core
 
             if (!isMatch)
             {
-                throw new FormatException();
+                throw new FormatException($"Wrong input string format. Must be {NumberRegexPattern}");
             }
         }
 
@@ -60,14 +60,14 @@ namespace ExceptionHandling.Task2.Core
         {
             if (string.IsNullOrWhiteSpace(inputString))
             {
-                throw new FormatException();
+                throw new FormatException("Input string is empty");
             }
 
             string trimedString = inputString.TrimNonPrintableChars();
 
             if (trimedString == string.Empty)
             {
-                throw new FormatException();
+                throw new FormatException($"Wrong input string format. Must be {NumberRegexPattern}");
             }
 
             return trimedString;
