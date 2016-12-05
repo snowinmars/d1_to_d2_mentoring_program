@@ -9,6 +9,9 @@ namespace ExceptionHandling.Task1.Core
     // ReSharper disable once InconsistentNaming
     public static class IEnumerableExtension
     {
+        public static char CutOff(this string input)
+            => new[] { input }.CutOff().First();
+
         public static IEnumerable<char> CutOff(this IEnumerable<string> input)
         {
             if (input == null)
