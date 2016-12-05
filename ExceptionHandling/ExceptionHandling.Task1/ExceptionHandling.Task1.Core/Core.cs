@@ -7,7 +7,7 @@ using System.Text;
 namespace ExceptionHandling.Task1.Core
 {
     // ReSharper disable once InconsistentNaming
-    public static class IEnumerableExtension
+    public static class Core
     {
         public static char CutOff(this string input)
             => new[] { input }.CutOff().First();
@@ -24,7 +24,7 @@ namespace ExceptionHandling.Task1.Core
                 throw new IndexOutOfRangeException();
             }
 
-            return input.Select(IEnumerableExtension.HandleEntry).Select(trimmedString => trimmedString[0]);
+            return input.Select(Core.HandleEntry).Select(trimmedString => trimmedString[0]);
         }
 
         private static string HandleEntry(string entry)
@@ -39,7 +39,7 @@ namespace ExceptionHandling.Task1.Core
                 throw new IndexOutOfRangeException();
             }
 
-            string trimmedString = IEnumerableExtension.Trim(entry);
+            string trimmedString = Core.Trim(entry);
 
             if (trimmedString == string.Empty)
             {

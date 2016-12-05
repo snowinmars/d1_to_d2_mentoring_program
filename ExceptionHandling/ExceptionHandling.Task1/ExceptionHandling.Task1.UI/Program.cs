@@ -10,7 +10,7 @@ namespace ExceptionHandling.Task1.UI
             while (true)
             {
                 string input = Console.ReadLine();
-                Console.WriteLine(Core.IEnumerableExtension.CutOff(new[] { input}).First());
+                Console.WriteLine(Core.Core.CutOff(new[] { input}).First());
             }
         }
     }
