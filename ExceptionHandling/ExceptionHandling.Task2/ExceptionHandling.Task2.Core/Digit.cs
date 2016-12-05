@@ -10,7 +10,7 @@ namespace ExceptionHandling.Task2.Core
             {'0', 0}, {'1', 1}, {'2', 2}, {'3', 3}, {'4', 4}, {'5', 5}, {'6', 6}, {'7', 7}, {'8', 8}, {'9', 9},
         };
 
-        private static readonly IDictionary<string, DigitSign> SignBinding = new Dictionary<string, DigitSign>
+        internal static readonly IDictionary<string, DigitSign> SignBinding = new Dictionary<string, DigitSign>
         {
             {string.Empty, DigitSign.None}, {"+", DigitSign.Plus}, {"-", DigitSign.Minus},
         };
