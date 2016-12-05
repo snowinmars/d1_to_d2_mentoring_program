@@ -31,7 +31,7 @@ namespace ExceptionHandling.Task1.Tests
         [InlineData("\u0007\u0007\u0007\u00071\u0007\u0007\u0007\u0007")] // four    U+0007
         public void NonPrintableChars_MustBeIgnored(string str)
         {
-            char actual = new[] { str }.Go().First();
+            char actual = new[] { str }.CutOff().First();
 
             const char expected = '1';
 
@@ -43,7 +43,7 @@ namespace ExceptionHandling.Task1.Tests
         [InlineData("abcd")]
         public void Print_MustWork(string str)
         {
-            Assert.Equal(expected: str[0], actual: new[] { str }.Go().First());
+            Assert.Equal(expected: str[0], actual: new[] { str }.CutOff().First());
         }
 
         #endregion positive
@@ -61,7 +61,7 @@ namespace ExceptionHandling.Task1.Tests
         {
             Assert.Throws<IndexOutOfRangeException>(() =>
             {
-                new[] { str }.Go().ToList();
+                new[] { str }.CutOff().ToList();
             });
         }
 
@@ -70,12 +70,12 @@ namespace ExceptionHandling.Task1.Tests
         {
             Assert.Throws<IndexOutOfRangeException>(() =>
             {
-                new[] { "" }.Go().ToList();
+                new[] { "" }.CutOff().ToList();
             });
 
             Assert.Throws<IndexOutOfRangeException>(() =>
             {
-                new string[] { }.Go().ToList();
+                new string[] { }.CutOff().ToList();
             });
         }
 
@@ -84,7 +84,7 @@ namespace ExceptionHandling.Task1.Tests
         {
             Assert.Throws<ArgumentNullException>(() =>
             {
-                new string[] { null }.Go().ToList();
+                new string[] { null }.CutOff().ToList();
             });
         }
 

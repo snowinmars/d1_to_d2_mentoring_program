@@ -9,7 +9,7 @@ namespace ExceptionHandling.Task1.Core
     // ReSharper disable once InconsistentNaming
     public static class IEnumerableExtension
     {
-        public static IEnumerable<char> Go(this IEnumerable<string> input)
+        public static IEnumerable<char> CutOff(this IEnumerable<string> input)
         {
             if (input == null)
             {

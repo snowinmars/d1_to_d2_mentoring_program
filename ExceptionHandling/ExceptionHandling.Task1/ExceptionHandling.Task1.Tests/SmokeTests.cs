@@ -20,7 +20,7 @@ namespace ExceptionHandling.Task1.Tests
 
             IEnumerable<char> expectedResults = new[] { 'a', 'b', 'c', 'd' };
 
-            Assert.True(inputStrings.Go().SequenceEqual(expectedResults));
+            Assert.True(inputStrings.CutOff().SequenceEqual(expectedResults));
         }
     }
 }
