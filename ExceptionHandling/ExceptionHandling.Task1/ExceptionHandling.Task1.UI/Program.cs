@@ -18,10 +18,6 @@ namespace ExceptionHandling.Task1.UI
                 {
                     result = input.CutOff().ToString();
                 }
-                catch (FormatException)
-                {
-                    result = "Incorrect input format";
-                }
                 catch (IndexOutOfRangeException)
                 {
                     result = "string is too short or too long";
