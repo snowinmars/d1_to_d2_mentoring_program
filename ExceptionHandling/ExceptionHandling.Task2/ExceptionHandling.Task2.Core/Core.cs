@@ -76,7 +76,6 @@ namespace ExceptionHandling.Task2.Core
 
 
 
-
             //if (trimedString.Length > Core.IntMaxValueOrder)
             //{
             //    bool wasFound = false;

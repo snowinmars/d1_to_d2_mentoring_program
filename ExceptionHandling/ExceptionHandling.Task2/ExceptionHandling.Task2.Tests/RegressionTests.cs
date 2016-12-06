@@ -20,5 +20,16 @@ namespace ExceptionHandling.Task2.Tests
 
             Assert.Equal(v1, v2);
         }
+
+        [Theory]
+        [InlineData("123 456")]
+        [InlineData("123\u0007456")]
+        public void SpacesAreNotAllowedAmid(string s)
+        {
+            Assert.Throws<FormatException>(() =>
+            {
+                Core.Core.Parse(s);
+            });
+        }
     }
 }
