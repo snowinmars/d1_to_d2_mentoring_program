@@ -22,23 +22,6 @@ namespace ExceptionHandling.Task2.Core
             string trimedString = Core.Trim(inputString);
 
             // int cant contain 10^10. If it's more - anyway Overflow will be thrown
-            //if (trimedString.Length > Core.IntMaxValueOrder)
-            //{
-            //    foreach (var sign in Digit.SignBinding.Keys.Where(s => s != string.Empty))
-            //    {
-            //        if (trimedString.StartsWith(sign, StringComparison.InvariantCultureIgnoreCase))
-            //        {
-            //            goto ok;
-            //        }
-            //    }
-
-            //    throw new OverflowException("Input cant be fitted to Integer range");
-            //}
-            //ok:
-            //;
-
-
-
             if (trimedString.Length > Core.IntMaxValueOrder)
             {
                 if (!Digit.SignBinding.Keys
@@ -48,58 +31,6 @@ namespace ExceptionHandling.Task2.Core
                     throw new OverflowException("Input cant be fitted to Integer range");
                 }
             }
-
-
-
-            //if (trimedString.Length > Core.IntMaxValueOrder)
-            //{
-            //    bool wasFound = false;
-
-            //    foreach (var sign in Digit.SignBinding.Keys.Where(s => s != string.Empty))
-            //    {
-            //        if (trimedString.StartsWith(sign, StringComparison.InvariantCultureIgnoreCase))
-            //        {
-            //            wasFound = true;
-            //        }
-
-            //        if (wasFound)
-            //        {
-            //            break;
-            //        }
-            //    }
-
-            //    if (!wasFound)
-            //    {
-            //        throw new OverflowException("Input cant be fitted to Integer range");
-            //    }
-            //}
-
-
-
-            //if (trimedString.Length > Core.IntMaxValueOrder)
-            //{
-            //    bool wasFound = false;
-
-            //    IEnumerator<string> enumerator = Digit.SignBinding.Keys.Where(s => s != string.Empty).GetEnumerator();
-
-            //    if (enumerator.MoveNext())
-            //    {
-            //        do
-            //        {
-            //            string sign = enumerator.Current;
-
-            //            if (trimedString.StartsWith(sign, StringComparison.InvariantCultureIgnoreCase))
-            //            {
-            //                wasFound = true;
-            //            }
-            //        } while (!wasFound && enumerator.MoveNext());
-            //    }
-
-            //    if (!wasFound)
-            //    {
-            //        throw new OverflowException("Input cant be fitted to Integer range");
-            //    }
-            //}
 
             Core.EnsureCorrectFormat(trimedString);
             return Core.ParseImplementation(trimedString);
