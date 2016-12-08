@@ -169,7 +169,7 @@ namespace SampleQueries
 
             var result = dict.OrderBy(kvp => kvp.Value.OrderDate.Year)
                 .ThenBy(kvp => kvp.Value.OrderDate.Month)
-                .ThenByDescending(kvp => kvp.Key.Orders.Max(order => order.Total))
+                .ThenByDescending(kvp => kvp.Key.Orders.Sum(order => order.Total))
                 .ThenBy(kvp => kvp.Key.CompanyName);
 
             LinqSamples.Show(result);
@@ -203,7 +203,7 @@ namespace SampleQueries
 	                new KeyValuePair<string, IEnumerable<KeyValuePair<decimal, IEnumerable<Product>>>>(
 	                    groupedByCategoryProducts.Key,
 	                    from p in groupedByCategoryProducts
-	                    group p by p.UnitPrice
+	                    group p by p.UnitsInStock
 	                    into asd
 	                    select new KeyValuePair<decimal, IEnumerable<Product>>(asd.Key, asd.OrderBy(a => a.UnitPrice)));
 
@@ -294,7 +294,7 @@ namespace SampleQueries
 
                         foreach (Product product in pair.Value)
                         {
-                            ObjectDumper.Write("        " + product.ProductName);
+                            ObjectDumper.Write($"        {product.ProductName}: {product.UnitPrice}");
                         }
                     }
                 }
