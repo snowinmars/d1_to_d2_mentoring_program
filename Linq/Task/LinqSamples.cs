@@ -66,16 +66,23 @@ namespace SampleQueries
         [Description("Выдайте список всех клиентов, чей суммарный оборот (сумма всех заказов) превосходит некоторую величину X. Продемонстрируйте выполнение запроса с различными X (подумайте, можно ли обойтись без копирования запроса несколько раз)")]
         public void Linq001()
         {
-            const int x = 100000;
+            int[] arr = {100, 1000, 10000, 100000};
 
-            var products = this.dataSource.Customers
-                .Where(cust => cust.Orders.Sum(order => order.Total) > x)
-                .Select(cust => cust.CompanyName);
+            foreach (var x in arr)
+            {
+                ObjectDumper.Write("");
+                ObjectDumper.Write("");
+                ObjectDumper.Write($"x is {x}");
+                ObjectDumper.Write("");
+                ObjectDumper.Write("");
 
-            LinqSamples.Show(products);
+                var products = this.dataSource.Customers
+                    .Where(cust => cust.Orders.Sum(order => order.Total) > x)
+                    .Select(cust => cust.CompanyName);
+
+                LinqSamples.Show(products);
+            }
         }
-
-        
 
         [Category("Restriction Operators")]
 	    [Title("Task 2")]
@@ -90,24 +97,53 @@ namespace SampleQueries
                 from client in clients
                 where supplier.Country == client.Country &&
                       supplier.City == client.City
-                //group client by client.Country;
                 select $"Company: {client.CompanyName}, city: {supplier.City}, country: {supplier.Country}";
 
+            ObjectDumper.Write("");
+            ObjectDumper.Write("");
+            ObjectDumper.Write("Ingroupped");
+            ObjectDumper.Write("");
+            ObjectDumper.Write("");
+
             LinqSamples.Show(result);
+
+            var grouppedResult =
+                from supplier in suppliers
+                from client in clients
+                where supplier.Country == client.Country &&
+                      supplier.City == client.City
+                group client by client.Country;
+
+            ObjectDumper.Write("");
+            ObjectDumper.Write("");
+            ObjectDumper.Write("Groupped");
+            ObjectDumper.Write("");
+            ObjectDumper.Write("");
+
+            LinqSamples.Show(grouppedResult);
         }
 
-	    [Category("Restriction Operators")]
+        [Category("Restriction Operators")]
 	    [Title("Task 3")]
 	    [Description("Найдите всех клиентов, у которых были заказы, превосходящие по сумме величину X")]
 	    public void Linq003()
 	    {
-	        const int x = 100000;
+            int[] arr = { 100, 1000, 10000, 100000 };
 
-	        var result = this.dataSource.Customers
-	            .Where(cust => cust.Orders.Any(order => order.Total > x))
-	            .Select(cust => cust.CompanyName);
+            foreach (var x in arr)
+            {
+                ObjectDumper.Write("");
+                ObjectDumper.Write("");
+                ObjectDumper.Write($"x is {x}");
+                ObjectDumper.Write("");
+                ObjectDumper.Write("");
 
-            LinqSamples.Show(result);
+                var result = this.dataSource.Customers
+                    .Where(cust => cust.Orders.Any(order => order.Total > x))
+                    .Select(cust => cust.CompanyName);
+
+                LinqSamples.Show(result);
+            }
         }
 
 	    [Category("Restriction Operators")]
@@ -133,7 +169,7 @@ namespace SampleQueries
 
             var result = dict.OrderBy(kvp => kvp.Value.OrderDate.Year)
                 .ThenBy(kvp => kvp.Value.OrderDate.Month)
-                .ThenBy(kvp => kvp.Key.Orders.Max(order => order.Total))
+                .ThenByDescending(kvp => kvp.Key.Orders.Max(order => order.Total))
                 .ThenBy(kvp => kvp.Key.CompanyName);
 
             LinqSamples.Show(result);
