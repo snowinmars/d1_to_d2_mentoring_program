@@ -167,15 +167,15 @@ namespace SampleQueries
         [Description("Сделайте предыдущее задание, но выдайте список отсортированным по году, месяцу, оборотам клиента (от максимального к минимальному) и имени клиента")]
         public void Linq005()
         {
-            var dict = this.dataSource.Customers
+            var result = this.dataSource.Customers
                 .Where(cust => cust.Orders.Any())
                 .ToDictionary(cust => cust,
-                                cust => cust.Orders.OrderBy(order => order.OrderDate).FirstOrDefault());
-
-            var result = dict.OrderBy(kvp => kvp.Value.OrderDate.Year)
+                    cust => cust.Orders.OrderBy(order => order.OrderDate).FirstOrDefault())
+                .OrderBy(kvp => kvp.Value.OrderDate.Year)
                 .ThenBy(kvp => kvp.Value.OrderDate.Month)
                 .ThenByDescending(kvp => kvp.Key.Orders.Sum(order => order.Total))
-                .ThenBy(kvp => kvp.Key.CompanyName);
+                .ThenBy(kvp => kvp.Key.CompanyName)
+                .Select(dict => $"{dict.Key.CompanyName} is client since {dict.Value.OrderDate.ToString("yyyy MMMM")}, total is {dict.Key.Orders.Sum(order => order.Total)}");
 
             LinqSamples.Show(result);
         }
