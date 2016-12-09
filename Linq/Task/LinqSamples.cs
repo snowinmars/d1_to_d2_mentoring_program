@@ -225,10 +225,13 @@ namespace SampleQueries
 
             var result = this.dataSource.Products
                 .GroupBy(product => LinqSamples.GetRange(product, min, max),
-                    product => product.ProductName);
+                    product => $"Name = {product.ProductName}, price is {product.UnitPrice}")
+                .OrderBy(kvp => kvp.Key, new Comparor());
 
             LinqSamples.Show(result);
         }
+
+       
 
         [Category("Restriction Operators")]
         [Title("Task 9")]
@@ -252,6 +255,7 @@ namespace SampleQueries
         [Description("Сделайте среднегодовую статистику активности клиентов по месяцам (без учета года), статистику по годам, по годам и месяцам (т.е. когда один месяц в разные годы имеет своё значение).")]
         public void Linq010()
         {
+
         }
 
         private static string GetRange(Product product, int a, int b)
@@ -320,6 +324,19 @@ namespace SampleQueries
             else
             {
                 Console.WriteLine("No such objects");
+            }
+        }
+
+        private class Comparor : IComparer<string>
+        {
+            public int Compare(string x, string y)
+            {
+                if (x == y)
+                {
+                    return 0;
+                }
+
+                return -1; // this generates at least ten wft per sec
             }
         }
 
