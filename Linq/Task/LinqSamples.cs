@@ -78,7 +78,7 @@ namespace SampleQueries
 
                 var products = this.dataSource.Customers
                     .Where(cust => cust.Orders.Sum(order => order.Total) > x)
-                    .Select(cust => cust.CompanyName);
+                    .Select(cust => $"Name = {cust.CompanyName}, Order's total price = {cust.Orders.Sum(order => order.Total)}" );
 
                 LinqSamples.Show(products);
             }
