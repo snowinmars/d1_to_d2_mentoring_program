@@ -190,7 +190,7 @@ namespace SampleQueries
                     cust.PostalCode.Any(c => !char.IsDigit(c)) ||
                     string.IsNullOrWhiteSpace(cust.Region) ||
                     !cust.Phone.StartsWith("(", StringComparison.InvariantCultureIgnoreCase))
-                .Select(cust => cust.CompanyName);
+                .Select(cust => $"Customer {cust.CompanyName} have postal code {cust.PostalCode}, region {cust.Region}, phone {cust.Phone}");
 
             LinqSamples.Show(result);
         }
