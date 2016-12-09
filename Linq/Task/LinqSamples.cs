@@ -8,7 +8,6 @@ using SampleSupport;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
 using Task.Data;
 
 // Version Mad01
@@ -92,7 +91,7 @@ namespace SampleQueries
                 select $"Company {customer.CompanyName} and supplier {supplier.SupplierName} are in the same city {supplier.City} and country {supplier.Country}";
 
             LinqSamples.WriteHeader("Ingroupped");
-            
+
             LinqSamples.Show(result);
 
             var grouppedResult =
@@ -231,8 +230,6 @@ namespace SampleQueries
             LinqSamples.Show(result);
         }
 
-       
-
         [Category("Restriction Operators")]
         [Title("Task 9")]
         [Description("Рассчитайте среднюю прибыльность каждого города (среднюю сумму заказа по всем клиентам из данного города) и среднюю интенсивность (среднее количество заказов, приходящееся на клиента из каждого города)")]
@@ -255,7 +252,6 @@ namespace SampleQueries
         [Description("Сделайте среднегодовую статистику активности клиентов по месяцам (без учета года), статистику по годам, по годам и месяцам (т.е. когда один месяц в разные годы имеет своё значение).")]
         public void Linq010()
         {
-
         }
 
         private static string GetRange(Product product, int a, int b)
@@ -327,19 +323,6 @@ namespace SampleQueries
             }
         }
 
-        private class Comparor : IComparer<string>
-        {
-            public int Compare(string x, string y)
-            {
-                if (x == y)
-                {
-                    return 0;
-                }
-
-                return -1; // this generates at least ten wft per sec
-            }
-        }
-
         private static void Show(IEnumerable<IGrouping<string, string>> products)
         {
             if (products.Any())
@@ -382,6 +365,19 @@ namespace SampleQueries
             ObjectDumper.Write(v);
             ObjectDumper.Write("");
             ObjectDumper.Write("");
+        }
+
+        private class Comparor : IComparer<string>
+        {
+            public int Compare(string x, string y)
+            {
+                if (x == y)
+                {
+                    return 0;
+                }
+
+                return -1; // this generates at least ten wft per sec
+            }
         }
     }
 }
