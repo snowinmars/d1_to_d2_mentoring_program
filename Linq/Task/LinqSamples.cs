@@ -270,10 +270,6 @@ namespace SampleQueries
 
             WriteHeader("Mounthly");
 
-            // dict <mounthname , activity>
-
-            // I hope, that current culture and culture in database is same and is en-US
-
             var mounthly =
                 from order in clients.SelectMany(client => client.Orders).Select(o => o.OrderDate)
                 group order by order.Month
@@ -285,17 +281,30 @@ namespace SampleQueries
 
             Show(mounthly);
 
-            //WriteHeader("Yearly");
+            WriteHeader("Yearly");
 
-            //var yearly =;
+            var yearly = from order in clients.SelectMany(client => client.Orders).Select(o => o.OrderDate)
+                group order by order.Year
+                into groupped
+                select
+                    new KeyValuePair<int, int>(groupped.Key,
+                        groupped.Count());
 
-            //Show(yearly);
+            Show(yearly.OrderBy(g => g.Key));
 
             //WriteHeader("Bothly");
 
             //var bothly =;
 
             //Show(bothly);
+        }
+
+        private void Show(IEnumerable<KeyValuePair<int, int>> yearly)
+        {
+            foreach (var item in yearly)
+            {
+                ObjectDumper.Write($"{item.Key} - {item.Value}");
+            }
         }
 
         private static string GetRange(Product product, int a, int b)
