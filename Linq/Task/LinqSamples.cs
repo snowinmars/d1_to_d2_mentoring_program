@@ -7,6 +7,7 @@
 using SampleSupport;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Task.Data;
 
@@ -14,6 +15,19 @@ using Task.Data;
 
 namespace SampleQueries
 {
+    public class Comparer : IEqualityComparer<KeyValuePair<String, Customer>>
+    {
+        public bool Equals(KeyValuePair<string, Customer> x, KeyValuePair<string, Customer> y)
+        {
+            return x.Key == y.Key;
+        }
+
+        public int GetHashCode(KeyValuePair<string, Customer> obj)
+        {
+            return obj.Key.GetHashCode() ^ obj.Value.GetHashCode();
+        }
+    }
+
     [Title("LINQ Module")]
     [Prefix("Linq")]
     public class LinqSamples : SampleHarness
@@ -252,6 +266,36 @@ namespace SampleQueries
         [Description("Сделайте среднегодовую статистику активности клиентов по месяцам (без учета года), статистику по годам, по годам и месяцам (т.е. когда один месяц в разные годы имеет своё значение).")]
         public void Linq010()
         {
+            var clients = dataSource.Customers;
+
+            WriteHeader("Mounthly");
+
+            // dict <mounthname , activity>
+
+            // I hope, that current culture and culture in database is same and is en-US
+
+            var mounthly =
+                from order in clients.SelectMany(client => client.Orders).Select(o => o.OrderDate)
+                group order by order.Month
+                into groupped
+                select
+                    new KeyValuePair<string, int>(CultureInfo.CurrentCulture
+                                                                .DateTimeFormat.GetMonthName(groupped.Key),
+                                                    groupped.Count());
+
+            Show(mounthly);
+
+            //WriteHeader("Yearly");
+
+            //var yearly =;
+
+            //Show(yearly);
+
+            //WriteHeader("Bothly");
+
+            //var bothly =;
+
+            //Show(bothly);
         }
 
         private static string GetRange(Product product, int a, int b)
@@ -263,17 +307,47 @@ namespace SampleQueries
                     : "High";
         }
 
-        private static void Show(IEnumerable<IGrouping<string, KeyValuePair<string, string>>> products)
+        private static void Show(IOrderedEnumerable<KeyValuePair<Customer, Order>> products)
         {
             if (products.Any())
             {
-                foreach (var group in products)
+                foreach (var p in products)
                 {
-                    ObjectDumper.Write(group.Key);
+                    ObjectDumper.Write($"{p.Key.CompanyName} - {p.Value.OrderDate.ToString("yyyy MMMM")}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No such objects");
+            }
+        }
 
-                    foreach (var pair in group)
+        private static void Show(IEnumerable<string> products)
+        {
+            if (products.Any())
+            {
+                foreach (var p in products)
+                {
+                    ObjectDumper.Write(p);
+                }
+            }
+            else
+            {
+                Console.WriteLine("No such objects");
+            }
+        }
+
+        private static void Show(IEnumerable<IGrouping<string, string>> products)
+        {
+            if (products.Any())
+            {
+                foreach (var p in products)
+                {
+                    ObjectDumper.Write(p.Key);
+
+                    foreach (var item in p)
                     {
-                        ObjectDumper.Write($"    {pair.Key} : {pair.Value}");
+                        ObjectDumper.Write("    " + item);
                     }
                 }
             }
@@ -308,48 +382,18 @@ namespace SampleQueries
             }
         }
 
-        private static void Show(IOrderedEnumerable<KeyValuePair<Customer, Order>> products)
+        private static void Show(IEnumerable<IGrouping<string, KeyValuePair<string, string>>> products)
         {
             if (products.Any())
             {
-                foreach (var p in products)
+                foreach (var group in products)
                 {
-                    ObjectDumper.Write($"{p.Key.CompanyName} - {p.Value.OrderDate.ToString("yyyy MMMM")}");
-                }
-            }
-            else
-            {
-                Console.WriteLine("No such objects");
-            }
-        }
+                    ObjectDumper.Write(group.Key);
 
-        private static void Show(IEnumerable<IGrouping<string, string>> products)
-        {
-            if (products.Any())
-            {
-                foreach (var p in products)
-                {
-                    ObjectDumper.Write(p.Key);
-
-                    foreach (var item in p)
+                    foreach (var pair in group)
                     {
-                        ObjectDumper.Write("    " + item);
+                        ObjectDumper.Write($"    {pair.Key} : {pair.Value}");
                     }
-                }
-            }
-            else
-            {
-                Console.WriteLine("No such objects");
-            }
-        }
-
-        private static void Show(IEnumerable<string> products)
-        {
-            if (products.Any())
-            {
-                foreach (var p in products)
-                {
-                    ObjectDumper.Write(p);
                 }
             }
             else
@@ -365,6 +409,14 @@ namespace SampleQueries
             ObjectDumper.Write(v);
             ObjectDumper.Write("");
             ObjectDumper.Write("");
+        }
+
+        private void Show(IEnumerable<KeyValuePair<string, int>> mounthly)
+        {
+            foreach (var item in mounthly)
+            {
+                ObjectDumper.Write($"{item.Key} - {item.Value}");
+            }
         }
 
         private class Comparor : IComparer<string>
