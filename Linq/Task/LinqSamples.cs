@@ -292,11 +292,22 @@ namespace SampleQueries
 
             Show(yearly.OrderBy(g => g.Key));
 
-            //WriteHeader("Bothly");
+            WriteHeader("Bothly");
 
-            //var bothly =;
+            var bothly = from order in clients.SelectMany(client => client.Orders).Select(o => o.OrderDate)
+                group order by new {year = order.Year, mounth = order.Month}
+                into groupped
+                select
+                    new
+                    {
+                        Key = new KeyValuePair<int,int>(groupped.Key.year, groupped.Key.mounth),
+                        Value = groupped.Count(),
+                    };
 
-            //Show(bothly);
+            foreach (var item in bothly.OrderBy(g => g.Key.Key).ThenBy(g => g.Key.Value))
+            {
+                ObjectDumper.Write($"{item.Key.Key}, {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(item.Key.Value)} - {item.Value}");
+            }
         }
 
         private void Show(IEnumerable<KeyValuePair<int, int>> yearly)
