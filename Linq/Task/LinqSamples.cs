@@ -236,10 +236,17 @@ namespace SampleQueries
             const int min = 10;
             const int max = 100;
 
+            var dict = new Dictionary<string, uint>
+            {
+                { "Low", 0},
+                { "Middle", 1},
+                { "High", 2},
+            };
+
             var result = this.dataSource.Products
                 .GroupBy(product => LinqSamples.GetRange(product, min, max),
                     product => $"Name = {product.ProductName}, price is {product.UnitPrice}")
-                .OrderBy(kvp => kvp.Key, new Comparor());
+                .OrderBy(kvp => dict[kvp.Key]);
 
             LinqSamples.Show(result);
         }
@@ -266,9 +273,9 @@ namespace SampleQueries
         [Description("Сделайте среднегодовую статистику активности клиентов по месяцам (без учета года), статистику по годам, по годам и месяцам (т.е. когда один месяц в разные годы имеет своё значение).")]
         public void Linq010()
         {
-            var clients = dataSource.Customers;
+            var clients = this.dataSource.Customers;
 
-            WriteHeader("Mounthly");
+            LinqSamples.WriteHeader("Mounthly");
 
             var mounthly =
                 from order in clients.SelectMany(client => client.Orders).Select(o => o.OrderDate)
@@ -279,9 +286,9 @@ namespace SampleQueries
                                                                 .DateTimeFormat.GetMonthName(groupped.Key),
                                                     groupped.Count());
 
-            Show(mounthly);
+            this.Show(mounthly);
 
-            WriteHeader("Yearly");
+            LinqSamples.WriteHeader("Yearly");
 
             var yearly = from order in clients.SelectMany(client => client.Orders).Select(o => o.OrderDate)
                 group order by order.Year
@@ -290,9 +297,9 @@ namespace SampleQueries
                     new KeyValuePair<int, int>(groupped.Key,
                         groupped.Count());
 
-            Show(yearly.OrderBy(g => g.Key));
+            this.Show(yearly.OrderBy(g => g.Key));
 
-            WriteHeader("Bothly");
+            LinqSamples.WriteHeader("Bothly");
 
             var bothly = from order in clients.SelectMany(client => client.Orders).Select(o => o.OrderDate)
                 group order by new {year = order.Year, mounth = order.Month}
@@ -325,21 +332,6 @@ namespace SampleQueries
                 : product.UnitPrice < b
                     ? "Middle"
                     : "High";
-        }
-
-        private static void Show(IOrderedEnumerable<KeyValuePair<Customer, Order>> products)
-        {
-            if (products.Any())
-            {
-                foreach (var p in products)
-                {
-                    ObjectDumper.Write($"{p.Key.CompanyName} - {p.Value.OrderDate.ToString("yyyy MMMM")}");
-                }
-            }
-            else
-            {
-                Console.WriteLine("No such objects");
-            }
         }
 
         private static void Show(IEnumerable<string> products)
@@ -416,19 +408,6 @@ namespace SampleQueries
             foreach (var item in mounthly)
             {
                 ObjectDumper.Write($"{item.Key} - {item.Value}");
-            }
-        }
-
-        private class Comparor : IComparer<string>
-        {
-            public int Compare(string x, string y)
-            {
-                if (x == y)
-                {
-                    return 0;
-                }
-
-                return -1; // this generates at least ten wft per sec
             }
         }
     }
