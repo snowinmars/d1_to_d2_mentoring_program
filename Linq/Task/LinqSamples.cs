@@ -402,26 +402,6 @@ namespace SampleQueries
             }
         }
 
-        private static void Show(IEnumerable<IGrouping<string, KeyValuePair<string, string>>> products)
-        {
-            if (products.Any())
-            {
-                foreach (var group in products)
-                {
-                    ObjectDumper.Write(group.Key);
-
-                    foreach (var pair in group)
-                    {
-                        ObjectDumper.Write($"    {pair.Key} : {pair.Value}");
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine("No such objects");
-            }
-        }
-
         private static void WriteHeader(string v)
         {
             ObjectDumper.Write("");
