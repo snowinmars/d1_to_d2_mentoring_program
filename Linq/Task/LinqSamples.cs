@@ -256,16 +256,39 @@ namespace SampleQueries
         [Description("Рассчитайте среднюю прибыльность каждого города (среднюю сумму заказа по всем клиентам из данного города) и среднюю интенсивность (среднее количество заказов, приходящееся на клиента из каждого города)")]
         public void Linq009()
         {
-            double avgIntensivity = this.dataSource.Customers
-                .Where(customer => customer.Orders.Any())
-                .Average(customer => customer.Orders.Length);
+            var intensity = from customer in this.dataSource.Customers
+                group customer by customer.City
+                into groupped
+                select new KeyValuePair<string, double>(groupped.Key, groupped.Average(customer => customer.Orders.Length));
 
-            decimal avgMoneys = this.dataSource.Customers
-                .Where(customer => customer.Orders.Any())
-                .Average(customer => customer.Orders.Average(order => order.Total));
+            WriteHeader("Intensity");
+            LinqSamples.Show(intensity);
 
-            ObjectDumper.Write(avgIntensivity);
-            ObjectDumper.Write(avgMoneys);
+            var profitability = from customer in this.dataSource.Customers
+                group customer by customer.City
+                into groupped
+                select
+                    new KeyValuePair<string, decimal>(groupped.Key,
+                        groupped.Select(customer => customer.Orders.Select(order => order.Total)).Average(e => e.Sum()));
+
+            WriteHeader("Profitability");
+            LinqSamples.Show(profitability);
+        }
+
+        private static void Show(IEnumerable<KeyValuePair<string, decimal>> collection)
+        {
+            foreach (var iten in collection)
+            {
+                ObjectDumper.Write($"{iten.Key} - {iten.Value}");
+            }
+        }
+
+        private static void Show(IEnumerable<KeyValuePair<string, double>> collection)
+        {
+            foreach (var iten in collection)
+            {
+                ObjectDumper.Write($"{iten.Key} - {iten.Value}");
+            }
         }
 
         [Category("Restriction Operators")]
@@ -297,7 +320,7 @@ namespace SampleQueries
                     new KeyValuePair<int, int>(groupped.Key,
                         groupped.Count());
 
-            this.Show(yearly.OrderBy(g => g.Key));
+            LinqSamples.Show(yearly.OrderBy(g => g.Key));
 
             LinqSamples.WriteHeader("Bothly");
 
@@ -317,7 +340,7 @@ namespace SampleQueries
             }
         }
 
-        private void Show(IEnumerable<KeyValuePair<int, int>> yearly)
+        private static void Show(IEnumerable<KeyValuePair<int, int>> yearly)
         {
             foreach (var item in yearly)
             {
