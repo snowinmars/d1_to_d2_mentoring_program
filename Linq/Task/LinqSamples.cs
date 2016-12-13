@@ -261,7 +261,7 @@ namespace SampleQueries
                 into groupped
                                 select
                                     new KeyValuePair<string, decimal>(groupped.Key,
-                                        groupped.Select(customer => customer.Orders.Select(order => order.Total)).Average(e => e.Sum()));
+                                        groupped.SelectMany(c => c.Orders).Average(o => o.Total));
 
             WriteHeader("Profitability");
             LinqSamples.Show(profitability);
