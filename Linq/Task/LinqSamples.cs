@@ -256,14 +256,6 @@ namespace SampleQueries
         [Description("Рассчитайте среднюю прибыльность каждого города (среднюю сумму заказа по всем клиентам из данного города) и среднюю интенсивность (среднее количество заказов, приходящееся на клиента из каждого города)")]
         public void Linq009()
         {
-            var intensity = from customer in this.dataSource.Customers
-                            group customer by customer.City
-                into groupped
-                            select new KeyValuePair<string, double>(groupped.Key, groupped.Average(customer => customer.Orders.Length));
-
-            WriteHeader("Intensity");
-            LinqSamples.Show(intensity);
-
             var profitability = from customer in this.dataSource.Customers
                                 group customer by customer.City
                 into groupped
@@ -273,6 +265,14 @@ namespace SampleQueries
 
             WriteHeader("Profitability");
             LinqSamples.Show(profitability);
+
+            var intensity = from customer in this.dataSource.Customers
+                            group customer by customer.City
+                into groupped
+                            select new KeyValuePair<string, double>(groupped.Key, groupped.Average(customer => customer.Orders.Length));
+
+            WriteHeader("Intensity");
+            LinqSamples.Show(intensity);
         }
 
         [Category("Restriction Operators")]
