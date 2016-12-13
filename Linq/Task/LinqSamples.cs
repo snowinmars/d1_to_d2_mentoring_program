@@ -257,38 +257,22 @@ namespace SampleQueries
         public void Linq009()
         {
             var intensity = from customer in this.dataSource.Customers
-                group customer by customer.City
+                            group customer by customer.City
                 into groupped
-                select new KeyValuePair<string, double>(groupped.Key, groupped.Average(customer => customer.Orders.Length));
+                            select new KeyValuePair<string, double>(groupped.Key, groupped.Average(customer => customer.Orders.Length));
 
             WriteHeader("Intensity");
             LinqSamples.Show(intensity);
 
             var profitability = from customer in this.dataSource.Customers
-                group customer by customer.City
+                                group customer by customer.City
                 into groupped
-                select
-                    new KeyValuePair<string, decimal>(groupped.Key,
-                        groupped.Select(customer => customer.Orders.Select(order => order.Total)).Average(e => e.Sum()));
+                                select
+                                    new KeyValuePair<string, decimal>(groupped.Key,
+                                        groupped.Select(customer => customer.Orders.Select(order => order.Total)).Average(e => e.Sum()));
 
             WriteHeader("Profitability");
             LinqSamples.Show(profitability);
-        }
-
-        private static void Show(IEnumerable<KeyValuePair<string, decimal>> collection)
-        {
-            foreach (var iten in collection)
-            {
-                ObjectDumper.Write($"{iten.Key} - {iten.Value}");
-            }
-        }
-
-        private static void Show(IEnumerable<KeyValuePair<string, double>> collection)
-        {
-            foreach (var iten in collection)
-            {
-                ObjectDumper.Write($"{iten.Key} - {iten.Value}");
-            }
         }
 
         [Category("Restriction Operators")]
@@ -314,37 +298,29 @@ namespace SampleQueries
             LinqSamples.WriteHeader("Yearly");
 
             var yearly = from order in clients.SelectMany(client => client.Orders).Select(o => o.OrderDate)
-                group order by order.Year
+                         group order by order.Year
                 into groupped
-                select
-                    new KeyValuePair<int, int>(groupped.Key,
-                        groupped.Count());
+                         select
+                             new KeyValuePair<int, int>(groupped.Key,
+                                 groupped.Count());
 
             LinqSamples.Show(yearly.OrderBy(g => g.Key));
 
             LinqSamples.WriteHeader("Bothly");
 
             var bothly = from order in clients.SelectMany(client => client.Orders).Select(o => o.OrderDate)
-                group order by new {year = order.Year, mounth = order.Month}
+                         group order by new { year = order.Year, mounth = order.Month }
                 into groupped
-                select
-                    new
-                    {
-                        Key = new KeyValuePair<int,int>(groupped.Key.year, groupped.Key.mounth),
-                        Value = groupped.Count(),
-                    };
+                         select
+                             new
+                             {
+                                 Key = new KeyValuePair<int, int>(groupped.Key.year, groupped.Key.mounth),
+                                 Value = groupped.Count(),
+                             };
 
             foreach (var item in bothly.OrderBy(g => g.Key.Key).ThenBy(g => g.Key.Value))
             {
                 ObjectDumper.Write($"{item.Key.Key}, {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(item.Key.Value)} - {item.Value}");
-            }
-        }
-
-        private static void Show(IEnumerable<KeyValuePair<int, int>> yearly)
-        {
-            foreach (var item in yearly)
-            {
-                ObjectDumper.Write($"{item.Key} - {item.Value}");
             }
         }
 
@@ -355,6 +331,30 @@ namespace SampleQueries
                 : product.UnitPrice < b
                     ? "Middle"
                     : "High";
+        }
+
+        private static void Show(IEnumerable<KeyValuePair<string, decimal>> collection)
+        {
+            foreach (var iten in collection)
+            {
+                ObjectDumper.Write($"{iten.Key} - {iten.Value}");
+            }
+        }
+
+        private static void Show(IEnumerable<KeyValuePair<string, double>> collection)
+        {
+            foreach (var iten in collection)
+            {
+                ObjectDumper.Write($"{iten.Key} - {iten.Value}");
+            }
+        }
+
+        private static void Show(IEnumerable<KeyValuePair<int, int>> yearly)
+        {
+            foreach (var item in yearly)
+            {
+                ObjectDumper.Write($"{item.Key} - {item.Value}");
+            }
         }
 
         private static void Show(IEnumerable<string> products)
