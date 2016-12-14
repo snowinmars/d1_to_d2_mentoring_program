@@ -257,19 +257,20 @@ namespace SampleQueries
         public void Linq009()
         {
             var profitability = from customer in this.dataSource.Customers
-                                group customer by customer.City
+                group customer by customer.City
                 into groupped
-                                select
-                                    new KeyValuePair<string, decimal>(groupped.Key,
-                                        groupped.SelectMany(c => c.Orders).Average(o => o.Total));
+                select
+                    new KeyValuePair<string, decimal>(groupped.Key,
+                        groupped.SelectMany(c => c.Orders).Average(o => o.Total));
 
             LinqSamples.WriteHeader("Profitability");
             LinqSamples.Show(profitability);
 
             var intensity = from customer in this.dataSource.Customers
-                            group customer by customer.City
+                group customer by customer.City
                 into groupped
-                            select new KeyValuePair<string, double>(groupped.Key, groupped.Average(customer => customer.Orders.Length));
+                select
+                    new KeyValuePair<string, double>(groupped.Key, groupped.Average(customer => customer.Orders.Length));
 
             LinqSamples.WriteHeader("Intensity");
             LinqSamples.Show(intensity);
