@@ -121,7 +121,7 @@ namespace SampleQueries
         public void Linq004()
         {
             var result = this.dataSource.Customers
-                .Select(cust => $"{cust.CompanyName} is client since {cust.Orders.OrderBy(order => order.OrderDate).Select(order => order.OrderDate.ToString("MMMM yyyy")).FirstOrDefault()}");
+                .Select(cust => $"{cust.CompanyName} is client since {(cust.Orders.Any() ? cust.Orders.Min(order => order.OrderDate).ToString("MMMM yyyy") : "never")}");
 
             LinqSamples.Show(result);
         }
