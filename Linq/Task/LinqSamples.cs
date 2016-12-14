@@ -263,7 +263,7 @@ namespace SampleQueries
                                     new KeyValuePair<string, decimal>(groupped.Key,
                                         groupped.SelectMany(c => c.Orders).Average(o => o.Total));
 
-            WriteHeader("Profitability");
+            LinqSamples.WriteHeader("Profitability");
             LinqSamples.Show(profitability);
 
             var intensity = from customer in this.dataSource.Customers
@@ -271,7 +271,7 @@ namespace SampleQueries
                 into groupped
                             select new KeyValuePair<string, double>(groupped.Key, groupped.Average(customer => customer.Orders.Length));
 
-            WriteHeader("Intensity");
+            LinqSamples.WriteHeader("Intensity");
             LinqSamples.Show(intensity);
         }
 
