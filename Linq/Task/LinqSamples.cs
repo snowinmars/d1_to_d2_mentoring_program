@@ -15,60 +15,11 @@ using Task.Data;
 
 namespace SampleQueries
 {
-    public class Comparer : IEqualityComparer<KeyValuePair<String, Customer>>
-    {
-        public bool Equals(KeyValuePair<string, Customer> x, KeyValuePair<string, Customer> y)
-        {
-            return x.Key == y.Key;
-        }
-
-        public int GetHashCode(KeyValuePair<string, Customer> obj)
-        {
-            return obj.Key.GetHashCode() ^ obj.Value.GetHashCode();
-        }
-    }
-
     [Title("LINQ Module")]
     [Prefix("Linq")]
     public class LinqSamples : SampleHarness
     {
-        private DataSource dataSource = new DataSource();
-
-        //[Category("Restriction Operators")]
-        //[Title("Where - Task 1")]
-        //[Description("This sample uses the where clause to find all elements of an array with a value less than 5.")]
-        //public void Linq1()
-        //{
-        //	int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
-
-        //	var lowNums =
-        //		from num in numbers
-        //		where num < 5
-        //		select num;
-
-        //	Console.WriteLine("Numbers < 5:");
-        //	foreach (var x in lowNums)
-        //	{
-        //		Console.WriteLine(x);
-        //	}
-        //}
-
-        //[Category("Restriction Operators")]
-        //[Title("Where - Task 2")]
-        //[Description("This sample return return all presented in market products")]
-
-        //public void Linq2()
-        //{
-        //	var products =
-        //		from p in dataSource.Products
-        //		where p.UnitsInStock > 0
-        //		select p;
-
-        //	foreach (var p in products)
-        //	{
-        //		ObjectDumper.Write(p);
-        //	}
-        //}
+        private readonly DataSource dataSource = new DataSource();
 
         [Category("Restriction Operators")]
         [Title("Task 1")]
@@ -290,34 +241,34 @@ namespace SampleQueries
                 group order by order.Month
                 into groupped
                 select
-                    new KeyValuePair<string, int>(CultureInfo.CurrentCulture
-                                                                .DateTimeFormat.GetMonthName(groupped.Key),
-                                                    groupped.Count());
+                    new KeyValuePair<string, int>(
+                        CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(groupped.Key),
+                        groupped.Count());
 
             this.Show(mounthly);
 
             LinqSamples.WriteHeader("Yearly");
 
             var yearly = from order in clients.SelectMany(client => client.Orders).Select(o => o.OrderDate)
-                         group order by order.Year
+                group order by order.Year
                 into groupped
-                         select
-                             new KeyValuePair<int, int>(groupped.Key,
-                                 groupped.Count());
+                select
+                    new KeyValuePair<int, int>(groupped.Key,
+                        groupped.Count());
 
             LinqSamples.Show(yearly.OrderBy(g => g.Key));
 
             LinqSamples.WriteHeader("Bothly");
 
             var bothly = from order in clients.SelectMany(client => client.Orders).Select(o => o.OrderDate)
-                         group order by new { year = order.Year, mounth = order.Month }
+                group order by new {year = order.Year, mounth = order.Month}
                 into groupped
-                         select
-                             new
-                             {
-                                 Key = new KeyValuePair<int, int>(groupped.Key.year, groupped.Key.mounth),
-                                 Value = groupped.Count(),
-                             };
+                select
+                    new
+                    {
+                        Key = new KeyValuePair<int, int>(groupped.Key.year, groupped.Key.mounth),
+                        Value = groupped.Count(),
+                    };
 
             foreach (var item in bothly.OrderBy(g => g.Key.Key).ThenBy(g => g.Key.Value))
             {
