@@ -196,7 +196,7 @@ namespace SampleQueries
 
             var result = this.dataSource.Products
                 .GroupBy(product => LinqSamples.GetRange(product, min, max),
-                    product => $"Name = {product.ProductName}, price is {product.UnitPrice}")
+                    product => $"Name = {product.ProductName}, price is {product.UnitPrice.ToString(".##")}")
                 .OrderBy(kvp => dict[kvp.Key]);
 
             LinqSamples.Show(result);
@@ -289,7 +289,7 @@ namespace SampleQueries
         {
             foreach (var iten in collection)
             {
-                ObjectDumper.Write($"{iten.Key} - {iten.Value}");
+                ObjectDumper.Write($"{iten.Key} - {iten.Value.ToString(".##")}");
             }
         }
 
@@ -297,7 +297,7 @@ namespace SampleQueries
         {
             foreach (var iten in collection)
             {
-                ObjectDumper.Write($"{iten.Key} - {iten.Value}");
+                ObjectDumper.Write($"{iten.Key} - {iten.Value.ToString(".##")}");
             }
         }
 
@@ -358,7 +358,7 @@ namespace SampleQueries
 
                         foreach (Product product in pair.Value)
                         {
-                            ObjectDumper.Write($"        {product.ProductName}: {product.UnitPrice}");
+                            ObjectDumper.Write($"        {product.ProductName}: {product.UnitPrice.ToString(".##")}");
                         }
                     }
                 }
