@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace Bcl.Core
 {
@@ -97,7 +98,7 @@ namespace Bcl.Core
 
                     if (!File.Exists(newFilePath)) // TODO
                     {
-                        File.Move(fileFullPath, newFilePath);
+                        this.TryToMove(fileFullPath, newFilePath);
                     }
 
                     return;
@@ -108,8 +109,18 @@ namespace Bcl.Core
 
             if (!File.Exists(defaultFilePath))
             {
-                File.Move(fileFullPath, defaultFilePath);
+                this.TryToMove(fileFullPath, defaultFilePath);
             }
+        }
+
+        private void TryToMove(string from, string to)
+        {
+            while (FileUtils.WhoIsLocking(from).Count != 0)
+            {
+                Thread.Sleep(50);
+            }
+
+            File.Move(from, to);
         }
     }
 }
