@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bcl.Core
+namespace Bcl.Enums
 {
     [Flags]
     public enum WatcherRuleParams

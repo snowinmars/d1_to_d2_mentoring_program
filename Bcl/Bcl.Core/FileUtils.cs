@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+
 // ReSharper disable All
 
 namespace Bcl.Core

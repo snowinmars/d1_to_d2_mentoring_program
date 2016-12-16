@@ -1,5 +1,6 @@
 ﻿using Bcl.Interfaces;
 using System.Text;
+using Bcl.Enums;
 
 namespace Bcl.Core
 {
@@ -12,14 +13,13 @@ namespace Bcl.Core
             this.DestinationFolder = destinationFolder;
         }
 
-        public string Regex { get; set; }
-
         /// <summary>
         /// This suppose to be full path to the directory
         /// </summary>
         public string DestinationFolder { get; set; }
 
         public WatcherRuleParams Params { get; set; }
+        public string Regex { get; set; }
 
         public override string ToString()
         {

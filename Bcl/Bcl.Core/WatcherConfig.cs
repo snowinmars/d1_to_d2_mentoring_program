@@ -1,10 +1,9 @@
-﻿using Bcl.Core;
-using Bcl.Interfaces;
+﻿using Bcl.Interfaces;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
-namespace Bcl.Enums
+namespace Bcl.Core
 {
     public class WatcherConfig : IWatcherConfig
     {
@@ -15,10 +14,7 @@ namespace Bcl.Enums
             this.WatcherRules = new List<IWatcherRule>();
         }
 
-        public bool IsVerbose { get; set; }
-
         public CultureInfo CultureInfo { get; set; }
-
         public string DefaultDestinationFolder { get; private set; }
 
         /// <summary>
@@ -26,7 +22,24 @@ namespace Bcl.Enums
         /// </summary>
         public IList<string> DirectoriesToListenFor { get; }
 
+        public bool IsVerbose { get; set; }
         public IList<IWatcherRule> WatcherRules { get; }
+
+        public static IWatcherConfig Load()
+        {
+            WatcherConfig watcherConfig = new WatcherConfig(CultureInfo.CurrentCulture);
+            watcherConfig.DirectoriesToListenFor.Add(@"D:\");
+
+            IWatcherRule rule = new WatcherRule(regex: @".*@.*\..*",
+                                                destinationFolder: @"D:\tmp");
+            watcherConfig.WatcherRules.Add(rule);
+
+            watcherConfig.IsVerbose = true;
+
+            watcherConfig.DefaultDestinationFolder = @"D:\def";
+
+            return watcherConfig;
+        }
 
         public override string ToString()
         {
@@ -58,22 +71,6 @@ namespace Bcl.Enums
             sb.AppendLine();
 
             return sb.ToString();
-        }
-
-        public static IWatcherConfig Load()
-        {
-            WatcherConfig watcherConfig = new WatcherConfig(CultureInfo.CurrentCulture);
-            watcherConfig.DirectoriesToListenFor.Add(@"D:\");
-
-            IWatcherRule rule = new WatcherRule(regex: @".*@.*\..*",
-                                                destinationFolder: @"D:\tmp");
-            watcherConfig.WatcherRules.Add(rule);
-
-            watcherConfig.IsVerbose = true;
-
-            watcherConfig.DefaultDestinationFolder = @"D:\def";
-
-            return watcherConfig;
         }
     }
 }

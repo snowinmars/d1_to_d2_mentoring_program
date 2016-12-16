@@ -8,6 +8,24 @@ namespace Bcl.Core
     {
         public bool IsEnabled { get; set; }
 
+        public static IWatcherLogger Load()
+        {
+            IWatcherLogger logger = new WatcherLogger();
+
+            return logger;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine();
+            sb.Append($"{nameof(WatcherLogger.IsEnabled)}: {this.IsEnabled}");
+            sb.AppendLine();
+
+            return sb.ToString();
+        }
+
         public void Write(object obj)
         {
             this.Write(obj.ToString());
@@ -35,24 +53,6 @@ namespace Bcl.Core
             {
                 Console.WriteLine(str);
             }
-        }
-
-        public override string ToString()
-        {
-            StringBuilder sb = new StringBuilder();
-
-            sb.AppendLine();
-            sb.Append($"{nameof(WatcherLogger.IsEnabled)}: {this.IsEnabled}");
-            sb.AppendLine();
-
-            return sb.ToString();
-        }
-
-        public static IWatcherLogger Load()
-        {
-            IWatcherLogger logger = new WatcherLogger();
-
-            return logger;
         }
     }
 }
