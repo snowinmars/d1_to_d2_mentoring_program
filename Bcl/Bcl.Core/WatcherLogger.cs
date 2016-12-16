@@ -6,6 +6,11 @@ namespace Bcl.Core
 {
     public class WatcherLogger : IWatcherLogger
     {
+        private WatcherLogger()
+        {
+            
+        }
+
         public bool IsEnabled { get; set; }
 
         public static IWatcherLogger Load()

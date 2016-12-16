@@ -7,7 +7,7 @@ namespace Bcl.Core
 {
     public class WatcherConfig : IWatcherConfig
     {
-        public WatcherConfig(CultureInfo cultureInfo)
+        private WatcherConfig(CultureInfo cultureInfo)
         {
             this.CultureInfo = cultureInfo;
             this.DirectoriesToListenFor = new List<string>();
