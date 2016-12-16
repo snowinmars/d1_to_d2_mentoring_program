@@ -29,7 +29,15 @@ namespace Bcl.Core
 
         public Watcher()
         {
-            this.fsv = new FileSystemWatcher();
+            try
+            {
+                this.fsv = new FileSystemWatcher();
+            }
+            catch (Exception)
+            {
+                this.fsv.Dispose();
+                throw;
+            }
 
             this.Configurate();
         }
