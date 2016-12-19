@@ -104,7 +104,7 @@ namespace Bcl.Core
                 {
                     string newFilePath = Path.Combine(watcherRule.DestinationFolder, fileName);
 
-                    if (!File.Exists(newFilePath)) // TODO
+                    if (!File.Exists(newFilePath))
                     {
                         this.TryToMove(fileFullPath, newFilePath);
                     }
