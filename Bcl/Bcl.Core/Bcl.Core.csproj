@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -40,6 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigEntities\BclConfigSection.cs" />
+    <Compile Include="ConfigEntities\CultureInfoElement.cs" />
+    <Compile Include="ConfigEntities\DefaultDestinationFolderElement.cs" />
+    <Compile Include="ConfigEntities\FolderElement.cs" />
+    <Compile Include="ConfigEntities\FoldersCollection.cs" />
+    <Compile Include="ConfigEntities\IsVerboseElement.cs" />
+    <Compile Include="ConfigEntities\RuleCollection.cs" />
+    <Compile Include="ConfigEntities\RuleElement.cs" />
     <Compile Include="FileUtils.cs" />
     <Compile Include="Watcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

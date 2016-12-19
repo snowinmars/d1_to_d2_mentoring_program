@@ -1,7 +1,10 @@
 ﻿using Bcl.Interfaces;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text;
+using Bcl.Core.ConfigEntities;
+using System.Linq;
 
 namespace Bcl.Core
 {
@@ -28,15 +31,35 @@ namespace Bcl.Core
         public static IWatcherConfig Load()
         {
             WatcherConfig watcherConfig = new WatcherConfig(CultureInfo.CurrentCulture);
-            watcherConfig.SourceDirectories.Add(@"D:\");
+            //watcherConfig.SourceDirectories.Add(@"D:\");
 
-            IWatcherRule rule = new WatcherRule(regex: @".*@.*\..*",
-                                                destinationFolder: @"D:\tmp");
-            watcherConfig.WatcherRules.Add(rule);
+            //IWatcherRule rule = new WatcherRule(regex: @".*@.*\..*",
+            //                                    destinationFolder: @"D:\tmp");
+            //watcherConfig.WatcherRules.Add(rule);
 
-            watcherConfig.IsVerbose = true;
+            //watcherConfig.IsVerbose = true;
 
-            watcherConfig.DefaultDestinationFolder = @"D:\def";
+            //watcherConfig.DefaultDestinationFolder = @"D:\def";
+
+            var config = BclConfigSection.GetConfig();
+
+            foreach (FolderElement sourceFolder in config.SourceFoldersCollection)
+            {
+                watcherConfig.SourceDirectories.Add(sourceFolder.Path);
+            }
+
+            foreach (RuleElement ruleElement in config.Rules)
+            {
+                WatcherRule rule = new WatcherRule(ruleElement.Regex, ruleElement.MoveTo);
+
+                watcherConfig.WatcherRules.Add(rule);
+            }
+
+            watcherConfig.CultureInfo = new CultureInfo(config.CultureInfo.Value);
+
+            watcherConfig.IsVerbose = config.IsVerbose.Value;
+
+            watcherConfig.DefaultDestinationFolder = config.DefaultDestinationFolder.Value;
 
             return watcherConfig;
         }
