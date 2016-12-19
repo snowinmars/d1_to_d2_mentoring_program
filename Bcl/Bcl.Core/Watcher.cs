@@ -74,7 +74,7 @@ namespace Bcl.Core
 
         private void HandleConfig()
         {
-            foreach (var sourceDir in this.config.DirectoriesToListenFor)
+            foreach (var sourceDir in this.config.SourceDirectories)
             {
                 if (!Directory.Exists(sourceDir))
                 {
@@ -95,7 +95,7 @@ namespace Bcl.Core
         {
             this.fsv.NotifyFilter = Watcher.AllNotifyFilters;
             this.fsv.Filter = Watcher.DefaultFilter;
-            this.fsv.Path = this.config.DirectoriesToListenFor.First();
+            this.fsv.Path = this.config.SourceDirectories.First();
 
             this.fsv.Created += (sender, args) => this.HandleFileOrDirectory(args);
         }

@@ -10,7 +10,7 @@ namespace Bcl.Core
         private WatcherConfig(CultureInfo cultureInfo)
         {
             this.CultureInfo = cultureInfo;
-            this.DirectoriesToListenFor = new List<string>();
+            this.SourceDirectories = new List<string>();
             this.WatcherRules = new List<IWatcherRule>();
         }
 
@@ -20,7 +20,7 @@ namespace Bcl.Core
         /// <summary>
         /// This suppose to be full pathes to the directories
         /// </summary>
-        public IList<string> DirectoriesToListenFor { get; }
+        public IList<string> SourceDirectories { get; }
 
         public bool IsVerbose { get; set; }
         public IList<IWatcherRule> WatcherRules { get; }
@@ -28,7 +28,7 @@ namespace Bcl.Core
         public static IWatcherConfig Load()
         {
             WatcherConfig watcherConfig = new WatcherConfig(CultureInfo.CurrentCulture);
-            watcherConfig.DirectoriesToListenFor.Add(@"D:\");
+            watcherConfig.SourceDirectories.Add(@"D:\");
 
             IWatcherRule rule = new WatcherRule(regex: @".*@.*\..*",
                                                 destinationFolder: @"D:\tmp");
@@ -51,9 +51,9 @@ namespace Bcl.Core
             sb.Append($"{nameof(WatcherConfig.CultureInfo)}: {this.CultureInfo}");
             sb.AppendLine();
 
-            sb.Append($"{nameof(WatcherConfig.DirectoriesToListenFor)}:");
+            sb.Append($"{nameof(WatcherConfig.SourceDirectories)}:");
             sb.AppendLine();
-            foreach (var dir in this.DirectoriesToListenFor)
+            foreach (var dir in this.SourceDirectories)
             {
                 sb.Append($"    {dir}");
                 sb.AppendLine();
