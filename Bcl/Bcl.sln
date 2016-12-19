@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bcl.UI", "Bcl.UI\Bcl.UI.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bcl.Core", "Bcl.Core\Bcl.Core.csproj", "{6441366D-6CDD-4583-B71F-3DD11D3CB411}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bcl.Enums", "Bcl.Enums\Bcl.Enums.csproj", "{903FE9F4-C861-4C75-BACD-FF09AA627C1D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bcl.Interfaces", "Bcl.Interfaces\Bcl.Interfaces.csproj", "{B333DBE9-3E90-478D-A6FD-CA1E0EAF6301}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{6441366D-6CDD-4583-B71F-3DD11D3CB411}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6441366D-6CDD-4583-B71F-3DD11D3CB411}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6441366D-6CDD-4583-B71F-3DD11D3CB411}.Release|Any CPU.Build.0 = Release|Any CPU
-		{903FE9F4-C861-4C75-BACD-FF09AA627C1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{903FE9F4-C861-4C75-BACD-FF09AA627C1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{903FE9F4-C861-4C75-BACD-FF09AA627C1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{903FE9F4-C861-4C75-BACD-FF09AA627C1D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B333DBE9-3E90-478D-A6FD-CA1E0EAF6301}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B333DBE9-3E90-478D-A6FD-CA1E0EAF6301}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B333DBE9-3E90-478D-A6FD-CA1E0EAF6301}.Release|Any CPU.ActiveCfg = Release|Any CPU
