@@ -64,11 +64,31 @@ namespace Bcl.Core
             this.config = WatcherConfig.Load();
             this.logger = WatcherLogger.Load();
 
+            this.HandleConfig();
             this.ConfigurateLogger();
 
             this.ConfigurateFileSystemWatcher();
 
             this.logger.Write(this.config, this.logger);
+        }
+
+        private void HandleConfig()
+        {
+            foreach (var sourceDir in this.config.DirectoriesToListenFor)
+            {
+                if (!Directory.Exists(sourceDir))
+                {
+                    Directory.CreateDirectory(sourceDir);
+                }
+            }
+
+            foreach (var destinationDir in this.config.WatcherRules.Select(rule => rule.DestinationFolder))
+            {
+                if (!Directory.Exists(destinationDir))
+                {
+                    Directory.CreateDirectory(destinationDir);
+                }
+            }
         }
 
         private void ConfigurateFileSystemWatcher()
@@ -125,10 +145,12 @@ namespace Bcl.Core
         {
             while (FileUtils.WhoIsLocking(from).Count != 0)
             {
-                Thread.Sleep(50);
+                Thread.Sleep(30); // ms
             }
 
             File.Move(from, to);
+
+            this.logger.Write($"Moved {from} to {to}");
         }
     }
 }
