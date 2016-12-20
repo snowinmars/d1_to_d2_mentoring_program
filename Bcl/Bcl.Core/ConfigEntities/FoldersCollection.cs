@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 
 namespace Bcl.Core.ConfigEntities
 {
     [ConfigurationCollection(typeof(FolderElement), AddItemName = "folder")]
     public class FoldersCollection : ConfigurationElementCollection
     {
+        public FolderElement this[int idx]
+            => (FolderElement)this.BaseGet(idx);
+
         protected override ConfigurationElement CreateNewElement()
         {
             return new FolderElement();
@@ -19,8 +17,5 @@ namespace Bcl.Core.ConfigEntities
         {
             return ((FolderElement)element).Path;
         }
-
-        public FolderElement this[int idx]
-            => (FolderElement)this.BaseGet(idx);
     }
 }

@@ -1,6 +1,6 @@
-﻿using Bcl.Interfaces;
+﻿using Bcl.Enums;
+using Bcl.Interfaces;
 using System.Text;
-using Bcl.Enums;
 
 namespace Bcl.Core
 {

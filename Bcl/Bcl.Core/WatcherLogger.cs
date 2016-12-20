@@ -8,7 +8,6 @@ namespace Bcl.Core
     {
         private WatcherLogger()
         {
-            
         }
 
         public bool IsEnabled { get; set; }

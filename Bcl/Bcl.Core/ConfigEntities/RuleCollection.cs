@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 
 namespace Bcl.Core.ConfigEntities
 {
     [ConfigurationCollection(typeof(RuleElement), AddItemName = "rule")]
     public class RuleCollection : ConfigurationElementCollection
     {
+        public RuleElement this[int idx]
+            => (RuleElement)this.BaseGet(idx);
+
         protected override ConfigurationElement CreateNewElement()
         {
             return new RuleElement();
@@ -19,8 +17,5 @@ namespace Bcl.Core.ConfigEntities
         {
             return ((RuleElement)element).MoveTo;
         }
-
-        public RuleElement this[int idx]
-            => (RuleElement)this.BaseGet(idx);
     }
 }

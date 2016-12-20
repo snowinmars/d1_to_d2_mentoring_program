@@ -1,33 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 
 namespace Bcl.Core.ConfigEntities
 {
     public class BclConfigSection : ConfigurationSection
     {
-        [ConfigurationProperty("sourceFolders")]
-        public FoldersCollection SourceFoldersCollection 
-            => (FoldersCollection) base["sourceFolders"];
+        [ConfigurationProperty("cultureInfo")]
+        public CultureInfoElement CultureInfo
+            => (CultureInfoElement)base["cultureInfo"];
+
+        [ConfigurationProperty("defaultDestinationFolder")]
+        public DefaultDestinationFolderElement DefaultDestinationFolder
+            => (DefaultDestinationFolderElement)base["defaultDestinationFolder"];
+
+        [ConfigurationProperty("isVerbose")]
+        public IsVerboseElement IsVerbose
+            => (IsVerboseElement)base["isVerbose"];
 
         [ConfigurationProperty("rules")]
         public RuleCollection Rules
          => (RuleCollection)base["rules"];
 
-        [ConfigurationProperty("cultureInfo")]
-        public CultureInfoElement CultureInfo
-            => (CultureInfoElement) base["cultureInfo"];
-
-        [ConfigurationProperty("isVerbose")]
-        public IsVerboseElement IsVerbose
-            => (IsVerboseElement) base["isVerbose"];
-
-        [ConfigurationProperty("defaultDestinationFolder")]
-        public DefaultDestinationFolderElement DefaultDestinationFolder
-            => (DefaultDestinationFolderElement) base["defaultDestinationFolder"];
+        [ConfigurationProperty("sourceFolders")]
+        public FoldersCollection SourceFoldersCollection
+            => (FoldersCollection)base["sourceFolders"];
 
         public static BclConfigSection GetConfig()
         {

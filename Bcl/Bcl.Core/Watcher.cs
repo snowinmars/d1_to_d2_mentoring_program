@@ -1,5 +1,4 @@
-﻿using Bcl.Enums;
-using Bcl.Interfaces;
+﻿using Bcl.Interfaces;
 using System;
 using System.IO;
 using System.Linq;
@@ -72,25 +71,6 @@ namespace Bcl.Core
             this.logger.Write(this.config, this.logger);
         }
 
-        private void HandleConfig()
-        {
-            foreach (var sourceDir in this.config.SourceDirectories)
-            {
-                if (!Directory.Exists(sourceDir))
-                {
-                    Directory.CreateDirectory(sourceDir);
-                }
-            }
-
-            foreach (var destinationDir in this.config.WatcherRules.Select(rule => rule.DestinationFolder))
-            {
-                if (!Directory.Exists(destinationDir))
-                {
-                    Directory.CreateDirectory(destinationDir);
-                }
-            }
-        }
-
         private void ConfigurateFileSystemWatcher()
         {
             this.fsv.NotifyFilter = Watcher.AllNotifyFilters;
@@ -109,6 +89,25 @@ namespace Bcl.Core
             this.fsv.Deleted += (sender, args) => this.logger.Write($"Deleted {args.FullPath}");
             this.fsv.Renamed += (sender, args) => this.logger.Write($"Renamed from {args.OldFullPath} to {args.FullPath}");
             this.fsv.Error += (sender, args) => this.logger.Write($"Error: {args.GetException().Message}");
+        }
+
+        private void HandleConfig()
+        {
+            foreach (var sourceDir in this.config.SourceDirectories)
+            {
+                if (!Directory.Exists(sourceDir))
+                {
+                    Directory.CreateDirectory(sourceDir);
+                }
+            }
+
+            foreach (var destinationDir in this.config.WatcherRules.Select(rule => rule.DestinationFolder))
+            {
+                if (!Directory.Exists(destinationDir))
+                {
+                    Directory.CreateDirectory(destinationDir);
+                }
+            }
         }
 
         private void HandleFileOrDirectory(FileSystemEventArgs args)

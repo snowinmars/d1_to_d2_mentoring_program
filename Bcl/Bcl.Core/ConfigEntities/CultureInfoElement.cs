@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 
 namespace Bcl.Core.ConfigEntities
 {
     public class CultureInfoElement : ConfigurationElement
     {
         [ConfigurationProperty("value",
-                                DefaultValue = "",
+                                DefaultValue = "en-US",
                                 IsKey = true,
-                                IsRequired = false)]
+                                IsRequired = true)]
         public string Value
             => (string)base["value"];
     }

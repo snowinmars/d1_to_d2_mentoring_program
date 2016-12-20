@@ -1,10 +1,9 @@
-﻿using Bcl.Interfaces;
+﻿using Bcl.Core.ConfigEntities;
+using Bcl.Interfaces;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Runtime.CompilerServices;
+using System.IO;
 using System.Text;
-using Bcl.Core.ConfigEntities;
-using System.Linq;
 
 namespace Bcl.Core
 {
@@ -20,12 +19,13 @@ namespace Bcl.Core
         public CultureInfo CultureInfo { get; set; }
         public string DefaultDestinationFolder { get; private set; }
 
+        public bool IsVerbose { get; set; }
+
         /// <summary>
         /// This suppose to be full pathes to the directories
         /// </summary>
         public IList<string> SourceDirectories { get; }
 
-        public bool IsVerbose { get; set; }
         public IList<IWatcherRule> WatcherRules { get; }
 
         public static IWatcherConfig Load()
@@ -45,6 +45,7 @@ namespace Bcl.Core
 
             foreach (FolderElement sourceFolder in config.SourceFoldersCollection)
             {
+                WatcherConfig.EnsureDirectoryExist(sourceFolder.Path);
                 watcherConfig.SourceDirectories.Add(sourceFolder.Path);
             }
 
@@ -52,6 +53,7 @@ namespace Bcl.Core
             {
                 WatcherRule rule = new WatcherRule(ruleElement.Regex, ruleElement.MoveTo);
 
+                WatcherConfig.EnsureDirectoryExist(rule.DestinationFolder);
                 watcherConfig.WatcherRules.Add(rule);
             }
 
@@ -59,9 +61,18 @@ namespace Bcl.Core
 
             watcherConfig.IsVerbose = config.IsVerbose.Value;
 
+            WatcherConfig.EnsureDirectoryExist(config.DefaultDestinationFolder.Value);
             watcherConfig.DefaultDestinationFolder = config.DefaultDestinationFolder.Value;
 
             return watcherConfig;
+        }
+
+        private static void EnsureDirectoryExist(string path)
+        {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
         }
 
         public override string ToString()

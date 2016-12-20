@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 
 namespace Bcl.Core.ConfigEntities
 {
@@ -12,7 +7,7 @@ namespace Bcl.Core.ConfigEntities
         [ConfigurationProperty("value",
                                 DefaultValue = true,
                                 IsKey = true,
-                                IsRequired = false)]
+                                IsRequired = true)]
         public bool Value
             => (bool)base["value"];
     }
