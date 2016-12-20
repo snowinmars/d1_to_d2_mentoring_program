@@ -3,6 +3,7 @@ using Bcl.Interfaces;
 using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Bcl.Common;
@@ -193,7 +194,23 @@ namespace Bcl.Core
             string dir = Path.GetDirectoryName(to);
             string file = Path.GetFileName(to);
 
-            string result = Path.Combine(dir, $"({date}) №{num} {file}"); // culture based?
+            StringBuilder sb = new StringBuilder(256);
+
+            if (!string.IsNullOrWhiteSpace(num))
+            {
+                sb.Append(num);
+                sb.Append(". ");
+            }
+
+            if (!string.IsNullOrWhiteSpace(date))
+            {
+                sb.Append(date);
+                sb.Append(" - ");
+            }
+
+            sb.Append(file);
+
+            string result = Path.Combine(dir, sb.ToString()); // culture based?
 
             File.Move(from, result);
 
