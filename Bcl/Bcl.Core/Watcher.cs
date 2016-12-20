@@ -49,13 +49,13 @@ namespace Bcl.Core
 
         public void Start()
         {
-            this.logger.Write(this.config.ResourceManager.GetString(BclResource.Started));
+            this.logger.Write(BclResource.Started);
             this.fsv.EnableRaisingEvents = true;
         }
 
         public void Stop()
         {
-            this.logger.Write(this.config.ResourceManager.GetString(BclResource.Stopped));
+            this.logger.Write(BclResource.Stopped);
             this.fsv.EnableRaisingEvents = false;
         }
 
@@ -70,6 +70,8 @@ namespace Bcl.Core
             this.ConfigurateFileSystemWatcher();
 
             this.logger.Write(this.config, this.logger);
+
+            BclResource.Culture = this.config.CultureInfo;
         }
 
         private void ConfigurateFileSystemWatcher()
@@ -85,11 +87,16 @@ namespace Bcl.Core
         {
             this.logger.IsEnabled = this.config.IsVerbose;
 
-            this.fsv.Created += (sender, args) => this.logger.Write(string.Format(this.config.ResourceManager.GetString(BclResource.OnCreate), args.FullPath));
-            this.fsv.Changed += (sender, args) => this.logger.Write(string.Format(this.config.ResourceManager.GetString(BclResource.OnChange), args.FullPath));
-            this.fsv.Deleted += (sender, args) => this.logger.Write(string.Format(this.config.ResourceManager.GetString(BclResource.OnDelete), args.FullPath));
-            this.fsv.Renamed += (sender, args) => this.logger.Write(string.Format(this.config.ResourceManager.GetString(BclResource.OnRename), args.OldFullPath, args.FullPath));
-            this.fsv.Error += (sender, args) => this.logger.Write(string.Format(this.config.ResourceManager.GetString(BclResource.OnError), args.GetException().Message));
+            this.fsv.Created += (sender, args) =>
+            {
+                this.logger.Write(string.Format(BclResource.OnCreate,
+                    args.FullPath));
+            };
+
+            this.fsv.Changed += (sender, args) => this.logger.Write(string.Format(BclResource.OnChange, args.FullPath));
+            this.fsv.Deleted += (sender, args) => this.logger.Write(string.Format(BclResource.OnDelete, args.FullPath));
+            this.fsv.Renamed += (sender, args) => this.logger.Write(string.Format(BclResource.OnRename, args.OldFullPath, args.FullPath));
+            this.fsv.Error += (sender, args) => this.logger.Write(string.Format(BclResource.OnError, args.GetException().Message));
         }
 
         private void HandleConfig()
@@ -150,7 +157,7 @@ namespace Bcl.Core
 
             File.Move(from, to);
 
-            this.logger.Write(string.Format(this.config.ResourceManager.GetString(BclResource.OnMove), from, to));
+            this.logger.Write(string.Format(BclResource.OnMove, from, to));
         }
     }
 }

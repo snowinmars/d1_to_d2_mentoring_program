@@ -54,6 +54,7 @@
       <LastGenOutput>BclResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>Bcl.Common.Resources</CustomToolNamespace>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\BclResource.ru-RU.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
