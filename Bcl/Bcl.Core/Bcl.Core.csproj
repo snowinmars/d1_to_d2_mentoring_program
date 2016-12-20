@@ -57,9 +57,9 @@
     <Compile Include="WatcherRule.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bcl.Enums\Bcl.Enums.csproj">
+    <ProjectReference Include="..\Bcl.Common\Bcl.Common.csproj">
       <Project>{903FE9F4-C861-4C75-BACD-FF09AA627C1D}</Project>
-      <Name>Bcl.Enums</Name>
+      <Name>Bcl.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Bcl.Interfaces\Bcl.Interfaces.csproj">
       <Project>{B333DBE9-3E90-478D-A6FD-CA1E0EAF6301}</Project>

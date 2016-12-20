@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Bcl.Common.Resources;
 
 namespace Bcl.Core
 {
@@ -48,13 +49,13 @@ namespace Bcl.Core
 
         public void Start()
         {
-            this.logger.Write("Started");
+            this.logger.Write(this.config.ResourceManager.GetString(BclResource.Started));
             this.fsv.EnableRaisingEvents = true;
         }
 
         public void Stop()
         {
-            this.logger.Write("Stopped");
+            this.logger.Write(this.config.ResourceManager.GetString(BclResource.Stopped));
             this.fsv.EnableRaisingEvents = false;
         }
 
@@ -84,11 +85,11 @@ namespace Bcl.Core
         {
             this.logger.IsEnabled = this.config.IsVerbose;
 
-            this.fsv.Created += (sender, args) => this.logger.Write($"Created {args.FullPath}");
-            this.fsv.Changed += (sender, args) => this.logger.Write($"Changed {args.FullPath}");
-            this.fsv.Deleted += (sender, args) => this.logger.Write($"Deleted {args.FullPath}");
-            this.fsv.Renamed += (sender, args) => this.logger.Write($"Renamed from {args.OldFullPath} to {args.FullPath}");
-            this.fsv.Error += (sender, args) => this.logger.Write($"Error: {args.GetException().Message}");
+            this.fsv.Created += (sender, args) => this.logger.Write(string.Format(this.config.ResourceManager.GetString(BclResource.OnCreate), args.FullPath));
+            this.fsv.Changed += (sender, args) => this.logger.Write(string.Format(this.config.ResourceManager.GetString(BclResource.OnChange), args.FullPath));
+            this.fsv.Deleted += (sender, args) => this.logger.Write(string.Format(this.config.ResourceManager.GetString(BclResource.OnDelete), args.FullPath));
+            this.fsv.Renamed += (sender, args) => this.logger.Write(string.Format(this.config.ResourceManager.GetString(BclResource.OnRename), args.OldFullPath, args.FullPath));
+            this.fsv.Error += (sender, args) => this.logger.Write(string.Format(this.config.ResourceManager.GetString(BclResource.OnError), args.GetException().Message));
         }
 
         private void HandleConfig()
@@ -149,7 +150,7 @@ namespace Bcl.Core
 
             File.Move(from, to);
 
-            this.logger.Write($"Moved {from} to {to}");
+            this.logger.Write(string.Format(this.config.ResourceManager.GetString(BclResource.OnMove), from, to));
         }
     }
 }

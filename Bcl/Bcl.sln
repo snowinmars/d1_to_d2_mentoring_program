@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bcl.Core", "Bcl.Core\Bcl.Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bcl.Interfaces", "Bcl.Interfaces\Bcl.Interfaces.csproj", "{B333DBE9-3E90-478D-A6FD-CA1E0EAF6301}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bcl.Enums", "Bcl.Enums\Bcl.Enums.csproj", "{903FE9F4-C861-4C75-BACD-FF09AA627C1D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bcl.Common", "Bcl.Common\Bcl.Common.csproj", "{903FE9F4-C861-4C75-BACD-FF09AA627C1D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

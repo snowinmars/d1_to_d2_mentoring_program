@@ -1,4 +1,4 @@
-﻿using Bcl.Enums;
+﻿using Bcl.Common;
 
 namespace Bcl.Interfaces
 {

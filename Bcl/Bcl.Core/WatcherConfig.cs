@@ -3,6 +3,8 @@ using Bcl.Interfaces;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
+using System.Resources;
 using System.Text;
 
 namespace Bcl.Core
@@ -19,6 +21,8 @@ namespace Bcl.Core
         public CultureInfo CultureInfo { get; set; }
         public string DefaultDestinationFolder { get; private set; }
 
+        public ResourceManager ResourceManager { get; private set; }
+
         public bool IsVerbose { get; set; }
 
         /// <summary>
@@ -31,15 +35,6 @@ namespace Bcl.Core
         public static IWatcherConfig Load()
         {
             WatcherConfig watcherConfig = new WatcherConfig(CultureInfo.CurrentCulture);
-            //watcherConfig.SourceDirectories.Add(@"D:\");
-
-            //IWatcherRule rule = new WatcherRule(regex: @".*@.*\..*",
-            //                                    destinationFolder: @"D:\tmp");
-            //watcherConfig.WatcherRules.Add(rule);
-
-            //watcherConfig.IsVerbose = true;
-
-            //watcherConfig.DefaultDestinationFolder = @"D:\def";
 
             var config = BclConfigSection.GetConfig();
 
@@ -63,6 +58,9 @@ namespace Bcl.Core
 
             WatcherConfig.EnsureDirectoryExist(config.DefaultDestinationFolder.Value);
             watcherConfig.DefaultDestinationFolder = config.DefaultDestinationFolder.Value;
+
+            Assembly assembly = typeof(Common.WatcherRuleParams).Assembly; // shit
+            watcherConfig.ResourceManager = new ResourceManager("Bcl.Common.Resources.BclResource", assembly);
 
             return watcherConfig;
         }

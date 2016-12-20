@@ -47,9 +47,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bcl.Enums\Bcl.Enums.csproj">
+    <ProjectReference Include="..\Bcl.Common\Bcl.Common.csproj">
       <Project>{903FE9F4-C861-4C75-BACD-FF09AA627C1D}</Project>
-      <Name>Bcl.Enums</Name>
+      <Name>Bcl.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
