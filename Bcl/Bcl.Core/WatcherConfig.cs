@@ -8,6 +8,7 @@ using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
+using System;
 
 namespace Bcl.Core
 {
@@ -33,6 +34,10 @@ namespace Bcl.Core
         public IList<string> SourceDirectories { get; }
 
         public IList<IWatcherRule> WatcherRules { get; }
+
+        public bool MustAddDate { get; private set; }
+
+        public bool MustAddNumber { get; private set; }
 
         public static IWatcherConfig Load()
         {
@@ -60,6 +65,9 @@ namespace Bcl.Core
 
             WatcherConfig.EnsureDirectoryExist(config.DefaultDestinationFolder.Value);
             watcherConfig.DefaultDestinationFolder = config.DefaultDestinationFolder.Value;
+
+            watcherConfig.MustAddDate = config.MustAddDate.Value;
+            watcherConfig.MustAddNumber = config.MustAddNumber.Value;
 
             Assembly assembly = typeof(Common.WatcherRuleParams).Assembly; // shit
             watcherConfig.ResourceManager = new ResourceManager("Bcl.Common.Resources.BclResource", assembly);

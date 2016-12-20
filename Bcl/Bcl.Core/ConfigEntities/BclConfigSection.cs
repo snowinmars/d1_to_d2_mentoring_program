@@ -16,6 +16,14 @@ namespace Bcl.Core.ConfigEntities
         public IsVerboseElement IsVerbose
             => (IsVerboseElement)base["isVerbose"];
 
+        [ConfigurationProperty("mustAddNumber")]
+        public MustAddNumberElement MustAddNumber
+            => (MustAddNumberElement)base["mustAddNumber"];
+
+        [ConfigurationProperty("mustAddDate")]
+        public MustAddDateElement MustAddDate
+            => (MustAddDateElement)base["mustAddDate"];
+
         [ConfigurationProperty("rules")]
         public RuleCollection Rules
          => (RuleCollection)base["rules"];

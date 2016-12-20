@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Bcl.Common.Resources;
+using System.Text;
 
 namespace Bcl.Core
 {
@@ -182,12 +183,40 @@ namespace Bcl.Core
                 Thread.Sleep(30); // ms
             }
 
-            File.Move(from, to);
+            string date;
+
+            if (this.config.MustAddDate)
+            {
+                date = DateTime.Now.ToString("yyyy MMM dd - hh mm ss");
+            }
+            else
+            {
+                date = string.Empty;
+            }
+
+            string num;
+
+            if (this.config.MustAddNumber)
+            {
+                num = Directory.EnumerateFileSystemEntries(Path.GetDirectoryName(to), DefaultFilter, SearchOption.TopDirectoryOnly).Count().ToString();
+            }
+            else
+            {
+                num= string.Empty;
+            }
+
+            string dir = Path.GetDirectoryName(to);
+            string file = Path.GetFileName(to);
+
+            string result = Path.Combine(dir, $"({date}) №{num} {file}");
+
+            File.Move(from, result);
 
             if (this.config.IsVerbose)
             {
                 this.logger.Write(string.Format(BclResource.OnMove, from, to));
             }
+
         }
     }
 }

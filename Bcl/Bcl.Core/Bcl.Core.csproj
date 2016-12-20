@@ -47,6 +47,8 @@
     <Compile Include="ConfigEntities\FolderElement.cs" />
     <Compile Include="ConfigEntities\FoldersCollection.cs" />
     <Compile Include="ConfigEntities\IsVerboseElement.cs" />
+    <Compile Include="ConfigEntities\MustAddDateElement.cs" />
+    <Compile Include="ConfigEntities\MustAddNumberElement.cs" />
     <Compile Include="ConfigEntities\RuleCollection.cs" />
     <Compile Include="ConfigEntities\RuleElement.cs" />
     <Compile Include="FileUtils.cs" />
