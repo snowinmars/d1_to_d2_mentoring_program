@@ -193,9 +193,9 @@ namespace Bcl.Core
                                                         Watcher.DefaultFilter,
                                                         SearchOption.TopDirectoryOnly)
                             .Count()
-                            .ToString()
-                : string.Empty; // culture based?
-
+                            .ToString(this.config.CultureInfo)
+                : string.Empty;
+            
             string dir = Path.GetDirectoryName(to);
             string file = Path.GetFileName(to);
 
@@ -205,7 +205,7 @@ namespace Bcl.Core
 
             if (this.config.IsVerbose)
             {
-                this.logger.Write(string.Format(BclResource.OnMove, from, to));
+                this.logger.Write(string.Format(BclResource.OnMove, from, result));
             }
         }
     }
