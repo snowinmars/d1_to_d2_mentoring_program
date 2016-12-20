@@ -37,7 +37,7 @@ namespace Bcl.Core
             }
             catch (Exception)
             {
-                this.fsv.Dispose();
+                this.Dispose();
                 throw;
             }
 
@@ -210,7 +210,7 @@ namespace Bcl.Core
 
             sb.Append(file);
 
-            string result = Path.Combine(dir, sb.ToString()); // culture based?
+            string result = Path.Combine(dir, sb.ToString());
 
             File.Move(from, result);
 
