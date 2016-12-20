@@ -5,10 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Resources;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading;
-using System;
 
 namespace Bcl.Core
 {
@@ -22,11 +19,16 @@ namespace Bcl.Core
         }
 
         public CultureInfo CultureInfo { get; set; }
+
+        /// <summary>
+        /// This suppose to be full path to the directory
+        /// </summary>
         public string DefaultDestinationFolder { get; private set; }
 
-        public ResourceManager ResourceManager { get; private set; }
-
         public bool IsVerbose { get; set; }
+        public bool MustAddDate { get; private set; }
+        public bool MustAddNumber { get; private set; }
+        public ResourceManager ResourceManager { get; private set; }
 
         /// <summary>
         /// This suppose to be full pathes to the directories
@@ -35,15 +37,16 @@ namespace Bcl.Core
 
         public IList<IWatcherRule> WatcherRules { get; }
 
-        public bool MustAddDate { get; private set; }
-
-        public bool MustAddNumber { get; private set; }
-
         public static IWatcherConfig Load()
         {
-            WatcherConfig watcherConfig = new WatcherConfig(CultureInfo.CurrentCulture);
+            BclConfigSection config = BclConfigSection.GetConfig();
 
-            var config = BclConfigSection.GetConfig();
+            CultureInfo culture = new CultureInfo(config.CultureInfo.Value);
+
+            WatcherConfig watcherConfig = new WatcherConfig(culture);
+
+            WatcherConfig.EnsureDirectoryExist(config.DefaultDestinationFolder.Value);
+            watcherConfig.DefaultDestinationFolder = config.DefaultDestinationFolder.Value;
 
             foreach (FolderElement sourceFolder in config.SourceFoldersCollection)
             {
@@ -59,13 +62,7 @@ namespace Bcl.Core
                 watcherConfig.WatcherRules.Add(rule);
             }
 
-            watcherConfig.CultureInfo = new CultureInfo(config.CultureInfo.Value);
-
             watcherConfig.IsVerbose = config.IsVerbose.Value;
-
-            WatcherConfig.EnsureDirectoryExist(config.DefaultDestinationFolder.Value);
-            watcherConfig.DefaultDestinationFolder = config.DefaultDestinationFolder.Value;
-
             watcherConfig.MustAddDate = config.MustAddDate.Value;
             watcherConfig.MustAddNumber = config.MustAddNumber.Value;
 
@@ -73,14 +70,6 @@ namespace Bcl.Core
             watcherConfig.ResourceManager = new ResourceManager("Bcl.Common.Resources.BclResource", assembly);
 
             return watcherConfig;
-        }
-
-        private static void EnsureDirectoryExist(string path)
-        {
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
         }
 
         public override string ToString()
@@ -113,6 +102,14 @@ namespace Bcl.Core
             sb.AppendLine();
 
             return sb.ToString();
+        }
+
+        private static void EnsureDirectoryExist(string path)
+        {
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
         }
     }
 }

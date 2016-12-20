@@ -1,11 +1,10 @@
-﻿using Bcl.Interfaces;
+﻿using Bcl.Common.Resources;
+using Bcl.Interfaces;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Bcl.Common.Resources;
-using System.Text;
 
 namespace Bcl.Core
 {
@@ -89,6 +88,7 @@ namespace Bcl.Core
             this.logger.IsEnabled = this.config.IsVerbose;
 
             #region actionBinding
+
             this.fsv.Created += (sender, args) =>
             {
                 if (this.config.IsVerbose)
@@ -124,6 +124,7 @@ namespace Bcl.Core
                     this.logger.Write(string.Format(BclResource.OnError, args.GetException().Message));
                 }
             };
+
             #endregion actionBinding
         }
 
@@ -183,32 +184,22 @@ namespace Bcl.Core
                 Thread.Sleep(30); // ms
             }
 
-            string date;
+            string date = this.config.MustAddDate
+                            ? DateTime.Now.ToString("yyyy MMM dd - hh mm ss") // culture based?
+                            : string.Empty;
 
-            if (this.config.MustAddDate)
-            {
-                date = DateTime.Now.ToString("yyyy MMM dd - hh mm ss");
-            }
-            else
-            {
-                date = string.Empty;
-            }
-
-            string num;
-
-            if (this.config.MustAddNumber)
-            {
-                num = Directory.EnumerateFileSystemEntries(Path.GetDirectoryName(to), DefaultFilter, SearchOption.TopDirectoryOnly).Count().ToString();
-            }
-            else
-            {
-                num= string.Empty;
-            }
+            string num = this.config.MustAddNumber
+                ? Directory.EnumerateFileSystemEntries(Path.GetDirectoryName(to),
+                                                        Watcher.DefaultFilter,
+                                                        SearchOption.TopDirectoryOnly)
+                            .Count()
+                            .ToString()
+                : string.Empty; // culture based?
 
             string dir = Path.GetDirectoryName(to);
             string file = Path.GetFileName(to);
 
-            string result = Path.Combine(dir, $"({date}) №{num} {file}");
+            string result = Path.Combine(dir, $"({date}) №{num} {file}"); // culture based?
 
             File.Move(from, result);
 
@@ -216,7 +207,6 @@ namespace Bcl.Core
             {
                 this.logger.Write(string.Format(BclResource.OnMove, from, to));
             }
-
         }
     }
 }
