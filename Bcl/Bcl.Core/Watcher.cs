@@ -180,7 +180,7 @@ namespace Bcl.Core
             }
 
             string date = this.config.MustAddDate
-                            ? DateTime.Now.ToString("yyyy MMM dd - hh mm ss") // culture based?
+                            ? DateTime.Now.ToString("yyyy MMM dd - hh mm ss", this.config.CultureInfo) // culture based?
                             : string.Empty;
 
             string num = this.config.MustAddNumber
