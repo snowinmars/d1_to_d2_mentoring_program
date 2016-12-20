@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using Bcl.Common;
 
 namespace Bcl.Core
 {
@@ -130,21 +131,14 @@ namespace Bcl.Core
 
         private void HandleConfig()
         {
-            foreach (var sourceDir in this.config.SourceDirectories)
-            {
-                if (!Directory.Exists(sourceDir))
-                {
-                    Directory.CreateDirectory(sourceDir);
-                }
-            }
+            this.config.SourceDirectories
+                .Where(sourceDir => !Directory.Exists(sourceDir))
+                .ForEach(Directory.CreateDirectory);
 
-            foreach (var destinationDir in this.config.WatcherRules.Select(rule => rule.DestinationFolder))
-            {
-                if (!Directory.Exists(destinationDir))
-                {
-                    Directory.CreateDirectory(destinationDir);
-                }
-            }
+            this.config.WatcherRules
+                .Select(rule => rule.DestinationFolder)
+                .Where(destinationDir => !Directory.Exists(destinationDir))
+                .ForEach(Directory.CreateDirectory);
         }
 
         private void HandleFileOrDirectory(FileSystemEventArgs args)
