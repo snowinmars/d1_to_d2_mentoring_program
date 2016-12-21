@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IoCSample
 {
-	public class CustomerBLL
+	public class CustomerBll
 	{
 	}
 }

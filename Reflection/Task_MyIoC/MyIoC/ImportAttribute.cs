@@ -24,7 +24,7 @@ namespace MyIoC
 
 		public ExportAttribute(Type contract)
 		{
-			Contract = contract;
+		    this.Contract = contract;
 		}
 
 		public Type Contract { get; private set; }
@@ -32,9 +32,9 @@ namespace MyIoC
 
 
 	[Export]
-	public class ContractBLL {}
+	public class ContractBll {}
 
 	[Export]
-	public class ContractDLL { }
+	public class ContractDll { }
 
 }

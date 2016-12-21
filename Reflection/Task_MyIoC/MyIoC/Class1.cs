@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 namespace MyIoC
 {
 	[ImportConstructor]
-	public class CustomerBLL
+	public class CustomerBll
 	{
-		public CustomerBLL(ICustomerDAL dal, Logger logger)
+		public CustomerBll(ICustomerDao dao, Logger logger)
 		{ }
 	}
 
-	public class CustomerBLL2
+	public class CustomerBll2
 	{
 		[Import]
-		public ICustomerDAL CustomerDAL { get; set; }
+		public ICustomerDao CustomerDao { get; set; }
 		[Import]
-		public Logger logger { get; set; }
+		public Logger Logger { get; set; }
 	}
 }
