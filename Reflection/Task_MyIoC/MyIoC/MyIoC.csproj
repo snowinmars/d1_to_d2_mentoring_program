@@ -36,7 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="SandS.Algorithm.Extensions.EnumerableExtension, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SandS.Algorithm.Extensions.EnumerableExtensions.2.0.3\lib\SandS.Algorithm.Extensions.EnumerableExtension.dll</HintPath>
+      <HintPath>..\packages\SandS.Algorithm.Extensions.EnumerableExtensions.2.0.3.01\lib\SandS.Algorithm.Extensions.EnumerableExtension.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
