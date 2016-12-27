@@ -1,7 +1,7 @@
 ﻿namespace MyIoC
 {
-	[Export]
-	public class Logger
-	{
-	}
+    [Export]
+    public class Logger
+    {
+    }
 }

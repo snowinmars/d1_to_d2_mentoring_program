@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Container.cs" />
+    <Compile Include="Dependency.cs" />
     <Compile Include="ICustomerDao.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="ImportAttribute.cs" />

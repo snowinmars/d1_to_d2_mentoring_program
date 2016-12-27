@@ -1,10 +1,10 @@
 ﻿namespace MyIoC
 {
-	public interface ICustomerDao
-	{
-	}
+    public interface ICustomerDao
+    {
+    }
 
-	[Export(typeof(ICustomerDao))]
-	public class CustomerDao : ICustomerDao
-	{ }
+    [Export(typeof(ICustomerDao))]
+    public class CustomerDao : ICustomerDao
+    { }
 }
