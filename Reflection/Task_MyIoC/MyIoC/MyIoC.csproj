@@ -55,16 +55,18 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Container.cs" />
     <Compile Include="Dependency.cs" />
-    <Compile Include="ICustomerDao.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="ImportAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MyIoCAttributes\MyIoCAttributes.csproj">
+      <Project>{1026B6F8-5263-4EFA-B98A-A97F8EA55EAB}</Project>
+      <Name>MyIoCAttributes</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

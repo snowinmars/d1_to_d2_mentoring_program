@@ -1,4 +1,5 @@
-﻿using SandS.Algorithm.Extensions.EnumerableExtensionNamespace;
+﻿using MyIoCAttributes;
+using SandS.Algorithm.Extensions.EnumerableExtensionNamespace;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,8 @@ namespace MyIoC
 
         public void AddType(Type type)
         {
+
+
             this.AddType(type, type);
         }
 

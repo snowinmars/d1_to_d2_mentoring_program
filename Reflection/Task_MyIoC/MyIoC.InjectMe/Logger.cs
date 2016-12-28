@@ -1,4 +1,6 @@
-﻿namespace MyIoC
+﻿using MyIoCAttributes;
+
+namespace MyIoC
 {
     [Export]
     public class Logger
