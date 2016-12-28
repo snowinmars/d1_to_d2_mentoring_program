@@ -1,4 +1,5 @@
-﻿using MyIoC;
+﻿using System;
+using MyIoC;
 
 namespace ConsoleApplication1
 {
@@ -6,40 +7,48 @@ namespace ConsoleApplication1
     {
         private static void Main(string[] args)
         {
+            Console.WriteLine();
+            Console.WriteLine("AddType");
+            Console.WriteLine();
+
             var container = new Container();
 
-            //container.AddType(typeof(CustomerBll));
-            //container.AddType(typeof(CustomerBll2));
-            //container.AddType(typeof(Logger));
-            //container.AddType(typeof(CustomerDao), typeof(ICustomerDao));
+            container.AddType(typeof(CustomerBll));
+            container.AddType(typeof(CustomerBll2));
+            container.AddType(typeof(Logger));
+            container.AddType(typeof(CustomerDao), typeof(ICustomerDao));
 
-            //var customerBll = (CustomerBll)container.CreateInstance(typeof(CustomerBll));
-            //customerBll.CheckMe();
+            var customerBll = (CustomerBll)container.CreateInstance(typeof(CustomerBll));
+            customerBll.CheckMe();
 
-            //customerBll = container.CreateInstance<CustomerBll>();
-            //customerBll.CheckMe();
+            customerBll = container.CreateInstance<CustomerBll>();
+            customerBll.CheckMe();
 
-            //var customerBll2 = (CustomerBll2)container.CreateInstance(typeof(CustomerBll2));
-            //customerBll2.CheckMe();
+            var customerBll2 = (CustomerBll2)container.CreateInstance(typeof(CustomerBll2));
+            customerBll2.CheckMe();
 
-            //customerBll2 = container.CreateInstance<CustomerBll2>();
-            //customerBll2.CheckMe();
+            customerBll2 = container.CreateInstance<CustomerBll2>();
+            customerBll2.CheckMe();
 
-            //container = new Container();
+            Console.WriteLine();
+            Console.WriteLine("AddAssembly");
+            Console.WriteLine();
+
+            container = new Container();
 
             container.AddAssembly(typeof(CustomerBll).Assembly);
 
-            //customerBll = (CustomerBll)container.CreateInstance(typeof(CustomerBll));
-            //customerBll.CheckMe();
+            customerBll = (CustomerBll)container.CreateInstance(typeof(CustomerBll));
+            customerBll.CheckMe();
 
-            //customerBll = container.CreateInstance<CustomerBll>();
-            //customerBll.CheckMe();
+            customerBll = container.CreateInstance<CustomerBll>();
+            customerBll.CheckMe();
 
-            //customerBll2 = (CustomerBll2)container.CreateInstance(typeof(CustomerBll2));
-            //customerBll2.CheckMe();
+            customerBll2 = (CustomerBll2)container.CreateInstance(typeof(CustomerBll2));
+            customerBll2.CheckMe();
 
-            //customerBll2 = container.CreateInstance<CustomerBll2>();
-            //customerBll2.CheckMe();
+            customerBll2 = container.CreateInstance<CustomerBll2>();
+            customerBll2.CheckMe();
         }
     }
 }

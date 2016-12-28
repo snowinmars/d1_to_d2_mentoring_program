@@ -6,7 +6,9 @@ namespace MyIoCAttributes
     public class ExportAttribute : Attribute
     {
         public ExportAttribute()
-        { }
+        {
+            this.Contract = null;
+        }
 
         public ExportAttribute(Type contract)
         {

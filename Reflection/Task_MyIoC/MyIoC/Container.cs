@@ -27,16 +27,24 @@ namespace MyIoC
 
         public void AddAssembly(Assembly assembly)
         {
-            assembly.GetTypes()
-                .Where(type => type.IsClass)
-                .ForEach(this.AddType)
-                .ToList();
+            var types = assembly.GetTypes()
+                .Where(type => type.IsClass);
+
+            foreach (var type in types)
+            {
+                ExportAttribute exportAttribute = type.GetCustomAttributes<ExportAttribute>(inherit: false)
+                    .FirstOrDefault(attr => attr.Contract != null);
+
+                Type bindTo = exportAttribute == null ?
+                                type : 
+                                exportAttribute.Contract;
+
+                this.AddType(type, bindTo);
+            }
         }
 
         public void AddType(Type type)
         {
-
-
             this.AddType(type, type);
         }
 
