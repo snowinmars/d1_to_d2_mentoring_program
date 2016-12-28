@@ -112,7 +112,7 @@ namespace MyIoC
 
         private object HandleProperties(Type type)
         {
-            object obj = Container.InvokeDefaultCtor(type);
+            object obj = Activator.CreateInstance(type);
 
             IEnumerable<PropertyInfo> props = type.GetProperties()
                                                                 .Where(prop => prop.GetCustomAttributes<ImportAttribute>().Any());
@@ -123,18 +123,6 @@ namespace MyIoC
             }
 
             return obj;
-        }
-
-        private static object InvokeDefaultCtor(Type type)
-        {
-            ConstructorInfo defaultCtor = type.GetConstructor(Type.EmptyTypes);
-
-            if (defaultCtor == null)
-            {
-                throw new InvalidOperationException($"No default ctor definded for {type.FullName}");
-            }
-
-            return defaultCtor.Invoke(new object[0]);
         }
     }
 }
