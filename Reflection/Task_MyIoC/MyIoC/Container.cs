@@ -16,15 +16,6 @@ namespace MyIoC
 
         private IList<Dependency> Dependencies { get; }
 
-        //public static void AssemblySample()
-        //{
-        //    var container = new Container();
-        //    container.AddAssembly(Assembly.GetExecutingAssembly());
-
-        //    var customerBLL = (CustomerBll)container.CreateInstance(typeof(CustomerBll));
-        //    var customerBLL2 = container.CreateInstance<CustomerBll>();
-        //}
-
         public void AddAssembly(Assembly assembly)
         {
             var types = assembly.GetTypes()
