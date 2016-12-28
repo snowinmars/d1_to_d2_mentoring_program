@@ -39,6 +39,11 @@ namespace MyIoC
 
         public void AddType(Type type, Type baseType) // bad naming, can I change it?
         {
+            if (this.Dependencies.Any(d => d.OnRequest == type))
+            {
+                throw new InvalidOperationException("Type already binded");
+            }
+
             var dep = new Dependency(onRequest: baseType, createThis: type);
 
             this.Dependencies.Add(dep);
