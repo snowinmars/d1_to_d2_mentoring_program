@@ -33,7 +33,6 @@ namespace ConsoleApplication1
             container = new Container();
 
             container.AddAssembly(typeof(CustomerBll).Assembly);
-            container.AddAssembly(typeof(Logger).Assembly);
 
             customerBll = (CustomerBll)container.CreateInstance(typeof(CustomerBll));
             customerBll.CheckMe();

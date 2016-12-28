@@ -12,5 +12,10 @@ namespace MyIoC
 
         public Type OnRequest { get; }
         public Type CreateThis { get; }
+
+        public override string ToString()
+        {
+            return $"On request {this.OnRequest.Name} create {this.CreateThis.Name}";
+        }
     }
 }
