@@ -59,26 +59,19 @@ namespace BasicXml
                                 {
                                     PropertyInfo propertyInfo = book.GetType().GetProperty(name);
 
-                                    //if (propertyInfo.PropertyType.Name == "Guid")
-                                    //{
-                                    //    Guid g;
-
-                                    //    if (Guid.TryParse(reader.Value, out g))
-                                    //    {
-                                    //        v = g;
-                                    //    }
-                                    //}
-                                    //else
-                                    //{
-                                    //    v = reader.Value;
-                                    //}
+                                    if (propertyInfo == null)
+                                    {
+                                        continue;
+                                    }
 
                                     var tryParseMeth = propertyInfo.PropertyType.GetMethod("TryParse", new[] {typeof (string), propertyInfo.PropertyType.MakeByRefType()});
+                                    var equalsMeth = propertyInfo.PropertyType.GetMethod("Equals", new[] {propertyInfo.PropertyType});
 
-                                    object[] param = { reader.Value, null };
-                                    tryParseMeth.Invoke(null, param);
+                                    object[] param = {reader.Value, null};
+                                    tryParseMeth?.Invoke(null, param);
 
-                                    if (param[1] != propertyInfo.PropertyType.GetDefaultValue())
+                                    if (param[1] != null &&
+                                        !(bool) equalsMeth.Invoke(param[1], new[] {propertyInfo.PropertyType.GetDefaultValue()}))
                                     {
                                         propertyInfo.SetValue(book, param[1]);
                                     }
