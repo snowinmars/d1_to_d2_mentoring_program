@@ -11,6 +11,8 @@ namespace BasicXml.UI
         static void Main(string[] args)
         {
             Library.AddAll(new[] {Book.GetNewOne(), Book.GetNewOne() , Book.GetNewOne() , Book.GetNewOne() , Book.GetNewOne() });
+
+            Library.GetAll();
         }
     }
 }
