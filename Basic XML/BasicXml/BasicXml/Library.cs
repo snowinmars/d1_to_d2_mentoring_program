@@ -77,6 +77,19 @@ namespace BasicXml
             writter.WriteEndElement();
         }
 
+        private static object Create(XmlReader reader, string[] attrs, Type type)
+        {
+            var item = Activator.CreateInstance(type);
+
+            foreach (var attr in attrs)
+            {
+                PropertyInfo propertyInfo = type.GetProperty(attr);
+                propertyInfo.SetValue(item, reader.GetAttribute(attr));
+            }
+
+            return item;
+        }
+
         private static void HandleAttribute(XmlReader reader, Book book)
         {
             var attrs = Library.TypeAttributeBinding[reader.Name]; // I will work only with these attributes
@@ -87,13 +100,7 @@ namespace BasicXml
                 throw new Exception("Type is null");
             }
 
-            var item = Activator.CreateInstance(type);
-
-            foreach (var attr in attrs)
-            {
-                PropertyInfo propertyInfo = type.GetProperty(attr);
-                propertyInfo.SetValue(item, reader.GetAttribute(attr));
-            }
+            object item = Library.Create(reader, attrs, type);
 
             PropertyInfo bookPropertyInfo = book.GetType().GetProperty($"{reader.Name}s"); // collection
             object collection = bookPropertyInfo.GetValue(book); // instance of collection
