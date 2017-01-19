@@ -1,15 +1,12 @@
-﻿using System;
+﻿using BasicXml.Common;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BasicXml.Common;
 
 namespace BasicXml.UI
 {
-    class Program
+    internal class Program
     {
-        public static Book GetNewBook()
+        private static Book GetNewBook()
         {
             return new Book
             {
@@ -24,13 +21,13 @@ namespace BasicXml.UI
             };
         }
 
-        public static Newspaper GetNewNewspaper()
+        private static Newspaper GetNewNewspaper()
         {
             return new Newspaper
             {
-                CityName = Constants.TextGenerator.GetNewWord(3,12, isFirstLerretUp: true),
+                CityName = Constants.TextGenerator.GetNewWord(3, 12, isFirstLerretUp: true),
                 Issn = Constants.IssnGenerator.Generate(),
-                Year = Constants.Random.Next(1800,2017),
+                Year = Constants.Random.Next(1800, 2017),
                 PageNumber = Constants.Random.Next(10, 1337),
                 Id = Guid.NewGuid(),
                 Title = Constants.TextGenerator.GetNewWord(3, 12, isFirstLerretUp: true),
@@ -40,11 +37,11 @@ namespace BasicXml.UI
             };
         }
 
-        public static Patent GetNewPatent()
+        private static Patent GetNewPatent()
         {
             return new Patent
             {
-                PageNumber = Constants.Random.Next(10,1337),
+                PageNumber = Constants.Random.Next(10, 1337),
                 Id = Guid.NewGuid(),
                 Title = Constants.TextGenerator.GetNewWord(3, 12, isFirstLerretUp: true),
                 Authors = { Author.GetNewOne(), Author.GetNewOne(), Author.GetNewOne() },
@@ -52,13 +49,13 @@ namespace BasicXml.UI
                 Country = Constants.TextGenerator.GetNewWord(3, 12, isFirstLerretUp: true),
                 FilingDate = TypeExtensions.RandomDateTime(),
                 PublishingDate = TypeExtensions.RandomDateTime(),
-                RegistrationNumber = Constants.Random.Next(10,1337),
+                RegistrationNumber = Constants.Random.Next(10, 1337),
             };
         }
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Library.AddAll(new List<LibraryItem> {Program.GetNewBook(), Program.GetNewNewspaper() , Program.GetNewPatent() , Program.GetNewPatent(), Program.GetNewBook() , Program.GetNewNewspaper() });
+            Library.AddAll(new List<LibraryItem> { Program.GetNewBook(), Program.GetNewNewspaper(), Program.GetNewPatent(), Program.GetNewPatent(), Program.GetNewBook(), Program.GetNewNewspaper() });
 
             var collection = Library.GetAll();
         }

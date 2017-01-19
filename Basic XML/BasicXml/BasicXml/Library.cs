@@ -10,95 +10,29 @@ namespace BasicXml
 {
     public static class Library
     {
-        private static readonly IEnumerable<string> IgnoredTags = new[]
-        {
-            "Book",
-            "Newspaper",
-            "Patent",
-            "Library",
-            "TypeName",
-        };
-
-        private static readonly IDictionary<string, string[]> TypeAttributeBinding = new Dictionary<string, string[]>
-        {
-            { "Author", new [] {
-                                    "FirstName",
-                                    "SecondName",
-                                } },
-        };
-
         public static void AddAll(IEnumerable<LibraryItem> items)
         {
+            if (File.Exists(Constants.FullPathToDataFile))
+            {
+                File.Delete(Constants.FullPathToDataFile);
+            }
+
             using (var stream = File.OpenWrite(Constants.FullPathToDataFile))
             {
                 using (XmlWriter writter = XmlWriter.Create(stream))
                 {
                     writter.WriteStartDocument();
-                    writter.WriteStartElement("Library");
+                    writter.WriteStartElement(nameof(Library));
 
                     foreach (var item in items)
                     {
-                        if (item.TypeName == Constants.BookTypeName)
-                        {
-                            Library.AddBook(writter, item as Book);
-                        } else if (item.TypeName == Constants.NewspaperTypeName)
-                        {
-                            Library.AddNewspaper(writter, item as Newspaper);
-                        } else if (item.TypeName == Constants.PatentName)
-                        {
-                            AddPatent(writter, item as Patent);
-                        }
+                        Library.WriteLibraryItem(writter, item);
                     }
 
                     writter.WriteEndElement();
                     writter.WriteEndDocument();
                 }
             }
-        }
-
-        private static void AddPatent(XmlWriter writter, Patent patent)
-        {
-            writter.WriteStartElement("Patent"); // <Patent>
-
-            writter.WriteTag("Id", patent.Id); // <Id>...</Id>
-            writter.WriteTag("TypeName", patent.TypeName); // <TypeName>...</TypeName>
-            writter.WriteTag("PageNumber", patent.PageNumber); // <PageNumber>...</PageNumber>
-            writter.WriteTag("Title", patent.Title); // <Title>...</Title>
-            writter.WriteTag("Annotation", patent.Annotation); // <Annotation>...</Annotation>
-            writter.WriteTag("Country", patent.Country); // <Country>...</Country>
-            writter.WriteTag("FilingDate", patent.FilingDate); // <FilingDate>...</FilingDate>
-            writter.WriteTag("PublishingDate", patent.PublishingDate); // <PublishingDate>...</PublishingDate>
-            writter.WriteTag("RegistrationNumber", patent.RegistrationNumber); // <RegistrationNumber>...</RegistrationNumber>
-
-            foreach (var author in patent.Authors) // <Author FirstName="..." SecondName="..." />
-            {
-                writter.WriteStartElement("Author");
-
-                writter.WriteAttributeString("FirstName", author.FirstName);
-                writter.WriteAttributeString("SecondName", author.SecondName);
-
-                writter.WriteEndElement();
-            }
-
-            writter.WriteEndElement(); // </Patent>
-        }
-
-        private static void AddNewspaper(XmlWriter writter, Newspaper newspaper)
-        {
-            writter.WriteStartElement("Newspaper"); // <Newspaper>
-
-            writter.WriteTag(nameof(newspaper.Id), newspaper.Id); // <Id>...</Id>
-            writter.WriteTag(nameof(newspaper.TypeName), newspaper.TypeName); // <TypeName>...</TypeName>
-            writter.WriteTag(nameof(newspaper.PageNumber), newspaper.PageNumber); // <PageNumber>...</PageNumber>
-            writter.WriteTag(nameof(newspaper.Title), newspaper.Title); // <Title>...</Title>
-            writter.WriteTag(nameof(newspaper.CityName), newspaper.CityName); // <CityName>...</CityName>
-            writter.WriteTag(nameof(newspaper.Issn), newspaper.Issn); // <Issn>...</Issn>
-            writter.WriteTag(nameof(newspaper.Year), newspaper.Year); // <Year>...</Year>
-            writter.WriteTag(nameof(newspaper.Date), newspaper.Date); // <Date>...</Date>
-            writter.WriteTag(nameof(newspaper.Number), newspaper.Number); // <Number>...</Number>
-            writter.WriteTag(nameof(newspaper.PublisherName), newspaper.PublisherName); // <PublisherName>...</PublisherName>
-
-            writter.WriteEndElement(); // </Newspaper>
         }
 
         public static IEnumerable<LibraryItem> GetAll()
@@ -114,28 +48,63 @@ namespace BasicXml
 
         private static void AddBook(XmlWriter writter, Book book)
         {
-            writter.WriteStartElement("Book"); // <Book>
+            writter.WriteStartElement(nameof(Book)); // <Book>
 
-            writter.WriteTag("Id", book.Id); // <Id>...</Id>
-            writter.WriteTag("TypeName", book.TypeName); // <TypeName>...</TypeName>
-            writter.WriteTag("PageNumber", book.PageNumber); // <PageNumber>...</PageNumber>
-            writter.WriteTag("Title", book.Title); // <Title>...</Title>
-            writter.WriteTag("Annotation", book.Annotation); // <Annotation>...</Annotation>
-            writter.WriteTag("CityName", book.CityName); // <CityName>...</CityName>
-            writter.WriteTag("Isbn", book.Isbn); // <Isbn>...</Isbn>
-            writter.WriteTag("Year", book.Year); // <Year>...</Year>
+            writter.WriteTag(nameof(LibraryItem.Id), book.Id); // <Id>...</Id>
+            writter.WriteTag(nameof(LibraryItem.TypeName), book.TypeName); // <TypeName>...</TypeName>
+            writter.WriteTag(nameof(LibraryItem.PageNumber), book.PageNumber); // <PageNumber>...</PageNumber>
+            writter.WriteTag(nameof(LibraryItem.Title), book.Title); // <Title>...</Title>
+            writter.WriteTag(nameof(book.Annotation), book.Annotation); // <Annotation>...</Annotation>
+            writter.WriteTag(nameof(book.CityName), book.CityName); // <CityName>...</CityName>
+            writter.WriteTag(nameof(book.Isbn), book.Isbn); // <Isbn>...</Isbn>
+            writter.WriteTag(nameof(book.Year), book.Year); // <Year>...</Year>
 
             foreach (var author in book.Authors) // <Author FirstName="..." SecondName="..." />
             {
-                writter.WriteStartElement("Author");
-
-                writter.WriteAttributeString("FirstName", author.FirstName);
-                writter.WriteAttributeString("SecondName", author.SecondName);
-
-                writter.WriteEndElement();
+                Library.WriteAuthor(writter, author);
             }
 
             writter.WriteEndElement(); // </Book>
+        }
+
+        private static void AddNewspaper(XmlWriter writter, Newspaper newspaper)
+        {
+            writter.WriteStartElement(nameof(Newspaper)); // <Newspaper>
+
+            writter.WriteTag(nameof(LibraryItem.Id), newspaper.Id); // <Id>...</Id>
+            writter.WriteTag(nameof(LibraryItem.TypeName), newspaper.TypeName); // <TypeName>...</TypeName>
+            writter.WriteTag(nameof(LibraryItem.PageNumber), newspaper.PageNumber); // <PageNumber>...</PageNumber>
+            writter.WriteTag(nameof(LibraryItem.Title), newspaper.Title); // <Title>...</Title>
+            writter.WriteTag(nameof(newspaper.CityName), newspaper.CityName); // <CityName>...</CityName>
+            writter.WriteTag(nameof(newspaper.Issn), newspaper.Issn); // <Issn>...</Issn>
+            writter.WriteTag(nameof(newspaper.Year), newspaper.Year); // <Year>...</Year>
+            writter.WriteTag(nameof(newspaper.Date), newspaper.Date); // <Date>...</Date>
+            writter.WriteTag(nameof(newspaper.Number), newspaper.Number); // <Number>...</Number>
+            writter.WriteTag(nameof(newspaper.PublisherName), newspaper.PublisherName); // <PublisherName>...</PublisherName>
+
+            writter.WriteEndElement(); // </Newspaper>
+        }
+
+        private static void AddPatent(XmlWriter writter, Patent patent)
+        {
+            writter.WriteStartElement(nameof(Patent)); // <Patent>
+
+            writter.WriteTag(nameof(LibraryItem.Id), patent.Id); // <Id>...</Id>
+            writter.WriteTag(nameof(LibraryItem.TypeName), patent.TypeName); // <TypeName>...</TypeName>
+            writter.WriteTag(nameof(LibraryItem.PageNumber), patent.PageNumber); // <PageNumber>...</PageNumber>
+            writter.WriteTag(nameof(LibraryItem.Title), patent.Title); // <Title>...</Title>
+            writter.WriteTag(nameof(patent.Annotation), patent.Annotation); // <Annotation>...</Annotation>
+            writter.WriteTag(nameof(patent.Country), patent.Country); // <Country>...</Country>
+            writter.WriteTag(nameof(patent.FilingDate), patent.FilingDate); // <FilingDate>...</FilingDate>
+            writter.WriteTag(nameof(patent.PublishingDate), patent.PublishingDate); // <PublishingDate>...</PublishingDate>
+            writter.WriteTag(nameof(patent.RegistrationNumber), patent.RegistrationNumber); // <RegistrationNumber>...</RegistrationNumber>
+
+            foreach (var author in patent.Authors) // <Author FirstName="..." SecondName="..." />
+            {
+                Library.WriteAuthor(writter, author);
+            }
+
+            writter.WriteEndElement(); // </Patent>
         }
 
         /// <summary>
@@ -145,7 +114,7 @@ namespace BasicXml
         /// <param name="attrs">names of attributes</param>
         /// <param name="type">create instance of this type</param>
         /// <returns></returns>
-        private static object Create(XmlReader reader, string[] attrs, Type type)
+        private static object Create(XmlReader reader, IEnumerable<string> attrs, Type type)
         {
             var item = Activator.CreateInstance(type);
 
@@ -158,28 +127,28 @@ namespace BasicXml
             return item;
         }
 
-        private static void HandleAttribute(XmlReader reader, LibraryItem book)
+        private static void HandleAttribute(XmlReader reader, LibraryItem libraryItem)
         {
-            var attrs = Library.TypeAttributeBinding[reader.Name]; // I will work only with these attributes
-            Type type = Type.GetType($"BasicXml.{reader.Name}"); // TODO fix namespace
+            IEnumerable<string> attrs = Constants.TypeAttributeBinding[reader.Name]; // I will work only with these attributes
+            Type type = Type.GetType($"{Constants.Namespace}.{reader.Name}"); // TODO fix namespace
 
             if (type == null)
             {
-                throw new Exception("Type is null");
+                throw new InvalidOperationException("Type is null");
             }
 
             object item = Library.Create(reader, attrs, type);
 
-            PropertyInfo bookPropertyInfo = book.GetType().GetProperty($"{reader.Name}s"); // collection
-            object collection = bookPropertyInfo.GetValue(book); // instance of collection
-            MethodInfo addMeth = collection.GetType().GetMethod("Add"); // method of instance of collection
+            PropertyInfo propertyInfo = libraryItem.GetType().GetProperty($"{reader.Name}s"); // collection
+            object collection = propertyInfo.GetValue(libraryItem); // instance of collection
+            MethodInfo addMethod = collection.GetType().GetMethod("Add"); // method of instance of collection
 
-            addMeth?.Invoke(collection, new[] { item }); // add item to the collection
+            addMethod?.Invoke(collection, new[] { item }); // add item to the collection
         }
 
         private static void HandleText(XmlReader reader, LibraryItem book, PropertyInfo propertyInfo)
         {
-            if (propertyInfo.PropertyType.Name == "String")
+            if (propertyInfo.PropertyType.Name == nameof(String))
             {
                 propertyInfo.SetValue(book, reader.Value);
                 return;
@@ -244,7 +213,7 @@ namespace BasicXml
                             libraryItem = new Patent();
                         }
 
-                        if (!Library.IgnoredTags.Contains(reader.Name)) // if node is not some trash
+                        if (!Constants.IgnoredTags.Contains(reader.Name)) // if node is not some trash
                         {
                             name = reader.Name; // work with this node on the next itteration
 
@@ -257,6 +226,11 @@ namespace BasicXml
                         break;
 
                     case XmlNodeType.Text:
+                        if (libraryItem == null)
+                        {
+                            throw new InvalidOperationException("Library item is null, check XmlNodeType.Element case");
+                        }
+
                         PropertyInfo propertyInfo = libraryItem.GetType().GetProperty(name);
 
                         if (propertyInfo == null)
@@ -269,6 +243,37 @@ namespace BasicXml
                 }
             }
             return result;
+        }
+
+        private static void WriteAuthor(XmlWriter writter, Author author)
+        {
+            writter.WriteStartElement(nameof(Author));
+
+            writter.WriteAttributeString(nameof(author.FirstName), author.FirstName);
+            writter.WriteAttributeString(nameof(author.SecondName), author.SecondName);
+
+            writter.WriteEndElement();
+        }
+
+        private static void WriteLibraryItem(XmlWriter writter, LibraryItem item)
+        {
+            switch (item.TypeName)
+            {
+                case Constants.BookTypeName:
+                    Library.AddBook(writter, item as Book);
+                    break;
+
+                case Constants.NewspaperTypeName:
+                    Library.AddNewspaper(writter, item as Newspaper);
+                    break;
+
+                case Constants.PatentName:
+                    Library.AddPatent(writter, item as Patent);
+                    break;
+
+                default:
+                    throw new InvalidOperationException($"Unknown item type {item.TypeName}");
+            }
         }
 
         private static void WriteTag(this XmlWriter writter, string name, object value)

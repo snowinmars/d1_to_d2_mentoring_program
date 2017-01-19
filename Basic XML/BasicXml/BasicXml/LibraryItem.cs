@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BasicXml
 {
@@ -13,12 +9,9 @@ namespace BasicXml
             this.TypeName = typeName;
         }
 
-        public string TypeName { get;  }
-
         public Guid Id { get; set; }
-
-        public string Title { get; set; }
-
         public int PageNumber { get; set; }
+        public string Title { get; set; }
+        public string TypeName { get; }
     }
 }
