@@ -105,7 +105,7 @@ namespace BasicXml
             return item;
         }
 
-        private static void HandleAttribute(XmlReader reader, Book book)
+        private static void HandleAttribute(XmlReader reader, LibraryItem book)
         {
             var attrs = Library.TypeAttributeBinding[reader.Name]; // I will work only with these attributes
             Type type = Type.GetType($"BasicXml.{reader.Name}"); // TODO fix namespace
@@ -124,7 +124,7 @@ namespace BasicXml
             addMeth?.Invoke(collection, new[] { item }); // add item to the collection
         }
 
-        private static void HandleText(XmlReader reader, Book book, PropertyInfo propertyInfo)
+        private static void HandleText(XmlReader reader, LibraryItem book, PropertyInfo propertyInfo)
         {
             if (propertyInfo.PropertyType.Name == "String")
             {
@@ -157,7 +157,7 @@ namespace BasicXml
         {
             IList<LibraryItem> result = new List<LibraryItem>(32);
 
-            Book book = new Book();
+            LibraryItem libraryItem = null;
             string name = ""; // not null attribute
 
             while (reader.Read())
@@ -181,20 +181,20 @@ namespace BasicXml
                             if (reader.HasAttributes) // but if node has attributes, try to write it down
                             {
                                 // I will invoke this if block as many times, as how many attributes are in tag
-                                Library.HandleAttribute(reader, book);
+                                Library.HandleAttribute(reader, libraryItem);
                             }
                         }
                         break;
 
                     case XmlNodeType.Text:
-                        PropertyInfo propertyInfo = book.GetType().GetProperty(name);
+                        PropertyInfo propertyInfo = libraryItem.GetType().GetProperty(name);
 
                         if (propertyInfo == null)
                         {
                             continue;
                         }
 
-                        Library.HandleText(reader, book, propertyInfo);
+                        Library.HandleText(reader, libraryItem, propertyInfo);
                         break;
                 }
             }
