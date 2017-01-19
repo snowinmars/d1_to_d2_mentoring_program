@@ -19,96 +19,116 @@ namespace BasicXml
 
         public static IEnumerable<LibraryItem> GetAll()
         {
-            IList<LibraryItem> result = new List<LibraryItem>(32);
 
             using (var stream = File.OpenRead(Constants.FullPathToDataFile))
             {
                 using (var reader = XmlReader.Create(stream))
                 {
-                    Book book = new Book();
-                    string name = "";
-                    while (reader.Read())
-                    {
-                        switch (reader.NodeType)
-                        {
-                            case XmlNodeType.EndElement:
-                                if (reader.Name == "Book")
-                                {
-                                    result.Add(book);
-
-                                    book = new Book();
-                                }
-                                break;
-
-                            case XmlNodeType.Element:
-                                if (!Library.ReservedNames.Contains(reader.Name))
-                                {
-                                    name = reader.Name;
-
-                                    if (reader.HasAttributes)
-                                    {
-                                        var attrs = Library.TypeAttributeBinding[reader.Name];
-                                        Type type = Type.GetType($"BasicXml.{reader.Name}");
-
-                                        if (type == null)
-                                        {
-                                            throw new Exception("Type is null");
-                                        }
-
-                                        var author = Activator.CreateInstance(type);
-
-                                        foreach (var attr in attrs)
-                                        {
-                                            PropertyInfo propertyInfo = type.GetProperty(attr);
-                                            propertyInfo.SetValue(author, reader.GetAttribute(attr));
-                                        }
-
-                                        PropertyInfo bookPropertyInfo = book.GetType().GetProperty($"{reader.Name}s");
-                                        object collection = bookPropertyInfo.GetValue(book);
-                                        MethodInfo addMeth = collection.GetType().GetMethod("Add");
-
-                                        addMeth?.Invoke(collection, new [] { author });
-                                    }
-                                }
-                                break;
-
-                            case XmlNodeType.Text:
-                                {
-                                    PropertyInfo propertyInfo = book.GetType().GetProperty(name);
-
-                                    if (propertyInfo == null)
-                                    {
-                                        continue;
-                                    }
-
-                                    if (propertyInfo.PropertyType.Name == "String")
-                                    {
-                                        propertyInfo.SetValue(book, reader.Value);
-                                    }
-                                    else
-                                    {
-                                        var tryParseMeth = propertyInfo.PropertyType.GetMethod("TryParse", new[] { typeof(string), propertyInfo.PropertyType.MakeByRefType() });
-                                        var equalsMeth = propertyInfo.PropertyType.GetMethod("Equals", new[] { propertyInfo.PropertyType });
-
-                                        object[] param = { reader.Value, null };
-                                        tryParseMeth?.Invoke(null, param);
-
-                                        if (param[1] != null &&
-                                            !(bool)
-                                                equalsMeth.Invoke(param[1],
-                                                                    new[] { propertyInfo.PropertyType.GetDefaultValue() }))
-                                        {
-                                            propertyInfo.SetValue(book, param[1]);
-                                        }
-                                    }
-                                }
-                                break;
-                        }
-                    }
+                    return Library.ReadAllLibraryItems(reader);
                 }
             }
+        }
 
+        private static IList<LibraryItem> ReadAllLibraryItems(XmlReader reader)
+        {
+            IList<LibraryItem> result = new List<LibraryItem>(32);
+
+            Book book = new Book();
+            string name = ""; // not null attribute
+
+            while (reader.Read())
+            {
+                switch (reader.NodeType)
+                {
+                    case XmlNodeType.EndElement:
+                        if (reader.Name == "Book") // if I read Book tag to the end
+                        {
+                            result.Add(book);
+
+                            book = new Book();
+                        }
+                        break;
+
+                    case XmlNodeType.Element:
+                        if (!Library.ReservedNames.Contains(reader.Name)) // if node is not some trash
+                        {
+                            name = reader.Name; // work with this node on the next itteration
+
+                            if (reader.HasAttributes) // but if node has attributes, try to write it down
+                            {
+                                // I will invoke this if block as many times, as how many attributes are in tag
+                                Library.HandleAttribute(reader, book);
+                            }
+                        }
+                        break;
+
+                    case XmlNodeType.Text:
+                        PropertyInfo propertyInfo = book.GetType().GetProperty(name);
+
+                        if (propertyInfo == null)
+                        {
+                            continue;
+                        }
+
+                        Library.HandleText(reader, book, propertyInfo);
+                        break;
+                }
+            }
             return result;
+        }
+
+        private static void HandleText(XmlReader reader, Book book, PropertyInfo propertyInfo)
+        {
+            if (propertyInfo.PropertyType.Name == "String")
+            {
+                propertyInfo.SetValue(book, reader.Value);
+                return;
+            }
+
+            // bool MyType.TryParse(string, out MyType)
+            MethodInfo tryParseMeth = propertyInfo.PropertyType
+                                                    .GetMethod("TryParse", new[] { typeof(string), propertyInfo.PropertyType.MakeByRefType() });
+
+            // bool Equals(this MyType, MyType)
+            MethodInfo equalsMeth = propertyInfo.PropertyType
+                                                    .GetMethod("Equals", new[] { propertyInfo.PropertyType });
+
+            object[] param = { reader.Value, null }; // in null here after Invoke() will appear out value
+            tryParseMeth?.Invoke(null, param);
+
+            // there was some troubles here with bool result of TryParse method, so I use this way
+            if (param[1] != null && // if parse was success for class...
+                !(bool)
+                    equalsMeth.Invoke(param[1],
+                        new[] { propertyInfo.PropertyType.GetDefaultValue() })) // ...and for struct
+            {
+                propertyInfo.SetValue(book, param[1]);
+            }
+        }
+
+        private static void HandleAttribute(XmlReader reader, Book book)
+        {
+            var attrs = Library.TypeAttributeBinding[reader.Name]; // I will work only with these attributes
+            Type type = Type.GetType($"BasicXml.{reader.Name}"); // TODO fix namespace
+
+            if (type == null)
+            {
+                throw new Exception("Type is null");
+            }
+
+            var item = Activator.CreateInstance(type);
+
+            foreach (var attr in attrs)
+            {
+                PropertyInfo propertyInfo = type.GetProperty(attr);
+                propertyInfo.SetValue(item, reader.GetAttribute(attr));
+            }
+
+            PropertyInfo bookPropertyInfo = book.GetType().GetProperty($"{reader.Name}s"); // collection
+            object collection = bookPropertyInfo.GetValue(book); // instance of collection
+            MethodInfo addMeth = collection.GetType().GetMethod("Add"); // method of instance of collection
+
+            addMeth?.Invoke(collection, new[] { item }); // add item to the collection
         }
 
         public static void AddAll(IEnumerable<LibraryItem> items)
@@ -124,7 +144,7 @@ namespace BasicXml
                     {
                         if (item.TypeName == Constants.BookTypeName)
                         {
-                            AddBook(writter, item as Book);
+                            Library.AddBook(writter, item as Book);
                         }
                     }
 
