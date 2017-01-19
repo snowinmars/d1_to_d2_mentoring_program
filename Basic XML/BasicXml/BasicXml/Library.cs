@@ -10,11 +10,19 @@ namespace BasicXml
 {
     public static class Library
     {
-        private static readonly IEnumerable<string> ReservedNames = new[] { "Book", "Library", "TypeName" };
+        private static readonly IEnumerable<string> IgnoredTags = new[]
+        {
+            "Book",
+            "Library",
+            "TypeName",
+        };
 
         private static readonly IDictionary<string, string[]> TypeAttributeBinding = new Dictionary<string, string[]>
         {
-            { "Author", new [] {"FirstName", "SecondName",} },
+            { "Author", new [] {
+                                    "FirstName",
+                                    "SecondName",
+                                } },
         };
 
         public static void AddAll(IEnumerable<LibraryItem> items)
@@ -53,18 +61,18 @@ namespace BasicXml
 
         private static void AddBook(XmlWriter writter, Book book)
         {
-            writter.WriteStartElement("Book");
+            writter.WriteStartElement("Book"); // <Book>
 
-            writter.WriteTag("Id", book.Id);
-            writter.WriteTag("TypeName", book.TypeName);
-            writter.WriteTag("PageNumber", book.PageNumber);
-            writter.WriteTag("Title", book.Title);
-            writter.WriteTag("Annotation", book.Annotation);
-            writter.WriteTag("CityName", book.CityName);
-            writter.WriteTag("Isbn", book.Isbn);
-            writter.WriteTag("Year", book.Year);
+            writter.WriteTag("Id", book.Id); // <Id>...</Id>
+            writter.WriteTag("TypeName", book.TypeName); // <TypeName>...</TypeName>
+            writter.WriteTag("PageNumber", book.PageNumber); // <PageNumber>...</PageNumber>
+            writter.WriteTag("Title", book.Title); // <Title>...</Title>
+            writter.WriteTag("Annotation", book.Annotation); // <Annotation>...</Annotation>
+            writter.WriteTag("CityName", book.CityName); // <CityName>...</CityName>
+            writter.WriteTag("Isbn", book.Isbn); // <Isbn>...</Isbn>
+            writter.WriteTag("Year", book.Year); // <Year>...</Year>
 
-            foreach (var author in book.Authors)
+            foreach (var author in book.Authors) // <Author FirstName="..." SecondName="..." />
             {
                 writter.WriteStartElement("Author");
 
@@ -74,9 +82,16 @@ namespace BasicXml
                 writter.WriteEndElement();
             }
 
-            writter.WriteEndElement();
+            writter.WriteEndElement(); // </Book>
         }
 
+        /// <summary>
+        /// Create instance of type and fill it's properties with attributes
+        /// </summary>
+        /// <param name="reader">reader provides value for attributes</param>
+        /// <param name="attrs">names of attributes</param>
+        /// <param name="type">create instance of this type</param>
+        /// <returns></returns>
         private static object Create(XmlReader reader, string[] attrs, Type type)
         {
             var item = Activator.CreateInstance(type);
@@ -159,7 +174,7 @@ namespace BasicXml
                         break;
 
                     case XmlNodeType.Element:
-                        if (!Library.ReservedNames.Contains(reader.Name)) // if node is not some trash
+                        if (!Library.IgnoredTags.Contains(reader.Name)) // if node is not some trash
                         {
                             name = reader.Name; // work with this node on the next itteration
 
