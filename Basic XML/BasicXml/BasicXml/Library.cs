@@ -12,7 +12,7 @@ namespace BasicXml
     {
         public static object GetDefaultValue(this Type t)
         {
-            if (t.IsValueType && 
+            if (t.IsValueType &&
                 Nullable.GetUnderlyingType(t) == null)
             {
                 return Activator.CreateInstance(t);
@@ -26,6 +26,11 @@ namespace BasicXml
     {
         private static string FullPathToDataFile = @"D:\file.dat";
         private static IEnumerable<string> ReservedNames = new[] { "Book", "Library", "TypeName" };
+
+        private static IDictionary<string, string[]> Asd = new Dictionary<string, string[]>
+        {
+            { "Author", new [] {"FirstName", "SecondName",} },
+        };
 
         public static IEnumerable<LibraryItem> GetAll()
         {
@@ -49,12 +54,39 @@ namespace BasicXml
                                     book = new Book();
                                 }
                                 break;
+
                             case XmlNodeType.Element:
                                 if (!Library.ReservedNames.Contains(reader.Name))
                                 {
                                     name = reader.Name;
+
+                                    if (reader.HasAttributes)
+                                    {
+                                        var attrs = Library.Asd[reader.Name];
+                                        Type type = Type.GetType($"BasicXml.{reader.Name}");
+
+                                        if (type == null)
+                                        {
+                                            throw new Exception("Type is null");
+                                        }
+
+                                        var author = Activator.CreateInstance(type);
+
+                                        foreach (var attr in attrs)
+                                        {
+                                            PropertyInfo propertyInfo = type.GetProperty(attr);
+                                            propertyInfo.SetValue(author, reader.GetAttribute(attr));
+                                        }
+
+                                        PropertyInfo bookPropertyInfo = book.GetType().GetProperty($"{reader.Name}s");
+                                        object collection = bookPropertyInfo.GetValue(book);
+                                        MethodInfo addMeth = collection.GetType().GetMethod("Add");
+
+                                        addMeth?.Invoke(collection, new [] { author });
+                                    }
                                 }
                                 break;
+
                             case XmlNodeType.Text:
                                 {
                                     PropertyInfo propertyInfo = book.GetType().GetProperty(name);
@@ -64,16 +96,25 @@ namespace BasicXml
                                         continue;
                                     }
 
-                                    var tryParseMeth = propertyInfo.PropertyType.GetMethod("TryParse", new[] {typeof (string), propertyInfo.PropertyType.MakeByRefType()});
-                                    var equalsMeth = propertyInfo.PropertyType.GetMethod("Equals", new[] {propertyInfo.PropertyType});
-
-                                    object[] param = {reader.Value, null};
-                                    tryParseMeth?.Invoke(null, param);
-
-                                    if (param[1] != null &&
-                                        !(bool) equalsMeth.Invoke(param[1], new[] {propertyInfo.PropertyType.GetDefaultValue()}))
+                                    if (propertyInfo.PropertyType.Name == "String")
                                     {
-                                        propertyInfo.SetValue(book, param[1]);
+                                        propertyInfo.SetValue(book, reader.Value);
+                                    }
+                                    else
+                                    {
+                                        var tryParseMeth = propertyInfo.PropertyType.GetMethod("TryParse", new[] { typeof(string), propertyInfo.PropertyType.MakeByRefType() });
+                                        var equalsMeth = propertyInfo.PropertyType.GetMethod("Equals", new[] { propertyInfo.PropertyType });
+
+                                        object[] param = { reader.Value, null };
+                                        tryParseMeth?.Invoke(null, param);
+
+                                        if (param[1] != null &&
+                                            !(bool)
+                                                equalsMeth.Invoke(param[1],
+                                                                    new[] { propertyInfo.PropertyType.GetDefaultValue() }))
+                                        {
+                                            propertyInfo.SetValue(book, param[1]);
+                                        }
                                     }
                                 }
                                 break;
@@ -121,17 +162,15 @@ namespace BasicXml
             writter.WriteTag("Isbn", book.Isbn);
             writter.WriteTag("Year", book.Year);
 
-            writter.WriteStartElement("Authors");
             foreach (var author in book.Authors)
             {
                 writter.WriteStartElement("Author");
 
-                writter.WriteTag("FirstName", author.FirstName);
-                writter.WriteTag("SecondName", author.SecondName);
+                writter.WriteAttributeString("FirstName", author.FirstName);
+                writter.WriteAttributeString("SecondName", author.SecondName);
 
                 writter.WriteEndElement();
             }
-            writter.WriteEndElement();
 
             writter.WriteEndElement();
         }
