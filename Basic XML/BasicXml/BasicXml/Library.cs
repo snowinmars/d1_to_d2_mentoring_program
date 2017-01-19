@@ -19,7 +19,7 @@ namespace BasicXml
 
             using (var stream = File.OpenWrite(Constants.FullPathToDataFile))
             {
-                using (XmlWriter writter = XmlWriter.Create(stream))
+                using (XmlWriter writter = XmlWriter.Create(stream, Constants.XmlWriterSettings))
                 {
                     writter.WriteStartDocument();
                     writter.WriteStartElement(nameof(Library));
@@ -39,7 +39,8 @@ namespace BasicXml
         {
             using (var stream = File.OpenRead(Constants.FullPathToDataFile))
             {
-                using (var reader = XmlReader.Create(stream))
+                
+                using (var reader = XmlReader.Create(stream, Constants.XmlReaderSettings))
                 {
                     return Library.ReadAllLibraryItems(reader);
                 }
@@ -130,14 +131,9 @@ namespace BasicXml
         private static void HandleAttribute(XmlReader reader, LibraryItem libraryItem)
         {
             IEnumerable<string> attrs = Constants.TypeAttributeBinding[reader.Name]; // I will work only with these attributes
-            Type type = Type.GetType($"{Constants.Namespace}.{reader.Name}"); // TODO fix namespace
+            Type type = Type.GetType($"{Constants.Namespace}.{reader.Name}");
 
-            if (type == null)
-            {
-                throw new InvalidOperationException("Type is null");
-            }
-
-            object item = Library.Create(reader, attrs, type);
+            object item = Library.Create(reader, attrs, type); // let null ref exc throws here
 
             PropertyInfo propertyInfo = libraryItem.GetType().GetProperty($"{reader.Name}s"); // collection
             object collection = propertyInfo.GetValue(libraryItem); // instance of collection
@@ -150,7 +146,7 @@ namespace BasicXml
         {
             if (propertyInfo.PropertyType.Name == nameof(String))
             {
-                propertyInfo.SetValue(book, reader.Value);
+                propertyInfo.SetValue(book, reader.Value); // we dont have to convert strings to write it to string property
                 return;
             }
 
@@ -163,7 +159,7 @@ namespace BasicXml
                                                     .GetMethod("Equals", new[] { propertyInfo.PropertyType });
 
             object[] param = { reader.Value, null }; // in null here after Invoke() will appear out value
-            tryParseMeth?.Invoke(null, param);
+            tryParseMeth?.Invoke(null, param); // first argument doesnt matter if method is static
 
             // there was some troubles here with bool result of TryParse method, so I use this way
             if (param[1] != null && // if parse was success for class...
@@ -198,7 +194,7 @@ namespace BasicXml
                     case XmlNodeType.Element:
                         if (Constants.LibraryItemTags.Contains(reader.Name))
                         {
-                            libraryItem = Activator.CreateInstance(Type.GetType($"{Constants.Namespace}.{reader.Name}")) as LibraryItem;
+                            libraryItem = Activator.CreateInstance(Type.GetType($"{Constants.Namespace}.{reader.Name}")) as LibraryItem; // let null ref exc throws here
                         }
 
                         if (!Constants.IgnoredTags.Contains(reader.Name)) // if node is not some trash
@@ -223,10 +219,27 @@ namespace BasicXml
 
                         if (propertyInfo == null)
                         {
-                            continue;
+                            continue; // we can take some bad props here
                         }
 
                         Library.HandleText(reader, libraryItem, propertyInfo);
+                        break;
+                    case XmlNodeType.None:
+                    case XmlNodeType.Attribute:
+                    case XmlNodeType.CDATA:
+                    case XmlNodeType.EntityReference:
+                    case XmlNodeType.Entity:
+                    case XmlNodeType.ProcessingInstruction:
+                    case XmlNodeType.Comment:
+                    case XmlNodeType.Document:
+                    case XmlNodeType.DocumentType:
+                    case XmlNodeType.DocumentFragment:
+                    case XmlNodeType.Notation:
+                    case XmlNodeType.Whitespace:
+                    case XmlNodeType.SignificantWhitespace:
+                    case XmlNodeType.EndEntity:
+                    case XmlNodeType.XmlDeclaration:
+                    default:
                         break;
                 }
             }

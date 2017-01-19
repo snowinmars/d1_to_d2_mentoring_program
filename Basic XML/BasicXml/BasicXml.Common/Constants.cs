@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 
 namespace BasicXml.Common
 {
@@ -12,16 +13,21 @@ namespace BasicXml.Common
         public const string Namespace = "BasicXml";
         public const string NewspaperTypeName = "Newspaper";
         public const string PatentName = "Patent";
-        public static readonly IEnumerable<string> IgnoredTags;
-        public static readonly Isbn10Generator Isbn10Generator;
-        public static readonly IssnGenerator IssnGenerator;
-        public static readonly Random Random;
-        public static readonly TextGenerator TextGenerator;
-        public static readonly IDictionary<string, string[]> TypeAttributeBinding;
-        public static readonly IEnumerable<string> LibraryItemTags;
+        public static IEnumerable<string> IgnoredTags { get; }
+        public static Isbn10Generator Isbn10Generator { get; }
+        public static IssnGenerator IssnGenerator { get; }
+        public static Random Random { get; }
+        public static TextGenerator TextGenerator { get; }
+        public static IDictionary<string, string[]> TypeAttributeBinding { get; }
+        public static IEnumerable<string> LibraryItemTags { get; }
+        public static XmlReaderSettings XmlReaderSettings { get; }
+        public static XmlWriterSettings XmlWriterSettings { get; }
 
         static Constants()
         {
+            Constants.XmlWriterSettings = new XmlWriterSettings { Indent = true, };
+            Constants.XmlReaderSettings = new XmlReaderSettings { IgnoreWhitespace = true, };
+
             Constants.LibraryItemTags = new List<string>
             {
                 "Book",
