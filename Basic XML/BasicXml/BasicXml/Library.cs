@@ -10,10 +10,9 @@ namespace BasicXml
 {
     public static class Library
     {
-        private static string FullPathToDataFile = @"D:\file.dat";
-        private static IEnumerable<string> ReservedNames = new[] { "Book", "Library", "TypeName" };
+        private static readonly IEnumerable<string> ReservedNames = new[] { "Book", "Library", "TypeName" };
 
-        private static IDictionary<string, string[]> Asd = new Dictionary<string, string[]>
+        private static readonly IDictionary<string, string[]> TypeAttributeBinding = new Dictionary<string, string[]>
         {
             { "Author", new [] {"FirstName", "SecondName",} },
         };
@@ -48,7 +47,7 @@ namespace BasicXml
 
                                     if (reader.HasAttributes)
                                     {
-                                        var attrs = Library.Asd[reader.Name];
+                                        var attrs = Library.TypeAttributeBinding[reader.Name];
                                         Type type = Type.GetType($"BasicXml.{reader.Name}");
 
                                         if (type == null)
