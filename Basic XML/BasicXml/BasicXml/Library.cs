@@ -14,6 +14,7 @@ namespace BasicXml
         {
             "Book",
             "Newspaper",
+            "Patent",
             "Library",
             "TypeName",
         };
@@ -43,6 +44,9 @@ namespace BasicXml
                         } else if (item.TypeName == Constants.NewspaperTypeName)
                         {
                             Library.AddNewspaper(writter, item as Newspaper);
+                        } else if (item.TypeName == Constants.PatentName)
+                        {
+                            AddPatent(writter, item as Patent);
                         }
                     }
 
@@ -50,6 +54,33 @@ namespace BasicXml
                     writter.WriteEndDocument();
                 }
             }
+        }
+
+        private static void AddPatent(XmlWriter writter, Patent patent)
+        {
+            writter.WriteStartElement("Patent"); // <Patent>
+
+            writter.WriteTag("Id", patent.Id); // <Id>...</Id>
+            writter.WriteTag("TypeName", patent.TypeName); // <TypeName>...</TypeName>
+            writter.WriteTag("PageNumber", patent.PageNumber); // <PageNumber>...</PageNumber>
+            writter.WriteTag("Title", patent.Title); // <Title>...</Title>
+            writter.WriteTag("Annotation", patent.Annotation); // <Annotation>...</Annotation>
+            writter.WriteTag("Country", patent.Country); // <Country>...</Country>
+            writter.WriteTag("FilingDate", patent.FilingDate); // <FilingDate>...</FilingDate>
+            writter.WriteTag("PublishingDate", patent.PublishingDate); // <PublishingDate>...</PublishingDate>
+            writter.WriteTag("RegistrationNumber", patent.RegistrationNumber); // <RegistrationNumber>...</RegistrationNumber>
+
+            foreach (var author in patent.Authors) // <Author FirstName="..." SecondName="..." />
+            {
+                writter.WriteStartElement("Author");
+
+                writter.WriteAttributeString("FirstName", author.FirstName);
+                writter.WriteAttributeString("SecondName", author.SecondName);
+
+                writter.WriteEndElement();
+            }
+
+            writter.WriteEndElement(); // </Patent>
         }
 
         private static void AddNewspaper(XmlWriter writter, Newspaper newspaper)
@@ -188,7 +219,8 @@ namespace BasicXml
                 {
                     case XmlNodeType.EndElement:
                         if (reader.Name == "Book" ||
-                            reader.Name == "Newspaper") // if I read Book tag to the end
+                            reader.Name == "Newspaper" ||
+                            reader.Name == "Patent") // if I read Book tag to the end
                         {
                             result.Add(libraryItem);
 
@@ -205,6 +237,11 @@ namespace BasicXml
                         if (reader.Name == "Newspaper")
                         {
                             libraryItem = new Newspaper();
+                        }
+
+                        if (reader.Name == "Patent")
+                        {
+                            libraryItem = new Patent();
                         }
 
                         if (!Library.IgnoredTags.Contains(reader.Name)) // if node is not some trash

@@ -40,9 +40,25 @@ namespace BasicXml.UI
             };
         }
 
+        public static Patent GetNewPatent()
+        {
+            return new Patent
+            {
+                PageNumber = Constants.Random.Next(10,1337),
+                Id = Guid.NewGuid(),
+                Title = Constants.TextGenerator.GetNewWord(3, 12, isFirstLerretUp: true),
+                Authors = { Author.GetNewOne(), Author.GetNewOne(), Author.GetNewOne() },
+                Annotation = string.Concat(Constants.TextGenerator.GetWords(20)),
+                Country = Constants.TextGenerator.GetNewWord(3, 12, isFirstLerretUp: true),
+                FilingDate = TypeExtensions.RandomDateTime(),
+                PublishingDate = TypeExtensions.RandomDateTime(),
+                RegistrationNumber = Constants.Random.Next(10,1337),
+            };
+        }
+
         static void Main(string[] args)
         {
-            Library.AddAll(new List<LibraryItem> {Program.GetNewBook(), Program.GetNewNewspaper() , Program.GetNewBook() , Program.GetNewBook() , Program.GetNewNewspaper() });
+            Library.AddAll(new List<LibraryItem> {Program.GetNewBook(), Program.GetNewNewspaper() , Program.GetNewPatent() , Program.GetNewPatent(), Program.GetNewBook() , Program.GetNewNewspaper() });
 
             var collection = Library.GetAll();
         }

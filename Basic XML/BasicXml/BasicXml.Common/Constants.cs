@@ -16,5 +16,6 @@ namespace BasicXml.Common
         public static TextGenerator TextGenerator = new TextGenerator();
         public static Random Random = new Random();
         public static string NewspaperTypeName = "Newspaper";
+        public static string PatentName = "Patent";
     }
 }
