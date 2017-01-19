@@ -39,6 +39,9 @@ namespace BasicXml
                         if (item.TypeName == Constants.BookTypeName)
                         {
                             Library.AddBook(writter, item as Book);
+                        } else if (item.TypeName == Constants.NewspaperTypeName)
+                        {
+                            Library.AddNewspaper(writter, item as Newspaper);
                         }
                     }
 
@@ -46,6 +49,24 @@ namespace BasicXml
                     writter.WriteEndDocument();
                 }
             }
+        }
+
+        private static void AddNewspaper(XmlWriter writter, Newspaper newspaper)
+        {
+            writter.WriteStartElement("Newspaper"); // <Newspaper>
+
+            writter.WriteTag(nameof(newspaper.Id), newspaper.Id); // <Id>...</Id>
+            writter.WriteTag(nameof(newspaper.TypeName), newspaper.TypeName); // <TypeName>...</TypeName>
+            writter.WriteTag(nameof(newspaper.PageNumber), newspaper.PageNumber); // <PageNumber>...</PageNumber>
+            writter.WriteTag(nameof(newspaper.Title), newspaper.Title); // <Title>...</Title>
+            writter.WriteTag(nameof(newspaper.CityName), newspaper.CityName); // <CityName>...</CityName>
+            writter.WriteTag(nameof(newspaper.Issn), newspaper.Issn); // <Issn>...</Issn>
+            writter.WriteTag(nameof(newspaper.Year), newspaper.Year); // <Year>...</Year>
+            writter.WriteTag(nameof(newspaper.Date), newspaper.Date); // <Date>...</Date>
+            writter.WriteTag(nameof(newspaper.Number), newspaper.Number); // <Number>...</Number>
+            writter.WriteTag(nameof(newspaper.PublisherName), newspaper.PublisherName); // <PublisherName>...</PublisherName>
+
+            writter.WriteEndElement(); // </Newspaper>
         }
 
         public static IEnumerable<LibraryItem> GetAll()
@@ -165,15 +186,26 @@ namespace BasicXml
                 switch (reader.NodeType)
                 {
                     case XmlNodeType.EndElement:
-                        if (reader.Name == "Book") // if I read Book tag to the end
+                        if (reader.Name == "Book" ||
+                            reader.Name == "Newspaper") // if I read Book tag to the end
                         {
-                            result.Add(book);
+                            result.Add(libraryItem);
 
-                            book = new Book();
+                            libraryItem = null;
                         }
                         break;
 
                     case XmlNodeType.Element:
+                        if (reader.Name == "Book")
+                        {
+                            libraryItem = new Book();
+                        }
+
+                        if (reader.Name == "Newspaper")
+                        {
+                            libraryItem = new Newspaper();
+                        }
+
                         if (!Library.IgnoredTags.Contains(reader.Name)) // if node is not some trash
                         {
                             name = reader.Name; // work with this node on the next itteration

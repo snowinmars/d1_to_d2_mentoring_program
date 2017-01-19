@@ -12,7 +12,9 @@ namespace BasicXml.Common
         public static string BookTypeName = "Book";
         public static string FullPathToDataFile = @"D:\file.dat";
         public static Isbn10Generator Isbn10Generator = new Isbn10Generator();
+        public static IssnGenerator IssnGenerator = new IssnGenerator();
         public static TextGenerator TextGenerator = new TextGenerator();
         public static Random Random = new Random();
+        public static string NewspaperTypeName = "Newspaper";
     }
 }

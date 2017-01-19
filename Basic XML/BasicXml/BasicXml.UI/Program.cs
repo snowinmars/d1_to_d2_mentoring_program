@@ -24,9 +24,25 @@ namespace BasicXml.UI
             };
         }
 
+        public static Newspaper GetNewNewspaper()
+        {
+            return new Newspaper
+            {
+                CityName = Constants.TextGenerator.GetNewWord(3,12, isFirstLerretUp: true),
+                Issn = Constants.IssnGenerator.Generate(),
+                Year = Constants.Random.Next(1800,2017),
+                PageNumber = Constants.Random.Next(10, 1337),
+                Id = Guid.NewGuid(),
+                Title = Constants.TextGenerator.GetNewWord(3, 12, isFirstLerretUp: true),
+                Date = TypeExtensions.RandomDateTime(),
+                Number = Constants.Random.Next(10, 1337),
+                PublisherName = Constants.TextGenerator.GetNewWord(3, 12, isFirstLerretUp: true),
+            };
+        }
+
         static void Main(string[] args)
         {
-            Library.AddAll(new[] {Program.GetNewBook(), Program.GetNewBook() , Program.GetNewBook() , Program.GetNewBook() , Program.GetNewBook() });
+            Library.AddAll(new List<LibraryItem> {Program.GetNewBook(), Program.GetNewNewspaper() , Program.GetNewBook() , Program.GetNewBook() , Program.GetNewNewspaper() });
 
             var collection = Library.GetAll();
         }
