@@ -13,6 +13,7 @@ namespace BasicXml
         private static readonly IEnumerable<string> IgnoredTags = new[]
         {
             "Book",
+            "Newspaper",
             "Library",
             "TypeName",
         };
