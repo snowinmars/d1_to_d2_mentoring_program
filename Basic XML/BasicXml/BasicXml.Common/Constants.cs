@@ -1,6 +1,7 @@
 ﻿using SandS.Algorithm.Library.GeneratorNamespace;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BasicXml.Common
 {
@@ -17,9 +18,17 @@ namespace BasicXml.Common
         public static readonly Random Random;
         public static readonly TextGenerator TextGenerator;
         public static readonly IDictionary<string, string[]> TypeAttributeBinding;
+        public static readonly IEnumerable<string> LibraryItemTags;
 
         static Constants()
         {
+            Constants.LibraryItemTags = new List<string>
+            {
+                "Book",
+                "Newspaper",
+                "Patent",
+            };
+
             Constants.TypeAttributeBinding = new Dictionary<string, string[]>
             {
                 { "Author", new [] {
@@ -27,14 +36,13 @@ namespace BasicXml.Common
                     "SecondName",
                 } },
             };
+
             Constants.IgnoredTags = new[]
             {
-                "Book",
-                "Newspaper",
-                "Patent",
                 "Library",
                 "TypeName",
-            };
+            }.Concat(Constants.LibraryItemTags);
+
             Constants.Random = new Random();
             Constants.TextGenerator = new TextGenerator();
             Constants.IssnGenerator = new IssnGenerator();

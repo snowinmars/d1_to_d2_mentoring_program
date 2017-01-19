@@ -187,9 +187,7 @@ namespace BasicXml
                 switch (reader.NodeType)
                 {
                     case XmlNodeType.EndElement:
-                        if (reader.Name == "Book" ||
-                            reader.Name == "Newspaper" ||
-                            reader.Name == "Patent") // if I read Book tag to the end
+                        if (Constants.LibraryItemTags.Contains(reader.Name)) // if I read Book tag to the end
                         {
                             result.Add(libraryItem);
 
@@ -198,19 +196,9 @@ namespace BasicXml
                         break;
 
                     case XmlNodeType.Element:
-                        if (reader.Name == "Book")
+                        if (Constants.LibraryItemTags.Contains(reader.Name))
                         {
-                            libraryItem = new Book();
-                        }
-
-                        if (reader.Name == "Newspaper")
-                        {
-                            libraryItem = new Newspaper();
-                        }
-
-                        if (reader.Name == "Patent")
-                        {
-                            libraryItem = new Patent();
+                            libraryItem = Activator.CreateInstance(Type.GetType($"{Constants.Namespace}.{reader.Name}")) as LibraryItem;
                         }
 
                         if (!Constants.IgnoredTags.Contains(reader.Name)) // if node is not some trash
