@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicXml.Common", "BasicXml
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicXml.UI", "BasicXml.UI\BasicXml.UI.csproj", "{803C9DCD-32DC-453E-825B-F3D83C259FF1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicXml.Tests", "BasicXml.Tests\BasicXml.Tests.csproj", "{DFF32197-3090-476E-9CCB-17241E795FED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicXml.Generators", "BasicXml.Generators\BasicXml.Generators.csproj", "{CBE78336-516F-439C-BC5A-822D6DE8DC54}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{803C9DCD-32DC-453E-825B-F3D83C259FF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{803C9DCD-32DC-453E-825B-F3D83C259FF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{803C9DCD-32DC-453E-825B-F3D83C259FF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFF32197-3090-476E-9CCB-17241E795FED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFF32197-3090-476E-9CCB-17241E795FED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFF32197-3090-476E-9CCB-17241E795FED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFF32197-3090-476E-9CCB-17241E795FED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBE78336-516F-439C-BC5A-822D6DE8DC54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBE78336-516F-439C-BC5A-822D6DE8DC54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBE78336-516F-439C-BC5A-822D6DE8DC54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBE78336-516F-439C-BC5A-822D6DE8DC54}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

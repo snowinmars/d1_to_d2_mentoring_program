@@ -4,18 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{803C9DCD-32DC-453E-825B-F3D83C259FF1}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{CBE78336-516F-439C-BC5A-822D6DE8DC54}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BasicXml.UI</RootNamespace>
-    <AssemblyName>BasicXml.UI</AssemblyName>
+    <RootNamespace>BasicXml.Generators</RootNamespace>
+    <AssemblyName>BasicXml.Generators</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -25,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -34,14 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SandS.Algorithm.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SandS.Algorithm.Common.2.0.1.02\lib\SandS.Algorithm.Common.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="SandS.Algorithm.Extensions.StringBuilderExtension, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SandS.Algorithm.Extensions.StringBuilderExtension.2.0.1.01\lib\SandS.Algorithm.Extensions.StringBuilderExtension.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="SandS.Algorithm.Library.Generator, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SandS.Algorithm.Library.Generator.2.0.2\lib\SandS.Algorithm.Library.Generator.dll</HintPath>
       <Private>True</Private>
@@ -56,26 +45,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="EntityGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\BasicXml.Common\BasicXml.Common.csproj">
-      <Project>{435ABBF2-128F-4331-81D0-50D22BD52BF6}</Project>
+      <Project>{435abbf2-128f-4331-81d0-50d22bd52bf6}</Project>
       <Name>BasicXml.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BasicXml.Generators\BasicXml.Generators.csproj">
-      <Project>{CBE78336-516F-439C-BC5A-822D6DE8DC54}</Project>
-      <Name>BasicXml.Generators</Name>
-    </ProjectReference>
     <ProjectReference Include="..\BasicXml\BasicXml.csproj">
-      <Project>{E479F8A3-499D-4EB7-9413-01C1724D1223}</Project>
+      <Project>{e479f8a3-499d-4eb7-9413-01c1724d1223}</Project>
       <Name>BasicXml</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,76 @@
+﻿<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Library">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded" minOccurs="0">
+        <xs:element name="Book">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:string" name="Id"/>
+              <xs:element type="xs:string" name="TypeName"/>
+              <xs:element type="xs:short" name="PageNumber"/>
+              <xs:element type="xs:string" name="Title"/>
+              <xs:element type="xs:string" name="Annotation"/>
+              <xs:element type="xs:string" name="CityName"/>
+              <xs:element type="xs:string" name="Isbn"/>
+              <xs:element type="xs:short" name="Year"/>
+              <xs:element name="Author" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute type="xs:string" name="FirstName" use="optional"/>
+                      <xs:attribute type="xs:string" name="SecondName" use="optional"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Newspaper">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:string" name="Id"/>
+              <xs:element type="xs:string" name="TypeName"/>
+              <xs:element type="xs:short" name="PageNumber"/>
+              <xs:element type="xs:string" name="Title"/>
+              <xs:element type="xs:string" name="CityName"/>
+              <xs:element type="xs:string" name="Issn"/>
+              <xs:element type="xs:short" name="Year"/>
+              <xs:element type="xs:string" name="Date"/>
+              <xs:element type="xs:short" name="Number"/>
+              <xs:element type="xs:string" name="PublisherName"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Patent" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:string" name="Id"/>
+              <xs:element type="xs:string" name="TypeName"/>
+              <xs:element type="xs:short" name="PageNumber"/>
+              <xs:element type="xs:string" name="Title"/>
+              <xs:element type="xs:string" name="Annotation"/>
+              <xs:element type="xs:string" name="Country" minOccurs="0"/>
+              <xs:element type="xs:string" name="FilingDate" minOccurs="0"/>
+              <xs:element type="xs:string" name="PublishingDate" minOccurs="0"/>
+              <xs:element type="xs:short" name="RegistrationNumber" minOccurs="0"/>
+              <xs:element type="xs:string" name="CityName" minOccurs="0"/>
+              <xs:element type="xs:string" name="Isbn" minOccurs="0"/>
+              <xs:element type="xs:short" name="Year" minOccurs="0"/>
+              <xs:element name="Author" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:string">
+                      <xs:attribute type="xs:string" name="FirstName" use="optional"/>
+                      <xs:attribute type="xs:string" name="SecondName" use="optional"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

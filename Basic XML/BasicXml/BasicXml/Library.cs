@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml;
+using System.Xml.Schema;
 
 namespace BasicXml
 {
@@ -37,12 +38,34 @@ namespace BasicXml
 
         public static IEnumerable<LibraryItem> GetAll()
         {
+            if (!File.Exists(Constants.FullPathToDataFile))
+            {
+                return new List<LibraryItem>();
+            }
+
             using (var stream = File.OpenRead(Constants.FullPathToDataFile))
             {
-                
                 using (var reader = XmlReader.Create(stream, Constants.XmlReaderSettings))
                 {
-                    return Library.ReadAllLibraryItems(reader);
+                    XmlReaderSettings s = new XmlReaderSettings();
+                    s.Schemas.Add("http://www.w3.org/2001/XMLSchema", "XmlValidationSchema.xsd");
+                    s.ValidationType = ValidationType.Schema;
+                    s.ValidationEventHandler += (sender, args) =>
+                    {
+                        switch (args.Severity)
+                        {
+                            case XmlSeverityType.Warning:
+                                Console.WriteLine($"Warning: {args.Message}");
+                                break;
+                            case XmlSeverityType.Error:
+                                Console.WriteLine($"Error: {args.Message}");
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException(nameof(args.Severity), args.Severity, $"Value of enum {args.Severity.GetType().FullName} is out of range");
+                        }
+                    };
+
+                    return Library.ReadAllLibraryItems(reader).ToList();
                 }
             }
         }
@@ -171,13 +194,11 @@ namespace BasicXml
             }
         }
 
-        private static IList<LibraryItem> ReadAllLibraryItems(XmlReader reader)
+        private static IEnumerable<LibraryItem> ReadAllLibraryItems(XmlReader reader)
         {
-            IList<LibraryItem> result = new List<LibraryItem>(32);
-
             LibraryItem libraryItem = null;
             string name = ""; // not null attribute
-
+            
             while (reader.Read())
             {
                 switch (reader.NodeType)
@@ -185,7 +206,7 @@ namespace BasicXml
                     case XmlNodeType.EndElement:
                         if (Constants.LibraryItemTags.Contains(reader.Name)) // if I read Book tag to the end
                         {
-                            result.Add(libraryItem);
+                            yield return libraryItem;
 
                             libraryItem = null;
                         }
@@ -243,7 +264,6 @@ namespace BasicXml
                         break;
                 }
             }
-            return result;
         }
 
         private static void WriteAuthor(XmlWriter writter, Author author)
