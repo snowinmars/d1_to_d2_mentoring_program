@@ -65,7 +65,7 @@ namespace BasicXml
                         }
                     };
 
-                    return Library.ReadAllLibraryItems(reader).ToList();
+                    return Library.ReadAllLibraryItems(reader);
                 }
             }
         }
