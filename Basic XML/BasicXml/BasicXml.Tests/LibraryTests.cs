@@ -15,28 +15,24 @@ namespace BasicXml.Tests
         [Fact]
         public void GetAll_MustNot_ThrowAnyException()
         {
-            Library.GetAll();
 
-            if (File.Exists(Constants.FullPathToDataFile))
-            {
-                File.Delete(Constants.FullPathToDataFile);
-            }
-
-            Library.GetAll();
+            using (var stream = File.OpenRead(Constants.FullPathToDataFile))
+                Library.GetAll(stream);
         }
 
         [Fact]
         public void AddAll_MustNot_ThrowAnyException()
         {
-            Library.AddAll(new List<LibraryItem> { EntityGenerator.GetNewBook(), EntityGenerator.GetNewNewspaper(), EntityGenerator.GetNewPatent(), EntityGenerator.GetNewPatent(), EntityGenerator.GetNewBook(), EntityGenerator.GetNewNewspaper() });
-
-            if (File.Exists(Constants.FullPathToDataFile))
+            using (var stream = File.OpenWrite(Constants.FullPathToDataFile))
+            {    Library.AddAll(new List<LibraryItem>
             {
-                File.Delete(Constants.FullPathToDataFile);
-            }
-
-            Library.AddAll(new List<LibraryItem> { EntityGenerator.GetNewBook(), EntityGenerator.GetNewNewspaper(), EntityGenerator.GetNewPatent(), EntityGenerator.GetNewPatent(), EntityGenerator.GetNewBook(), EntityGenerator.GetNewNewspaper() });
-
+                EntityGenerator.GetNewBook(),
+                EntityGenerator.GetNewNewspaper(),
+                EntityGenerator.GetNewPatent(),
+                EntityGenerator.GetNewPatent(),
+                EntityGenerator.GetNewBook(),
+                EntityGenerator.GetNewNewspaper(),
+            }, stream);}
         }
     }
 }

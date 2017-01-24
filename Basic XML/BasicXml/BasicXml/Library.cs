@@ -11,62 +11,50 @@ namespace BasicXml
 {
     public static class Library
     {
-        public static void AddAll(IEnumerable<LibraryItem> items)
+        public static void AddAll(IEnumerable<LibraryItem> items, Stream sourceStream)
         {
-            if (File.Exists(Constants.FullPathToDataFile))
-            {
-                File.Delete(Constants.FullPathToDataFile);
-            }
+           
 
-            using (var stream = File.OpenWrite(Constants.FullPathToDataFile))
+            using (XmlWriter writter = XmlWriter.Create(sourceStream, Constants.XmlWriterSettings))
             {
-                using (XmlWriter writter = XmlWriter.Create(stream, Constants.XmlWriterSettings))
+                writter.WriteStartDocument();
+                writter.WriteStartElement(nameof(Library));
+
+                foreach (var item in items)
                 {
-                    writter.WriteStartDocument();
-                    writter.WriteStartElement(nameof(Library));
-
-                    foreach (var item in items)
-                    {
-                        Library.WriteLibraryItem(writter, item);
-                    }
-
-                    writter.WriteEndElement();
-                    writter.WriteEndDocument();
+                    Library.WriteLibraryItem(writter, item);
                 }
+
+                writter.WriteEndElement();
+                writter.WriteEndDocument();
             }
         }
 
-        public static IEnumerable<LibraryItem> GetAll()
+        public static IEnumerable<LibraryItem> GetAll(Stream stream)
         {
-            if (!File.Exists(Constants.FullPathToDataFile))
+            using (var reader = XmlReader.Create(stream, Constants.XmlReaderSettings))
             {
-                return new List<LibraryItem>();
-            }
-
-            using (var stream = File.OpenRead(Constants.FullPathToDataFile))
-            {
-                using (var reader = XmlReader.Create(stream, Constants.XmlReaderSettings))
+                XmlReaderSettings s = new XmlReaderSettings();
+                s.Schemas.Add("http://www.w3.org/2001/XMLSchema", "XmlValidationSchema.xsd");
+                s.ValidationType = ValidationType.Schema;
+                s.ValidationEventHandler += (sender, args) =>
                 {
-                    XmlReaderSettings s = new XmlReaderSettings();
-                    s.Schemas.Add("http://www.w3.org/2001/XMLSchema", "XmlValidationSchema.xsd");
-                    s.ValidationType = ValidationType.Schema;
-                    s.ValidationEventHandler += (sender, args) =>
+                    switch (args.Severity)
                     {
-                        switch (args.Severity)
-                        {
-                            case XmlSeverityType.Warning:
-                                Console.WriteLine($"Warning: {args.Message}");
-                                break;
-                            case XmlSeverityType.Error:
-                                Console.WriteLine($"Error: {args.Message}");
-                                break;
-                            default:
-                                throw new ArgumentOutOfRangeException(nameof(args.Severity), args.Severity, $"Value of enum {args.Severity.GetType().FullName} is out of range");
-                        }
-                    };
+                        case XmlSeverityType.Warning:
+                            Console.WriteLine($"Warning: {args.Message}");
+                            break;
 
-                    return Library.ReadAllLibraryItems(reader);
-                }
+                        case XmlSeverityType.Error:
+                            Console.WriteLine($"Error: {args.Message}");
+                            break;
+
+                        default:
+                            throw new ArgumentOutOfRangeException(nameof(args.Severity), args.Severity, $"Value of enum {args.Severity.GetType().FullName} is out of range");
+                    }
+                };
+
+                return Library.ReadAllLibraryItems(reader);
             }
         }
 
@@ -198,7 +186,7 @@ namespace BasicXml
         {
             LibraryItem libraryItem = null;
             string name = ""; // not null attribute
-            
+
             while (reader.Read())
             {
                 switch (reader.NodeType)
@@ -245,6 +233,7 @@ namespace BasicXml
 
                         Library.HandleText(reader, libraryItem, propertyInfo);
                         break;
+
                     case XmlNodeType.None:
                     case XmlNodeType.Attribute:
                     case XmlNodeType.CDATA:
